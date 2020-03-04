@@ -28,60 +28,6 @@ export let LayerDefine = {
     UnKnow: { type: "", name: "未知" }
 }
 
-export enum VectorTileType {
-    BackGround = "BackGround",
-    Circle = "Circle",
-    Line = "Line",
-    Fill = "Fill",
-    FillExtrusion = "FillExtrusion",
-    Symbol = "Symbol",
-    Heatmap = "Heatmap",
-    HillShade = "HillShade"
-}
-
-export let VectorTileLayerDefine = {
-    BackGround: {
-        type: "background", name: "背景", icon: "icon-background",
-        info: "背景图层，用来设置背景颜色",
-        limit: [VectorTileType.BackGround]
-    },
-    Circle: {
-        type: "circle", name: "点", icon: "icon-pointer",
-        info: "只能实现单纯的点的样式",
-        limit: [VectorTileType.Circle, VectorTileType.Heatmap, VectorTileType.Symbol]
-    },
-    Line: {
-        type: "line", name: "线", icon: "icon-vectorpolyline",
-        info: "尽量使用多图层实现道路贯通",
-        limit: [VectorTileType.Line, VectorTileType.Symbol]
-    },
-    Fill: {
-        type: "fill", name: "区", icon: "icon-vector-polygon",
-        info: "区要素，多使用抗锯齿",
-        limit: [VectorTileType.Fill, VectorTileType.FillExtrusion, VectorTileType.Symbol]
-    },
-    FillExtrusion: {
-        type: "fill-extrusion", name: "面", icon: "icon-cube",
-        info: "区加上高程信息构建对应的面要素",
-        limit: [VectorTileType.Fill, VectorTileType.FillExtrusion, VectorTileType.Symbol]
-    },
-    Symbol: {
-        type: "symbol", name: "符号", icon: "icon-dollar-symbol-1",
-        info: "分为文字和图片两部分",
-        limit: [VectorTileType.Circle, VectorTileType.Line, VectorTileType.Fill, VectorTileType.FillExtrusion, VectorTileType.Symbol]
-    },
-    Heatmap: {
-        type: "heatmap", name: "热力图", icon: "icon-echarts_heatmap",
-        info: "热力图，实现热力展示",
-        limit: [VectorTileType.Circle, VectorTileType.Symbol]
-    },
-    HillShade: {
-        type: "hillshade", name: "地形阴影", icon: "icon-mountain-",
-        info: "通过RGB组合计算阴影",
-        limit: [VectorTileType.HillShade]
-    }
-}
-
 export class ILayer {
     type: LayerType;
     name: string;

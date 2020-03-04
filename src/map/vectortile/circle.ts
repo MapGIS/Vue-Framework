@@ -3,7 +3,7 @@ import { BaseLayer } from './baselayer';
 import {
     PropertyValueSpecification, DataDrivenPropertyValueSpecification, ColorSpecification
 } from "@mapbox/mapbox-gl-style-spec/types";
-import spec from '../spec/index';
+import { Mapbox as spec } from '../spec/index';
 
 export class CircleLayer extends BaseLayer {
     layout?: ILayout;

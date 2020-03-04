@@ -506,6 +506,24 @@ export class IDocument {
     /* static PI: number = Math.PI; */
     //静态方法中可以返回静态属性，，静态成员只能使用类名.静态成员的方式进行访问。
     /* static area(r: number) {return Document.PI * r * r;} */
+    static clone(document: IDocument): IDocument {
+        let { name, current, backgrounds, layers, sources, maprender, bounds, sprite, glyphs, service } = document;
+        let copy = new IDocument(name, current, backgrounds, layers, sources, maprender, bounds, sprite, glyphs, service);
+        return copy;
+    }
+    
+    static deepclone(document: IDocument): IDocument {
+        let { name, current, backgrounds, layers, sources, maprender, bounds, sprite, glyphs, service, crs } = document;
+        let newLayers = []
+    
+        layers.forEach(layer => {
+            let newLayer = deepCopy(layer)
+            newLayers.push(newLayer)
+        })
+    
+        let copy = new IDocument(name, current, backgrounds, newLayers, sources, maprender, bounds, sprite, glyphs, service, crs);
+        return copy;
+    }
 }
 
 export const defaultMapRender: MapRender = MapRender.MapBoxGL;

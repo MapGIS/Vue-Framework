@@ -18,6 +18,73 @@ export class Source {
     min?: number;
     max?: number;
     description?: string;
+    
+    static parseSources(sources: Object, mapRender: MapRender) {
+        let result = deepCopy(sources);
+        if (mapRender == MapRender.MapBoxGL) {
+            for (let key in result) {
+                let source = result[key];
+                let type = 'vector'
+                switch (source.type) {
+                    case SourceType.VectorTile:
+                        type = 'vector';
+                        break;
+                    case SourceType.RasterTile:
+                        type = 'raster';
+                        break;
+                    case SourceType.GeoJson:
+                        type = 'geojson';
+                        break;
+                }
+                source.type = type;
+                source.tiles = [source.url];
+                source.minZoom = source.min;
+                source.maxZoom = source.max;
+            }
+        } else if (mapRender == MapRender.Cesium) {
+
+        }
+        return result;
+    }
+
+    /**
+     * @description 将新的数据源添加到数据源集合对象中
+     * @param sources - {Object} 数据源集合对象
+     * @param sourceKey - {String} 新增数据源名称
+     * @param sourceValue - {Source} 新增数据源值
+     * @param sources - {MapRender} 地图渲染引擎
+     **/
+    static addSource(sources: Object, sourceValue: Source, sourceKey: string,
+        mapRender?: MapRender) {
+        let news: Object = deepCopy(sources);
+        if (!mapRender || mapRender == MapRender.MapBoxGL) {
+            news[sourceKey] = sourceValue;
+        } else {
+            //         news[sourceKey] = sourceValue;
+        }
+        return news;
+    }
+
+    static compareSource(sourcea: Source, sourceb: Source) {
+        if (!sourcea || !sourceb) {
+            return false
+        } else if (sourcea.type != sourceb.type) {
+            return false
+        } else if (sourcea.url != sourceb.url) {
+            return false
+        }
+        return true
+    }
+
+    static compareSources(sourcesa: Object, sourcesb: Object) {
+        if (!sourcesa || !sourcesb) return false
+        if (deepEqual(sourcesa, sourcesb)) return true
+        let keys_a = Object.keys(sourcesa)
+        let keys_b = Object.keys(sourcesb)
+        if (keys_a.length != keys_b.length) {
+            return false
+        }
+    }
 }
 
 export const defaultSource: Source = {
@@ -40,71 +107,3 @@ export const defaultSources: Object = {
     "默认数据源": defaultSource,
     "IGServer": vtSource
 };
-
-export function parseSources(sources: Object, mapRender: MapRender) {
-    let result = deepCopy(sources);
-    if (mapRender == MapRender.MapBoxGL) {
-        for (let key in result) {
-            let source = result[key];
-            let type = 'vector'
-            switch (source.type) {
-                case SourceType.VectorTile:
-                    type = 'vector';
-                    break;
-                case SourceType.RasterTile:
-                    type = 'raster';
-                    break;
-                case SourceType.GeoJson:
-                    type = 'geojson';
-                    break;
-            }
-            source.type = type;
-            source.tiles = [source.url];
-            source.minZoom = source.min;
-            source.maxZoom = source.max;
-        }
-    } else if (mapRender == MapRender.Cesium) {
-
-    }
-    return result;
-}
-
-/**
- * @description 将新的数据源添加到数据源集合对象中
- * @param sources - {Object} 数据源集合对象
- * @param sourceKey - {String} 新增数据源名称
- * @param sourceValue - {Source} 新增数据源值
- * @param sources - {MapRender} 地图渲染引擎
- **/
-export function addSource(sources:Object, sourceValue:Source, sourceKey:string, 
-                          mapRender?: MapRender) {
-    let news:Object = deepCopy(sources);
-    if(!mapRender || mapRender == MapRender.MapBoxGL){
-        news[sourceKey] = sourceValue;
-    } else {
-        //         news[sourceKey] = sourceValue;
-    }
-    return news;
-}
-
-export function compareSource ( sourcea: Source, sourceb: Source ) {
-    if (!sourcea || !sourceb) {
-        return false
-    } else if (sourcea.type != sourceb.type) {
-        return false
-    } else if (sourcea.url != sourceb.url) {
-        return false
-    }
-    return true
-}
-
-export function compareSources (sourcesa: Object, sourcesb: Object) {
-    if(!sourcesa || !sourcesb) return false
-    if (deepEqual(sourcesa, sourcesb)) return true
-    let keys_a = Object.keys(sourcesa)
-    let keys_b = Object.keys(sourcesb)
-    if(keys_a.length != keys_b.length) {
-        return false
-    }
-}
-

@@ -2,21 +2,21 @@ import { FillProperty, StrokeProperty, StrokeWidthProperty, BackgroundColorPrope
 
 export interface GroupSpriteProperty {
     groupProp: GroupProperty;
-    spriteProp: SpriteProperty[];
+    spriteProp: Array<SpriteProperty>;
 }
 export interface KeyProperty {
-    key: string | number;
+    key: String | Number;
 }
 export interface GroupProperty {
-    group: string;
-    descText: string;
-    symbol: string;
+    group: String;
+    descText: String;
+    symbol: String;
 }
 /**
  * @author 创新中心-潘卓然
  */
 export interface SpriteProperty {
-    key: string | number;
+    key: String | number;
     svg: SvgProperty;
 }
 
@@ -42,56 +42,58 @@ export const DefaultSvgProperty: SvgProperty = {
     strokeWidth: 10
 }
 
-export function base64ToImage(base64) {
-    const img = document.createElement('img').setAttribute('src', base64);
-    return img;
-}
-
-export function dataURLtoFile(dataurl, filename = 'file') {
-    // tslint:disable-next-line: prefer-const
-    let arr = dataurl.split(',')
-    // tslint:disable-next-line: prefer-const
-    let mime = arr[0].match(/:(.*?);/)[1]
-    // tslint:disable-next-line: prefer-const
-    let suffix = mime.split('/')[1]
-    // tslint:disable-next-line: prefer-const
-    let bstr = atob(arr[1])
-    let n = bstr.length
-    // tslint:disable-next-line: prefer-const
-    let u8arr = new Uint8Array(n)
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n)
+export class Sprite {
+    static base64ToImage(base64) {
+        const img = document.createElement('img').setAttribute('src', base64);
+        return img;
     }
-    return new File([u8arr], `${filename}.${suffix}`, {
-        type: mime
-    })
-}
 
-export function getSpriteIcon(icon, spriteImage, spriteData, canvas) {
-    if (canvas && spriteImage && spriteData && spriteData[icon]) {
-        // let pattern = patternCache[icon_cache_key];
-        // if (!pattern) {
-        let pattern;
-        const spriteImageData = spriteData[icon];
-        // const canvas = document.createElement('canvas');
-        canvas.width = spriteImageData.width;
-        canvas.height = spriteImageData.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(
-            spriteImage,
-            spriteImageData.x,
-            spriteImageData.y,
-            spriteImageData.width,
-            spriteImageData.height,
-            0,
-            0,
-            spriteImageData.width,
-            spriteImageData.height
-        );
-        pattern = ctx.createPattern(canvas, 'repeat');
-        // patternCache[icon_cache_key] = pattern;
-        // }
-        return pattern;
+    static dataURLtoFile(dataurl, filename = 'file') {
+        // tslint:disable-next-line: prefer-const
+        let arr = dataurl.split(',')
+        // tslint:disable-next-line: prefer-const
+        let mime = arr[0].match(/:(.*?);/)[1]
+        // tslint:disable-next-line: prefer-const
+        let suffix = mime.split('/')[1]
+        // tslint:disable-next-line: prefer-const
+        let bstr = atob(arr[1])
+        let n = bstr.length
+        // tslint:disable-next-line: prefer-const
+        let u8arr = new Uint8Array(n)
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n)
+        }
+        return new File([u8arr], `${filename}.${suffix}`, {
+            type: mime
+        })
     }
-    return undefined;
+
+    static getSpriteIcon(icon, spriteImage, spriteData, canvas) {
+        if (canvas && spriteImage && spriteData && spriteData[icon]) {
+            // let pattern = patternCache[icon_cache_key];
+            // if (!pattern) {
+            let pattern;
+            const spriteImageData = spriteData[icon];
+            // const canvas = document.createElement('canvas');
+            canvas.width = spriteImageData.width;
+            canvas.height = spriteImageData.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(
+                spriteImage,
+                spriteImageData.x,
+                spriteImageData.y,
+                spriteImageData.width,
+                spriteImageData.height,
+                0,
+                0,
+                spriteImageData.width,
+                spriteImageData.height
+            );
+            pattern = ctx.createPattern(canvas, 'repeat');
+            // patternCache[icon_cache_key] = pattern;
+            // }
+            return pattern;
+        }
+        return undefined;
+    }
 }

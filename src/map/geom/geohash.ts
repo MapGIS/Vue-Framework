@@ -6,14 +6,18 @@
 let BITS = [16, 8, 4, 2, 1];
 
 let BASE32 = "0123456789bcdefghjkmnpqrstuvwxyz";
-let NEIGHBORS = { right  : { even :  "bc01fg45238967deuvhjyznpkmstqrwx", odd:undefined },
-							left   : { even :  "238967debc01fg45kmstqrwxuvhjyznp", odd:undefined },
-							top    : { even :  "p0r21436x8zb9dcf5h7kjnmqesgutwvy", odd:undefined },
-							bottom : { even :  "14365h7k9dcfesgujnmqp0r2twvyx8zb", odd:undefined }};
-let BORDERS   = { right  : { even : "bcfguvyz" , odd:undefined},
-							left   : { even : "0145hjnp", odd:undefined },
-							top    : { even : "prxz", odd:undefined },
-							bottom : { even : "028b", odd:undefined } };
+let NEIGHBORS = {
+	right: { even: "bc01fg45238967deuvhjyznpkmstqrwx", odd: undefined },
+	left: { even: "238967debc01fg45kmstqrwxuvhjyznp", odd: undefined },
+	top: { even: "p0r21436x8zb9dcf5h7kjnmqesgutwvy", odd: undefined },
+	bottom: { even: "14365h7k9dcfesgujnmqp0r2twvyx8zb", odd: undefined }
+};
+let BORDERS = {
+	right: { even: "bcfguvyz", odd: undefined },
+	left: { even: "0145hjnp", odd: undefined },
+	top: { even: "prxz", odd: undefined },
+	bottom: { even: "028b", odd: undefined }
+};
 
 NEIGHBORS.bottom.odd = NEIGHBORS.left.even;
 NEIGHBORS.top.odd = NEIGHBORS.right.even;
@@ -25,122 +29,125 @@ BORDERS.top.odd = BORDERS.right.even;
 BORDERS.left.odd = BORDERS.bottom.even;
 BORDERS.right.odd = BORDERS.top.even;
 
-function refine_interval(interval, cd, mask) {
-	if (cd&mask)
-		interval[0] = (interval[0] + interval[1])/2;
-  else
-		interval[1] = (interval[0] + interval[1])/2;
-}
+export class GeoHash {
+	private static refine_interval(interval, cd, mask) {
+		if (cd & mask)
+			interval[0] = (interval[0] + interval[1]) / 2;
+		else
+			interval[1] = (interval[0] + interval[1]) / 2;
+	}
 
-function calculateAdjacent(srcHash, dir) {
-	srcHash = srcHash.toLowerCase();
-	var lastChr = srcHash.charAt(srcHash.length-1);
-	var type = (srcHash.length % 2) ? 'odd' : 'even';
-	var base = srcHash.substring(0,srcHash.length-1);
-	if (BORDERS[dir][type].indexOf(lastChr)!=-1)
-		base = calculateAdjacent(base, dir);
-	return base + BASE32[NEIGHBORS[dir][type].indexOf(lastChr)];
-}
+	private static calculateAdjacent(srcHash, dir) {
+		srcHash = srcHash.toLowerCase();
+		var lastChr = srcHash.charAt(srcHash.length - 1);
+		var type = (srcHash.length % 2) ? 'odd' : 'even';
+		var base = srcHash.substring(0, srcHash.length - 1);
+		if (BORDERS[dir][type].indexOf(lastChr) != -1)
+			base = this.calculateAdjacent(base, dir);
+		return base + BASE32[NEIGHBORS[dir][type].indexOf(lastChr)];
+	}
 
-export function decodeGeoHash(geohash) {
-	let is_even = true;
-	var lat = []; var lon = [];
-	lat[0] = -90.0;  lat[1] = 90.0;
-	lon[0] = -180.0; lon[1] = 180.0;
-	let lat_err = 90.0;  
-	let lon_err = 180.0;
+	static decodeGeoHash(geohash) {
+		let is_even = true;
+		var lat = []; var lon = [];
+		lat[0] = -90.0; lat[1] = 90.0;
+		lon[0] = -180.0; lon[1] = 180.0;
+		let lat_err = 90.0;
+		let lon_err = 180.0;
 
-	for (let i=0; i<geohash.length; i++) {
-		let c = geohash[i];
-		let cd = BASE32.indexOf(c);
-		for (let j=0; j<5; j++) {
-			let mask = BITS[j];
-			if (is_even) {
-				lon_err /= 2;
-				refine_interval(lon, cd, mask);
-			} else {
-				lat_err /= 2;
-				refine_interval(lat, cd, mask);
+		for (let i = 0; i < geohash.length; i++) {
+			let c = geohash[i];
+			let cd = BASE32.indexOf(c);
+			for (let j = 0; j < 5; j++) {
+				let mask = BITS[j];
+				if (is_even) {
+					lon_err /= 2;
+					this.refine_interval(lon, cd, mask);
+				} else {
+					lat_err /= 2;
+					this.refine_interval(lat, cd, mask);
+				}
+				is_even = !is_even;
 			}
-			is_even = !is_even;
 		}
+		lat[2] = (lat[0] + lat[1]) / 2;
+		lon[2] = (lon[0] + lon[1]) / 2;
+
+		return { latitude: lat, longitude: lon };
 	}
-	lat[2] = (lat[0] + lat[1])/2;
-	lon[2] = (lon[0] + lon[1])/2;
 
-	return { latitude: lat, longitude: lon};
-}
+	static encodeGeoHash(latitude, longitude) {
+		var is_even = true;
+		var i = 0;
+		var lat = []; var lon = [];
+		var bit = 0;
+		var ch = 0;
+		var precision = 12;
+		let geohash = "";
 
-export function encodeGeoHash(latitude, longitude) {
-	var is_even=true;
-	var i=0;
-	var lat = []; var lon = [];
-	var bit=0;
-	var ch=0;
-	var precision = 12;
-	let geohash = "";
+		lat[0] = -90.0; lat[1] = 90.0;
+		lon[0] = -180.0; lon[1] = 180.0;
 
-	lat[0] = -90.0;  lat[1] = 90.0;
-	lon[0] = -180.0; lon[1] = 180.0;
-
-	while (geohash.length < precision) {
-	  if (is_even) {
-			let mid = (lon[0] + lon[1]) / 2;
-	    if (longitude > mid) {
-				ch |= BITS[bit];
-				lon[0] = mid;
-	    } else
-				lon[1] = mid;
-	  } else {
-			let mid = (lat[0] + lat[1]) / 2;
-	    if (latitude > mid) {
-				ch |= BITS[bit];
-				lat[0] = mid;
-	    } else
-				lat[1] = mid;
-	  }
-
-		is_even = !is_even;
-	  if (bit < 4)
-			bit++;
-	  else {
-			geohash += BASE32[ch];
-			bit = 0;
-			ch = 0;
-	  }
-	}
-	return geohash;
-}
-
-export function decodeGeoHashToPolygon(geohash) {
-	var is_even = true;
-	var lat = []; var lon = [];
-	lat[0] = -90.0;  lat[1] = 90.0;
-	lon[0] = -180.0; lon[1] = 180.0;
-	let lat_err = 90.0;  let lon_err = 180.0;
-
-	for (let i=0; i<geohash.length; i++) {
-		let c = geohash[i];
-		let cd = BASE32.indexOf(c);
-		for (let j=0; j<5; j++) {
-			let mask = BITS[j];
+		while (geohash.length < precision) {
 			if (is_even) {
-				lon_err /= 2;
-				refine_interval(lon, cd, mask);
+				let mid = (lon[0] + lon[1]) / 2;
+				if (longitude > mid) {
+					ch |= BITS[bit];
+					lon[0] = mid;
+				} else
+					lon[1] = mid;
 			} else {
-				lat_err /= 2;
-				refine_interval(lat, cd, mask);
+				let mid = (lat[0] + lat[1]) / 2;
+				if (latitude > mid) {
+					ch |= BITS[bit];
+					lat[0] = mid;
+				} else
+					lat[1] = mid;
 			}
+
 			is_even = !is_even;
+			if (bit < 4)
+				bit++;
+			else {
+				geohash += BASE32[ch];
+				bit = 0;
+				ch = 0;
+			}
 		}
+		return geohash;
 	}
-	lat[2] = (lat[0] + lat[1])/2;
-	lon[2] = (lon[0] + lon[1])/2;
 
-	var top_left = [lon[0], lat[1]];
-	var top_right = [lon[1], lat[1]];
- 	var bottom_right = [lon[1], lat[0]];
-	var bottom_left = [lon[0], lat[0]];
+	static decodeGeoHashToPolygon(geohash) {
+		var is_even = true;
+		var lat = []; var lon = [];
+		lat[0] = -90.0; lat[1] = 90.0;
+		lon[0] = -180.0; lon[1] = 180.0;
+		let lat_err = 90.0; let lon_err = 180.0;
 
-	return [[top_left, top_right, bottom_right, bottom_left, top_left]];
+		for (let i = 0; i < geohash.length; i++) {
+			let c = geohash[i];
+			let cd = BASE32.indexOf(c);
+			for (let j = 0; j < 5; j++) {
+				let mask = BITS[j];
+				if (is_even) {
+					lon_err /= 2;
+					this.refine_interval(lon, cd, mask);
+				} else {
+					lat_err /= 2;
+					this.refine_interval(lat, cd, mask);
+				}
+				is_even = !is_even;
+			}
+		}
+		lat[2] = (lat[0] + lat[1]) / 2;
+		lon[2] = (lon[0] + lon[1]) / 2;
+
+		var top_left = [lon[0], lat[1]];
+		var top_right = [lon[1], lat[1]];
+		var bottom_right = [lon[1], lat[0]];
+		var bottom_left = [lon[0], lat[0]];
+
+		return [[top_left, top_right, bottom_right, bottom_left, top_left]];
+	}
+
 }

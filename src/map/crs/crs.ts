@@ -1,5 +1,5 @@
-import EPSG, { epsgId } from './epsg';
-import { getProj4sDetail, proj4Transform } from './proj4tool';
+import { epsgId } from './epsg';
+import { ProjectTool } from './proj4tool';
 
 export interface Project {
     projectPoint(lonlat);
@@ -25,38 +25,51 @@ export class Crs implements Project {
         this.proj = proj
     }
 
+    /**
+     * @description 点-正向投影  经纬度->平面坐标
+     * @param lonlat 
+     */
     projectPoint(lonlat: Array<number>) {
         let id = epsgId(this.epsg)
-        let source = getProj4sDetail(4326)
+        let source = ProjectTool.getProj4sDetail(4326)
         let destination = ''
 
         if (this.epsg && !this.proj) {
-            destination = getProj4sDetail(id)
+            destination = ProjectTool.getProj4sDetail(id)
         } else if (this.proj) {
             destination = this.proj
         } else {
             return [0, 0]
         }
 
-        return proj4Transform(source, destination, lonlat)
+        return ProjectTool.proj4Transform(source, destination, lonlat)
     }
 
+    /**
+     * @description 点-反向投影  平面坐标->经纬度
+     * @param point 
+     */
     unprojectPoint(point: Array<number>) {
         let id = epsgId(this.epsg)
-        let source = getProj4sDetail(4326)
+        let source = ProjectTool.getProj4sDetail(4326)
         let destination = ''
 
         if (this.epsg && !this.proj) {
-            destination = getProj4sDetail(id)
+            destination = ProjectTool.getProj4sDetail(id)
         } else if (this.proj) {
             destination = this.proj
         } else {
             return [0, 0]
         }
 
-        return proj4Transform(destination, source, point)
+        return ProjectTool.proj4Transform(destination, source, point)
     }
 
+    static clone(crs: Crs) {
+        let { epsg, proj } = crs
+        let copy = new Crs(epsg, proj)
+        return copy
+    }
 }
 
 export function cloneCrs(crs: Crs) {

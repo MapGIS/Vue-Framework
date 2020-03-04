@@ -1,3 +1,4 @@
-import { latest as spec } from './style-spec-china.js';
+import { latest as Mapbox } from './style-spec-china.js';
 
-export default spec;
+export { Mapbox };
+

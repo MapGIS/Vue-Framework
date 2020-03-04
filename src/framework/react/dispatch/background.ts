@@ -1,9 +1,9 @@
 import { NameSpaceDocument } from "../model";
 
-import { ILayout } from '@/map/layer';
-import { BackGroundLayer, BackGroundStyle } from '@/map/layer/background';
+import { ILayout } from '../../../map/layer/baselayer';
+import { BackGroundLayer, BackGroundStyle } from '../../../map/layer/background';
 
-export function changeBackgroundStyle(
+/* export function changeBackgroundStyle(
     backgrounds: Array<BackGroundLayer>,
     style: BackGroundStyle
 ) {
@@ -31,4 +31,4 @@ export function changeBackgroundLayout(
         type: NameSpaceDocument + "/changeBackgroundLayout",
         payload: backgrounds
     };
-}
+} */

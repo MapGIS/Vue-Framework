@@ -1,12 +1,6 @@
-import { IFilter } from './baselayer';
-import { latest } from '../spec/style-spec-china.js';
-
 export const combiningFilterOps = ['all', 'any', 'none']
 export const combiningFilterStr = ['全部匹配', '任意匹配', '不匹配'];
 export const setFilterOps = ['in', '!in']
-export const otherFilterOps = Object
-    .keys(latest.filter_operator.values)
-    .filter(op => combiningFilterOps.indexOf(op) < 0)
 
 export type FilterOpt = 'all' | 'any' | 'none';
 
@@ -18,7 +12,7 @@ export type FilterOpt = 'all' | 'any' | 'none';
  * @param rule = ['字段名', match, '匹配值']
  * @param match = ["==":, "!=", ">", ">=", "<", "<=", "in", "!in", "all", "any", "none", "has", "!has"]
  */
-export class LayerFilter extends IFilter {
+export class Filter {
     private filter: Array<any>;
 
     /*     constructor(opt?: FilterOpt, rules?: Array<any>) {
@@ -29,11 +23,10 @@ export class LayerFilter extends IFilter {
         } */
 
     constructor(filter?: Array<any>) {
-        super();
         this.filter = filter;
     }
 
-    getFilterOpt(): FilterOpt {
+    getFilterOpt() {
         if (!this.filter) return 'all';
         if (this.filter.length > 0) {
             if (combiningFilterOps.indexOf(this.filter[0]) >= 0) {
@@ -48,7 +41,7 @@ export class LayerFilter extends IFilter {
     getFilterRules() {
         if (!this.filter) return [];
         if (this.filter.length > 0) {
-            return this.filter.slice(1).filter(f=>f);
+            return this.filter.slice(1).filter(f => f);
         }
         return [];
     }
@@ -93,7 +86,6 @@ export class LayerFilter extends IFilter {
 
     deleteFilterItem(filterIdx) {
         const newFilter = this.combiningFilter().slice(0)
-        console.log('Delete', filterIdx, newFilter)
         newFilter.splice(filterIdx + 1, 1)
         this.filter = newFilter;
     }

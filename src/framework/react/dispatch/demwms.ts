@@ -1,4 +1,4 @@
-import { NameSpaceDocument } from "../model";
+/* import { NameSpaceDocument } from "../model";
 import { ILayout } from '@/map/layer';
 import { BackColorLayer } from '@/map/layer/backcolor';
 
@@ -16,3 +16,4 @@ export function changeBackColorLayout(
         payload: BackColors
     };
 }
+ */

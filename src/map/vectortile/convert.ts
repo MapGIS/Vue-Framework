@@ -16,11 +16,10 @@ const colorProperties = ['fill-color', 'fill-extrusion-color', 'line-color', 'ci
 export class Convert {
 
     /**
-     * @description MapGIS格式的样式文档转换成MapboxGL的样式文档
-     * @param doc 地图文档
-     */
+ * MapGIS格式的样式文档转换成MapboxGL的样式文档
+ * @param doc 
+ */
     docTomvt(doc: IDocument) {
-        // tslint:disable-next-line: prefer-const
         let style = {
             version: 8,
             id: defaultId,
@@ -44,20 +43,15 @@ export class Convert {
     }
 
     docTomvtSources(doc: IDocument) {
-        // tslint:disable-next-line: prefer-const
         let sources = {}
-        if (!doc) {
-            return sources
-        }
+        if (!doc) return sources
 
-        for (const key of Object.keys(doc.sources)) {
-            const source = doc.sources[key]
-            if (!source) {
-                continue
-            }
+        for (let key in doc.sources) {
+            let source = doc.sources[key]
+            if (!source) continue
 
-            const { url, type, min, max } = source
-            // tslint:disable-next-line: prefer-const
+            let { url, type, min, max } = source
+
             let newSouce = {
                 type: '',
                 tiles: [],
@@ -65,7 +59,7 @@ export class Convert {
                 maxZoom: 24
             }
 
-            if (type === LayerType.VectorTile) {
+            if (type == LayerType.VectorTile) {
                 newSouce.type = 'vector'
                 newSouce.tiles = [url]
                 newSouce.minZoom = min
@@ -76,20 +70,18 @@ export class Convert {
 
         return sources
     }
-    docTomvtLayers(doc: IDocument) {
-        // tslint:disable-next-line: prefer-const
-        let layers = []
-        if (!doc) {
-            return layers
-        }
 
-        const flats = doc.getFlatLayers()
-        layers = flats.map((layer) => {
-            const { sourceLayer, subtype, layout, style } = layer
-            layer.set('source-layer', sourceLayer)
-            layer.set('type', this.docTomvtType(subtype))
-            layer.set('layout', this.docTomvtLayout(layout))
-            layer.set('paint', style || {})
+    docTomvtLayers(doc: IDocument) {
+        let layers = []
+        if (!doc) return layers
+
+        let flats = doc.getFlatLayers()
+        layers = flats.map(layer => {
+            let { sourceLayer, subtype, layout, style } = layer
+            layer['source-layer'] = sourceLayer
+            layer['type'] = this.docTomvtType(subtype)
+            layer['layout'] = this.docTomvtLayout(layout)
+            layer['paint'] = style || {}
             delete layer.style
             delete layer.subtype
             delete layer.icon
@@ -105,33 +97,31 @@ export class Convert {
 
     docTomvtType(subtype) {
         return VectorTileLayerDefine[subtype].type
+
     }
 
     docTomvtLayout(layout) {
-        if (!layout) {
-            layout = { visibility: 'visible' }
-        }
-        if (layout.visible === undefined) {
-            layout.set('visibility', 'visible')
+        if (!layout) layout = { visibility: 'visible' }
+        if (layout.visible == undefined) {
+            layout['visibility'] = 'visible'
         } else if (layout.visible) {
-            layout.set('visibility', 'visible')
+            layout['visibility'] = 'visible'
         } else {
-            layout.set('visibility', 'none')
+            layout['visibility'] = 'none'
         }
         delete layout.visible
         return layout
     }
 
     /**
- * MapboxGL的样式文档转换成MapGIS的样式文档
- * @param doc
- */
+     * MapboxGL的样式文档转换成MapGIS的样式文档
+     * @param doc
+     */
     mvtTodoc(mvt): IDocument {
-        // let name = mvt.name || "地图样式";
-        const sources = this.mvtTodocSources(mvt.sources);
-        const layers = this.mvtTodocLayers(mvt.layers);
+        let name = mvt.name || "地图样式";
+        let sources = this.mvtTodocSources(mvt.sources);
+        let layers = this.mvtTodocLayers(mvt.layers);
 
-        // tslint:disable-next-line: prefer-const
         let doc = new IDocument(
             defaultName,
             defaultCurrent,
@@ -145,24 +135,20 @@ export class Convert {
     }
 
     mvtTodocSources(sources) {
-        if (!sources) {
-            return defaultSources;
-        }
-        const keys = Object.keys(sources);
-        let key;
-        // tslint:disable-next-line: prefer-const
+        if (!sources) return defaultSources;
+        let keys = Object.keys(sources);
+        let key = "";
         let news = {};
-        // tslint:disable-next-line:prefer-for-of
         for (let index = 0; index < keys.length; index++) {
             key = keys[index];
-            // tslint:disable-next-line: prefer-const
             let source = sources[key];
-            if (source.type !== 'vector') {
+            if (source.type != 'vector') {
                 continue;
             } else {
-                const tiles = source.tiles
-                if (!tiles || tiles.length <= 0) { continue; }
-                const url = tiles[0];
+                let tiles = source.tiles
+                if (!tiles) continue;
+                if (tiles.length <= 0) continue;
+                let url = tiles[0];
                 source.name = key;
                 source.url = url;
                 source.type = LayerType.VectorTile;
@@ -177,63 +163,60 @@ export class Convert {
         return news || defaultSources;
     }
 
+
+
     mvtTodocLayers(layers) {
         let flats = []
-        flats = layers.filter((layer) => {
-            const { id, type, paint, layout } = layer
+        flats = layers.filter(layer => {
+            let { id, type, paint, layout } = layer
 
-            layer.set('sourceLayer', layer.get('source-layer'))
+            layer['sourceLayer'] = layer['source-layer']
 
-            layer.set('title', id)
-            layer.set('id', id)
-            layer.set('name', id)
-            layer.set('key', id)
+            layer['title'] = id
+            layer['id'] = id
+            layer['name'] = id
+            layer['key'] = id
 
-            if (GeometryTypes.indexOf(layer.get('type')) < 0) {
-                return false
-            } else {
-                layer.set('type', LayerType.VectorTile)
-                layer.set('subtype', this.mvtTodocType(type))
-                layer.set('icon', VectorTileLayerDefine[layer.subtype].icon)
+            if (GeometryTypes.indexOf(layer['type']) < 0) return false
 
-                layer.set('info', "")
-                layer.set('description', "")
+            layer['type'] = LayerType.VectorTile
+            layer['subtype'] = this.mvtTodocType(type)
+            layer['icon'] = VectorTileLayerDefine[layer.subtype].icon
 
-                layer.set('style', paint || {})
-                layer.set('layout', this.mvtTodocLayout(layout) || {})
+            layer['info'] = ""
+            layer['description'] = ""
 
-                layer.set('url', undefined)
+            layer['style'] = paint || {}
+            layer['layout'] = this.mvtTodocLayout(layout) || {}
 
-                delete layer.paint
-                // delete layer['source-layer']
-                // return layer
-                return true;
-            }
+            layer['url'] = undefined;
+
+            delete layer.paint
+            // delete layer['source-layer']
+            // return layer
+            return true;
         })
+        console.log('flats', flats)
         return flats;
     }
 
     mvtTodocType(type) {
-        const keys = Object.keys(VectorTileLayerDefine)
-        const types = keys.map((key) => VectorTileLayerDefine[key].type);
-        const index = types.indexOf(type)
-        if (index >= 0) {
-            return keys[index]
-        }
+        let keys = Object.keys(VectorTileLayerDefine)
+        let types = keys.map(key => { return VectorTileLayerDefine[key].type });
+        let index = types.indexOf(type)
+        if (index >= 0) return keys[index]
         return undefined;
 
     }
 
     mvtTodocLayout(layout) {
-        if (!layout) {
-            layout = { visible: true }
-        }
-        if (layout.visibility === undefined) {
-            layout.set('visible', true)
+        if (!layout) layout = { visible: true }
+        if (layout.visibility == undefined) {
+            layout['visible'] = true
         } else if (layout.visibility === 'visible') {
-            layout.set('visible', true)
+            layout['visible'] = true
         } else {
-            layout.set('visible', false)
+            layout['visible'] = false
         }
         delete layout.visibility
         return layout
@@ -242,75 +225,72 @@ export class Convert {
     /**
      * 样式高亮功能实现，主要是实现选中的样式高亮对比度，未选中的样式低对比度
      */
-
     convertInspectLayers(layers, inspectId) {
         // '#424242'  #181818  #222222
         // let lineColor = d3.interpolateGreys;
-        let select
-        layers = layers.filter((layer) => {
-            if (layer.id === inspectId) {
-                select = layer;
-            }
-            return layer.id !== inspectId
+        let select = undefined
+        layers = layers.filter(layer => {
+            if (layer.id == inspectId) select = layer;
+            return layer.id != inspectId
         })
-        const fills = layers.filter((layer) => {
-            return layer.type === 'fill' || layer.type === 'fill-extrusion'
+        let fills = layers.filter(layer => {
+            return layer.type == 'fill' || layer.type == 'fill-extrusion'
         })
-        const lines = layers.filter((layer) => {
-            return layer.type === 'line'
+        let lines = layers.filter(layer => {
+            return layer.type == 'line'
         })
-        const circles = layers.filter((layer) => {
-            return layer.type === 'circle'
+        let circles = layers.filter(layer => {
+            return layer.type == 'circle'
         })
-        const symbols = layers.filter((layer) => {
-            return layer.type === 'symbol'
+        let symbols = layers.filter(layer => {
+            return layer.type == 'symbol'
         })
 
-        const unselectFill = this.convertUnselectLayer(fills, 0.8, 1.0)
-        const unselectLine = this.convertUnselectLayer(lines, 0.7, 0.9)
-        const unselectCircle = this.convertUnselectLayer(circles, 0.2, 0.4)
-        const unselectSymbol = this.convertUnselectLayer(symbols, 0.6, 0.8)
+        let unselectFill = this.convertUnselectLayer(fills, 0.8, 1.0)
+        let unselectLine = this.convertUnselectLayer(lines, 0.7, 0.9)
+        let unselectCircle = this.convertUnselectLayer(circles, 0.2, 0.4)
+        let unselectSymbol = this.convertUnselectLayer(symbols, 0.6, 0.8)
 
         select = this.convertSelectlayer(select)
         return [].concat(unselectFill).concat(unselectLine).concat(unselectCircle).concat(unselectSymbol).concat(select)
     }
 
     convertUnselectLayer(layers, startPercent, endPercent) {
-        const count = layers.length
-        // tslint:disable-next-line: prefer-const
+        let count = layers.length
         let inspects = layers.map((layer, index) => {
-            const percent = startPercent + (index / count) * (endPercent - startPercent)
-            const color = d3color(d3interpolate.interpolateGreys(percent)).copy({ opacity: 0.5 }).toString()
+            let percent = startPercent + (index / count) * (endPercent - startPercent)
+            let color = d3color(d3interpolate.interpolateGreys(percent)).copy({ opacity: 0.5 }).toString()
             if (layer.paint) {
-                if (layer.paint.get('circle-color')) {
-                    layer.paint.set('circle-color', color)
-                } else if (layer.get('line-color')) {
-                    layer.paint.set('line-color', color)
-                } else if (layer.paint.get('fill-color')) {
-                    layer.paint.set('fill-color', color)
-                } else if (layer.paint.get('fill-extrusion-color')) {
-                    layer.paint.set('fill-extrusion-color', color)
-                } else if (layer.paint.get('text-color')) {
-                    layer.paint.set('text-color', color)
-                } else if (layer.paint.get('text-halo-color')) {
-                    layer.paint.set('text-halo-color', color)
-                } else {
-                    // do nothing
+                if (layer.paint['circle-color']) {
+                    layer.paint['circle-color'] = color
+                } else if (layer.paint['line-color']) {
+                    layer.paint['line-color'] = color
                 }
-                if (layer.paint.get('line-pattern')) {
-                    layer.paint.set('line-opacity', 0.1)
-                } else if (layer.paint.get('fill-pattern')) {
-                    layer.paint.set('fill-opacity', 0.1)
-                } else if (layer.paint.get('fill-extrusion-pattern')) {
-                    layer.paint.set('fill-extrusion-opacity', 0.1)
-                } else {
-                    // do nothing
+                else if (layer.paint['fill-color']) {
+                    // #6a6a6a #5b5b5b  #3b3b3b #181818
+                    layer.paint['fill-color'] = color
+                }
+                else if (layer.paint['fill-extrusion-color']) {
+                    layer.paint['fill-extrusion-color'] = color
+                }
+                else if (layer.paint['text-color']) {
+                    layer.paint['text-color'] = color
+                }
+                else if (layer.paint['text-halo-color']) {
+                    layer.paint['text-halo-color'] = color
+                }
+                if (layer.paint['line-pattern']) {
+                    layer.paint['line-opacity'] = 0.1
+                } else if (layer.paint['fill-pattern']) {
+                    layer.paint['fill-opacity'] = 0.1
+                } else if (layer.paint['fill-extrusion-pattern']) {
+                    layer.paint['fill-extrusion-opacity'] = 0.1
                 }
             }
             if (layer.layout) {
-                if (layer.layout.get('icon-image')) {
-                    layer.paint.set('icon-opacity', 0.2)
-                    layer.paint.set('text-opacity', 0.2)
+                if (layer.layout['icon-image']) {
+                    layer.paint['icon-opacity'] = 0.2
+                    layer.paint['text-opacity'] = 0.2
                 }
             }
             return layer
@@ -319,69 +299,70 @@ export class Convert {
     }
 
     convertSelectlayer(layer) {
-        if (!layer) {
-            layer = {
-                filter: ['all'],
-                paint: {}
-            }
+        if (!layer) layer = {
+            filter: ['all'],
+            paint: {}
         }
         let unFilter = deepCopy(layer)
 
         if (layer.filter) {
             unFilter.id = layer.id + '_unfilter'
-            if (unFilter.filter[0] === 'all') {
+            if (unFilter.filter[0] == 'all') {
                 unFilter.filter[0] = 'none'
-            } else if (unFilter.filter[0] === 'none') {
+            } else if (unFilter.filter[0] == 'none') {
                 unFilter.filter[0] = 'any'
-            } else {
-                // do nothing
             }
-            if (unFilter.paint.get('circle-color')) {
+            if (unFilter.paint['circle-color']) {
                 unFilter.paint['circle-color'] = 'rgba(238, 78, 139, 0.7)'
-            } else if (unFilter.paint.get('line-color')) {
-                unFilter.paint.set('line-color', 'rgba(238, 78, 139, 0.7)')
-            } else if (unFilter.paint.get('fill-color')) {
-                unFilter.paint.set('fill-color', 'rgba(238, 78, 139, 0.7)')
-            } else if (unFilter.paint.get('fill-extrusion-color')) {
-                unFilter.paint.set('fill-extrusion-color', 'rgba(238, 78, 139, 0.7)')
-            } else if (unFilter.paint.get('text-color')) {
-                unFilter.paint.set('text-color', 'rgba(238, 78, 139, 0.7)')
-            } else if (unFilter.paint.get('text-halo-color')) {
-                unFilter.paint.set('text-halo-color', 'rgba(238, 78, 139, 0.7)')
-            } else {
-                // do nothing
+            } else if (unFilter.paint['line-color']) {
+                unFilter.paint['line-color'] = 'rgba(238, 78, 139, 0.7)'
             }
-
-            if (layer.paint) {
-                if (layer.paint.get('circle-color')) {
-                    layer.paint.set('circle-color', 'rgba(91, 255, 142, 0.7)')
-                } else if (layer.paint.get('line-color')) {
-                    layer.paint.set('line-color', 'rgba(91, 255, 142, 0.7)')
-                } else if (layer.paint.get('fill-color')) {
-                    layer.paint.set('fill-color', 'rgba(91, 255, 142, 0.7)')
-                } else if (layer.paint.get('fill-extrusion-color')) {
-                    layer.paint.set('fill-extrusion-color', 'rgba(91, 255, 142, 0.7)')
-                } else if (layer.paint.get('text-color')) {
-                    layer.paint.set('text-color', 'rgba(91, 255, 142, 0.7)')
-                } else if (layer.paint.get('text-halo-color')) {
-                    layer.paint.set('text-halo-color', 'rgba(91, 255, 142, 0.7)')
-                } else {
-                    // do nothing
-                }
-            } else {
-                // do nothing
+            else if (unFilter.paint['fill-color']) {
+                // #6a6a6a #5b5b5b  #3b3b3b #181818
+                unFilter.paint['fill-color'] = 'rgba(238, 78, 139, 0.7)'
             }
-
-            layer = [layer]
-            unFilter = [unFilter]
-            return [].concat(layer).concat(unFilter)
+            else if (unFilter.paint['fill-extrusion-color']) {
+                unFilter.paint['fill-extrusion-color'] = 'rgba(238, 78, 139, 0.7)'
+            }
+            else if (unFilter.paint['text-color']) {
+                unFilter.paint['text-color'] = 'rgba(238, 78, 139, 0.7)'
+            }
+            else if (unFilter.paint['text-halo-color']) {
+                unFilter.paint['text-halo-color'] = 'rgba(238, 78, 139, 0.7)'
+            }
         }
+
+        if (layer.paint) {
+            if (layer.paint['circle-color']) {
+                layer.paint['circle-color'] = 'rgba(91, 255, 142, 0.7)'
+            } else if (layer.paint['line-color']) {
+                layer.paint['line-color'] = 'rgba(91, 255, 142, 0.7)'
+            }
+            else if (layer.paint['fill-color']) {
+                // #6a6a6a #5b5b5b  #3b3b3b #181818
+                layer.paint['fill-color'] = 'rgba(91, 255, 142, 0.7)'
+            }
+            else if (layer.paint['fill-extrusion-color']) {
+                layer.paint['fill-extrusion-color'] = 'rgba(91, 255, 142, 0.7)'
+            }
+            else if (layer.paint['text-color']) {
+                layer.paint['text-color'] = 'rgba(91, 255, 142, 0.7)'
+            }
+            else if (layer.paint['text-halo-color']) {
+                layer.paint['text-halo-color'] = 'rgba(91, 255, 142, 0.7)'
+            }
+        } else {
+
+        }
+
+        layer = [layer]
+        unFilter = [unFilter]
+        return [].concat(layer).concat(unFilter)
     }
 
     convertInspectMode(doc: IDocument) {
-        const origins = this.docTomvtLayers(doc)
-        const inpsectid = doc.getCurrent().id
-        // tslint:disable-next-line: prefer-const
+        let origins = this.docTomvtLayers(doc)
+        let inpsectid = doc.getCurrent().id
         let inspects = this.convertInspectLayers(origins, inpsectid);
         return inspects;
     }

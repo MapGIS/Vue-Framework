@@ -20,7 +20,8 @@ import * as Style from './map/style'
 import * as Event from './map/mapevent';
 import * as Service from './map/service';
 
-export {
+// 平一\平二
+export default {
     Enum,
     Event,
     Service,

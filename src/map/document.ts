@@ -120,7 +120,7 @@ export class IDocument {
         }
         if (
             this.current.type == LayerType.VectorTile ||
-                this.current.type == LayerType.RasterTile
+            this.current.type == LayerType.RasterTile
         ) {
             return this.getLayersById(this.current.id);
         } else {
@@ -139,7 +139,7 @@ export class IDocument {
         }
         if (
             this.current.type == LayerType.VectorTile ||
-                this.current.type == LayerType.RasterTile
+            this.current.type == LayerType.RasterTile
         ) {
             const results = this.getLayersById(this.current.id);
             if (results && results.length >= 1) return results[0];
@@ -289,7 +289,6 @@ export class IDocument {
         return flats;
     }
 
-
     /**
      * @param type LayerType
      * @returns Array<ILayer> | Array<DemWMSLayer> | Array<RasterTileLayer> | Array<VectorTileLayer>
@@ -392,6 +391,7 @@ export class IDocument {
         if (position > 0) this.layers.splice(position, 0, copy);
         return this.layers;
     }
+
     specialLayer(id: string, type: string) {
         let position = -1;
         let copy, typeName, iconfont;
@@ -500,6 +500,48 @@ export class IDocument {
         return this.sources;
     }
 
+    changeLayerProp(id, propName, propValue) {
+        let layers = this.layers;
+        if (!layers) return undefined;
+
+        layers.map(item => {
+            if (item.type == LayerType.GroupLayer) {
+                if (item.children) {
+                    this.loopLayerProp(id, propName, propValue, item);
+                }
+            } else {
+                if (item.id == id) {
+                    item[propName] = propValue;
+                }
+            }
+        });
+
+        return layers;
+    }
+
+    loopLayerProp(id, propName, propValue, group) {
+        if (group.id == id) {
+            if (group && group[propName]) group[propName] = propValue;
+        }
+        if (group.type != LayerType.GroupLayer) {
+            return group;
+        }
+        if (group.children) {
+            group.children.map(child => {
+                if (child.type == LayerType.GroupLayer) {
+                    child = this.loopLayerProp(id, propName, propValue, child);
+                } else {
+                    if (child.id == id) {
+                        if (child && child[propName] !== undefined) {
+                            child[propName] = propValue;
+                        }
+                    }
+                }
+            });
+        }
+        return group;
+    }
+
     //静态方法
     /* static hello() {} */
     //静态属性
@@ -511,16 +553,16 @@ export class IDocument {
         let copy = new IDocument(name, current, backgrounds, layers, sources, maprender, bounds, sprite, glyphs, service);
         return copy;
     }
-    
+
     static deepclone(document: IDocument): IDocument {
         let { name, current, backgrounds, layers, sources, maprender, bounds, sprite, glyphs, service, crs } = document;
         let newLayers = []
-    
+
         layers.forEach(layer => {
             let newLayer = deepCopy(layer)
             newLayers.push(newLayer)
         })
-    
+
         let copy = new IDocument(name, current, backgrounds, newLayers, sources, maprender, bounds, sprite, glyphs, service, crs);
         return copy;
     }
@@ -546,18 +588,18 @@ export const defaultBacks: Array<BackGroundLayer> = [
         type: LayerType.BackGround,
         url: "",
         tileUrl:
-        "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
+            "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
         imgUrl:
-        "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png"
+            "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png"
     }
 ];
 
 export const defaultLayers: Array<ILayer> = []
-//.concat(defaultGroupLayer)
-//.concat(defaultVectorTileLayer)
-//.concat(defaultRasterLayer)
-//.concat(defaultDemWmsLayer)
-;
+    //.concat(defaultGroupLayer)
+    //.concat(defaultVectorTileLayer)
+    //.concat(defaultRasterLayer)
+    //.concat(defaultDemWmsLayer)
+    ;
 
 export const defaultSource = defaultSources;
 

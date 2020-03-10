@@ -57,6 +57,53 @@ export class ILayer {
     children?: Array<ILayer>;
     subtype?: any;
     bounds?: Bounds;
+
+    changeLayerName?(
+        layer: ILayer,
+        name: string,
+        document: IDocument
+    ) {
+        let layers = document.layers;
+        if (!layers) return undefined;
+
+        layers.map(item => {
+            if (item.type == LayerType.GroupLayer) {
+                if (item.children) {
+                    this.loopGroupName(layer.id, name, item);
+                }
+            } else {
+                if (item.name == layer.name) {
+                    item.title = item.name = name;
+                }
+            }
+        });
+
+        return layers;
+    }
+
+    loopGroupName?(id, name, group) {
+        if (group.id == id) {
+            if (group && group["name"]) group["name"] = name;
+            if (group && group["title"]) group["title"] = name;
+        }
+        if (group.type != LayerType.GroupLayer) {
+            return group;
+        }
+        if (group.children) {
+            group.children.map(child => {
+                if (child.type == LayerType.GroupLayer) {
+                    child = loopGroupName(id, name, child);
+                } else {
+                    if (child.id == id) {
+                        if (child && child.name !== undefined) child.name = name;
+                        if (child && child.title !== undefined) child.title = name;
+                    }
+                }
+            });
+        }
+        return group;
+    }
+
 }
 
 export interface ICommonAction {
@@ -275,13 +322,13 @@ function loopGroupVisible(ids, group) {
 }
 
 
-export function compareLayers(layersa:Array<ILayer>, layersb:Array<ILayer>) {
-    if(!layersa || !layersb) return false
-    if(layersa.length != layersb.length) return false
-    for(let i = 0; i < layersa.length; i++){
+export function compareLayers(layersa: Array<ILayer>, layersb: Array<ILayer>) {
+    if (!layersa || !layersb) return false
+    if (layersa.length != layersb.length) return false
+    for (let i = 0; i < layersa.length; i++) {
         let a = layersa[i]
         let b = layersb[i]
-        if(deepEqual(a, b) == false) return false
+        if (deepEqual(a, b) == false) return false
     }
     return true
 }

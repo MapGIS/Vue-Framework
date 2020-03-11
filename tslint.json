@@ -19,6 +19,7 @@
         "trailing-comma": [false, {"multiline": "never", "singleline": "never"}],
         "semicolon": [false, "never"],
         "max-line-length": [false, 180],
-        "max-classes-per-file": [false, 1]
+        "max-classes-per-file": [false, 1],
+        "jsdoc-format": [false, "check-multiline-start"]
     }
 }

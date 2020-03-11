@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "中地数码Webclient全局上下文环境&存储结构",
     "main": "dist/webclient-store.js",
+    "module": "src/index.ts",
     "scripts": {
         "build": "webpack",
         "docs:serve": "vuepress dev docs",
@@ -11,7 +12,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/MapGIS/WebClient-JavaScript-Common"
+        "url": "https://github.com/MapGIS/WebClient-Store.git"
     },
     "author": "zondy",
     "license": "MIT",

@@ -6,6 +6,12 @@ import { deepCopy } from '../../utils/deepequal';
 
 export class GroupLayer extends ILayer {
     children?: Array<ILayer>;
+
+    constructor() {
+        super();
+        this.title = '新建组图层';
+        this.id = this.key = uuid();
+    }
 }
 
 export function flatLayers(group, filtergroup: boolean = true): Array<ILayer> {

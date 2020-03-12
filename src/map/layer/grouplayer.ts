@@ -1,4 +1,4 @@
-import { ILayer, LayerType, IStyle, ILayout } from "./baselayer";
+import { ILayer, LayerType, IStyle, ILayout, changeSelfVisible } from "./baselayer";
 
 import IDocument from "../document";
 import { uuid } from '../../utils/uuid';
@@ -114,6 +114,67 @@ export function findLayersById(id, group): Array<ILayer> {
         });
     }
     return layers;
+}
+
+export function loopLayerProp(id, propName, propValue, group) {
+    if (group.id == id) {
+        if (group && group[propName]) group[propName] = propValue;
+    }
+    if (group.type != LayerType.GroupLayer) {
+        return group;
+    }
+    if (group.children) {
+        group.children.map(child => {
+            if (child.type == LayerType.GroupLayer) {
+                child = loopLayerProp(id, propName, propValue, child);
+            } else {
+                if (child.id == id) {
+                    if (child && child[propName] !== undefined) {
+                        child[propName] = propValue;
+                    }
+                }
+            }
+        });
+    }
+    return group;
+}
+
+export function loopLayerVisible(id, visible, group) {
+    if (group.id == id) {
+        group = changeSelfVisible(group, visible)
+    }
+    if (group.type != LayerType.GroupLayer) {
+        return group;
+    }
+    if (group.children) {
+        group.children.map(child => {
+            if (child.type == LayerType.GroupLayer) {
+                child = loopLayerVisible(id, visible, child);
+            } else {
+                if (child.id == id) {
+                    child = changeSelfVisible(child, visible)
+                }
+            }
+        });
+    }
+    return group;
+}
+
+export function forceLayerVisible(visible, group) {
+    group = changeSelfVisible(group, visible)
+    if (group.type != LayerType.GroupLayer) {
+        return group;
+    }
+    if (group.children) {
+        group.children.map(child => {
+            if (child.type == LayerType.GroupLayer) {
+                child = forceLayerVisible(visible, child);
+            } else {
+                child = changeSelfVisible(child, visible);
+            }
+        });
+    }
+    return group;
 }
 
 export function loopGroupProp(id: string, key: string, value, group) {

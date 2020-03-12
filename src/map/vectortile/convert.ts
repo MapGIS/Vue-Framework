@@ -71,24 +71,33 @@ export class Convert {
         return sources
     }
 
-    docTomvtLayers(doc: IDocument) {
+    docTomvtLayers(doc: IDocument, remove: boolean = true) {
         let layers = []
         if (!doc) return layers
 
         let flats = doc.getFlatLayers()
         layers = flats.map(layer => {
             let { sourceLayer, subtype, layout, style } = layer
-            layer['source-layer'] = sourceLayer
+
             layer['type'] = this.docTomvtType(subtype)
             layer['layout'] = this.docTomvtLayout(layout)
             layer['paint'] = style || {}
-            delete layer.style
-            delete layer.subtype
-            delete layer.icon
-            delete layer.sourceLayer
-            delete layer.title
-            delete layer.name
-            delete layer.url
+
+            if (subtype = VectorTileLayerDefine.Raster) {
+                layer['source-layer'] = 'null'
+            } else {
+                layer['source-layer'] = sourceLayer
+            }
+
+            if (remove) {
+                delete layer.style
+                delete layer.subtype
+                delete layer.icon
+                delete layer.sourceLayer
+                delete layer.title
+                delete layer.name
+                delete layer.url
+            }
             return layer
         })
 
@@ -97,7 +106,6 @@ export class Convert {
 
     docTomvtType(subtype) {
         return VectorTileLayerDefine[subtype].type
-
     }
 
     docTomvtLayout(layout) {

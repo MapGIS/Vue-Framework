@@ -19,7 +19,8 @@ import {
 import {
     findLayer, findLayersByType, findLayersById,
     addGroupItem, addItemNearItem, deleteGroupItem,
-    flatLayers, copyGroupItem, specialGroupItem
+    flatLayers, copyGroupItem, specialGroupItem,
+    loopLayerProp, loopLayerVisible, forceLayerVisible
 } from './layer/grouplayer';
 
 import { uuid } from '../utils/uuid';
@@ -289,6 +290,25 @@ export class IDocument {
         return flats;
     }
 
+    getCheckedLayers(document?: IDocument) {
+        let checkedKeys = [];
+
+        let idoc = IDocument.clone(document);
+        let flats = idoc.getFlatLayers();
+
+        flats.forEach(layer => {
+            if ((!layer.layout && layer.type != LayerType.GroupLayer)
+                || (layer.layout && layer.layout.visible == true)) {
+                checkedKeys.push(layer.id);
+            } else if (layer.type == LayerType.GroupLayer && layer.layout
+                && layer.layout.visible) {
+                checkedKeys.push(layer.id);
+            }
+        });
+
+        return checkedKeys;
+    }
+
     /**
      * @param type LayerType
      * @returns Array<ILayer> | Array<DemWMSLayer> | Array<RasterTileLayer> | Array<VectorTileLayer>
@@ -500,6 +520,36 @@ export class IDocument {
         return this.sources;
     }
 
+    changeLayerVisible(id, visible: boolean) {
+        let layers = this.layers;
+        if (!layers) return undefined;
+
+        layers.map(item => {
+            if (item.type == LayerType.GroupLayer) {
+                if (item.id === id) {
+                    forceLayerVisible(visible, item);
+                } else {
+                    if (item.children) {
+                        loopLayerVisible(id, visible, item);
+                    }
+                }
+            } else {
+                if (item.id === id) {
+                    if (!item.layout) {
+                        item.layout = { visible: visible }
+                    } else {
+                        item.layout = {
+                            ...item.layout,
+                            visible: visible
+                        }
+                    }
+                }
+            }
+        });
+
+        return layers;
+    }
+
     changeLayerProp(id, propName, propValue) {
         let layers = this.layers;
         if (!layers) return undefined;
@@ -507,7 +557,7 @@ export class IDocument {
         layers.map(item => {
             if (item.type == LayerType.GroupLayer) {
                 if (item.children) {
-                    this.loopLayerProp(id, propName, propValue, item);
+                    loopLayerProp(id, propName, propValue, item);
                 }
             } else {
                 if (item.id == id) {
@@ -519,35 +569,6 @@ export class IDocument {
         return layers;
     }
 
-    loopLayerProp(id, propName, propValue, group) {
-        if (group.id == id) {
-            if (group && group[propName]) group[propName] = propValue;
-        }
-        if (group.type != LayerType.GroupLayer) {
-            return group;
-        }
-        if (group.children) {
-            group.children.map(child => {
-                if (child.type == LayerType.GroupLayer) {
-                    child = this.loopLayerProp(id, propName, propValue, child);
-                } else {
-                    if (child.id == id) {
-                        if (child && child[propName] !== undefined) {
-                            child[propName] = propValue;
-                        }
-                    }
-                }
-            });
-        }
-        return group;
-    }
-
-    //静态方法
-    /* static hello() {} */
-    //静态属性
-    /* static PI: number = Math.PI; */
-    //静态方法中可以返回静态属性，，静态成员只能使用类名.静态成员的方式进行访问。
-    /* static area(r: number) {return Document.PI * r * r;} */
     static clone(document: IDocument): IDocument {
         let { name, current, backgrounds, layers, sources, maprender, bounds, sprite, glyphs, service } = document;
         let copy = new IDocument(name, current, backgrounds, layers, sources, maprender, bounds, sprite, glyphs, service);
@@ -565,6 +586,10 @@ export class IDocument {
 
         let copy = new IDocument(name, current, backgrounds, newLayers, sources, maprender, bounds, sprite, glyphs, service, crs);
         return copy;
+    }
+
+    static Default(): IDocument {
+        return defaultDocument;
     }
 }
 

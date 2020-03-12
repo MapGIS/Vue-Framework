@@ -20,8 +20,7 @@ import * as Style from './map/style'
 import * as Event from './map/mapevent';
 import * as Service from './map/service';
 
-// 平一\平二
-export {
+export const MapGIS = {
     Enum,
     Event,
     Service,
@@ -42,4 +41,22 @@ export {
     Style,
     Theme,
     Spec
-}
+};
+
+export const MapgisEnum = Enum;
+export const MapgisEvent = Event;
+export const MapgisService = Service;
+export const MapgisSource = Source;
+export const MapgisEllipsoid = Ellipsoid;
+export const MapgisCrs = Crs;
+export const MapgisIDocument = IDocument;
+export const MapgisMap = Map;
+export const MapgisLayer = Layer;
+export const MapgisFeature = Feature;
+export const MapgisGeometry = Geometry;
+export const MapgisVectorTile = VectorTile;
+export const MapgisStyle = Style;
+export const MapgisTheme = Theme;
+export const MapgisSpec = Spec;
+
+export default MapGIS;

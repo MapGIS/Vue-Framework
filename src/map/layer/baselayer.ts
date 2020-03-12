@@ -81,6 +81,17 @@ export class ILayer {
         return layers;
     }
 
+    changeSelfVisible?(visible: boolean) {
+        if (!this.layout) {
+            this.layout = { visible: visible }
+        } else {
+            this.layout = {
+                ...this.layout,
+                visible: visible
+            }
+        }
+    }
+
     loopGroupName?(id, name, group) {
         if (group.id == id) {
             if (group && group["name"]) group["name"] = name;
@@ -175,6 +186,18 @@ export function changeLayerName(
     });
 
     return layers;
+}
+
+export function changeSelfVisible(layer, visible) {
+    if (!layer.layout) {
+        layer.layout = { visible: visible }
+    } else {
+        layer.layout = {
+            ...layer.layout,
+            visible: visible
+        }
+    }
+    return layer;
 }
 
 export function changeLayerId(

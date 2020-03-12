@@ -4,6 +4,7 @@ import { loopGroupProp } from '../layer/grouplayer';
 
 export enum VectorTileType {
     BackGround = "BackGround",
+    Raster = "Raster",
     Circle = "Circle",
     Line = "Line",
     Fill = "Fill",
@@ -18,6 +19,11 @@ export let VectorTileLayerDefine = {
         type: "background", name: "背景", icon: "icon-background",
         info: "背景图层，用来设置背景颜色",
         limit: [VectorTileType.BackGround]
+    },
+    Raster: {
+        type: "raster", name: "栅格瓦片", icon: "icon-background",
+        info: "栅格图层，用来作为底图",
+        limit: [VectorTileType.Raster]
     },
     Circle: {
         type: "circle", name: "点", icon: "icon-pointer",

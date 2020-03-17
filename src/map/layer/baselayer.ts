@@ -5,6 +5,7 @@ import { deepEqual } from '../../utils/deepequal'
 export const defaultId: string = "unknow";
 
 export enum LayerType {
+    /**通用图层 */
     GroupLayer = "GroupLayer",
     BackGround = "BackGround",
     BackColor = "BackColor",
@@ -13,10 +14,11 @@ export enum LayerType {
     DemWMS = "DemWMS",
     GeoJSON = "GeoJSON",
     ShapeFile = "ShapeFile",
-    UnKnow = "UnKnow"
+    UnKnow = "UnKnow",
 }
 
 export let LayerDefine = {
+    /**通用图层 */
     GroupLayer: { type: "", name: "组图层" },
     BackColor: { type: "", name: "背景颜色" },
     BackGround: { type: "", name: "背景底图" },

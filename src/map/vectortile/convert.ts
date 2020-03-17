@@ -3,9 +3,12 @@ import * as d3interpolate from 'd3-interpolate'
 
 import { IDocument, MapRender, defaultName, defaultCurrent, defaultBacks } from '../document'
 import { defaultSources, Source } from '../source/source'
-import { LayerType } from '../layer'
+import { LayerType, IgsLayerType } from '../layer'
 import { VectorTileType, VectorTileLayerDefine } from './baselayer'
 import { deepCopy } from '../../utils/deepequal'
+import { uuid } from '../../utils/uuid'
+
+import { IgsLayerTypeDefine } from '../layer/igserver'
 
 export const defaultId = 'cesium vector tiles'
 export const defaultSprite = 'http://localhost:6163/igs/rest/mrms/vtiles/sprite'
@@ -98,6 +101,8 @@ export class Convert {
                 delete layer.name
                 delete layer.url
             }
+
+            // layer.key = uuid();
             return layer
         })
 
@@ -105,7 +110,14 @@ export class Convert {
     }
 
     docTomvtType(subtype) {
-        return VectorTileLayerDefine[subtype].type
+        let type;
+        if (IgsLayerTypeDefine[subtype] && IgsLayerTypeDefine[subtype].type) {
+            type = IgsLayerTypeDefine[subtype].type
+        } else if (VectorTileLayerDefine[subtype]
+            && VectorTileLayerDefine[subtype].type) {
+            type = VectorTileLayerDefine[subtype].type;
+        }
+        return type;
     }
 
     docTomvtLayout(layout) {

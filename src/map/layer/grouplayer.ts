@@ -1,6 +1,7 @@
 import { ILayer, LayerType, IStyle, ILayout, changeSelfVisible } from "./baselayer";
 
 import IDocument from "../document";
+import { moveArray } from '../../utils/array';
 import { uuid } from '../../utils/uuid';
 import { deepCopy } from '../../utils/deepequal';
 
@@ -173,6 +174,24 @@ export function forceLayerVisible(visible, group) {
                 child = changeSelfVisible(child, visible);
             }
         });
+    }
+    return group;
+}
+
+export function loopLayerPosition(id, position, group) {
+    if (group.type != LayerType.GroupLayer) {
+        return group;
+    }
+    if (group.children) {
+        for (let i = 0; i < group.children.length; i++) {
+            let child = group.children[i];
+            if (child.id === id) {
+                group.children = moveArray(group.children, i, i + position)
+                break;
+            } else if (child.type === LayerType.GroupLayer) {
+                child = loopLayerPosition(id, position, child);
+            }
+        }
     }
     return group;
 }

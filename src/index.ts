@@ -20,6 +20,8 @@ import * as Style from './map/style'
 import * as Event from './map/mapevent';
 import * as Service from './map/service';
 
+import * as Util from './utils'
+
 export const MapGIS = {
     Enum,
     Event,
@@ -40,7 +42,9 @@ export const MapGIS = {
 
     Style,
     Theme,
-    Spec
+    Spec,
+
+    Util
 };
 
 export const MapgisEnum = Enum;

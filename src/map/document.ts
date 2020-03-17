@@ -20,9 +20,10 @@ import {
     findLayer, findLayersByType, findLayersById,
     addGroupItem, addItemNearItem, deleteGroupItem,
     flatLayers, copyGroupItem, specialGroupItem,
-    loopLayerProp, loopLayerVisible, forceLayerVisible
+    loopLayerProp, loopLayerVisible, forceLayerVisible, loopLayerPosition
 } from './layer/grouplayer';
 
+import { moveArray } from '../utils/array';
 import { uuid } from '../utils/uuid';
 import { deepCopy } from '../utils/deepequal';
 import { Bounds, defaultBounds } from './map';
@@ -546,6 +547,23 @@ export class IDocument {
                 }
             }
         });
+
+        return layers;
+    }
+
+    changeLayerPosition(id, position: number) {
+        let layers = this.layers;
+        if (!layers) return undefined;
+
+        for (let i = 0; i < layers.length; i++) {
+            let layer = layers[i];
+            if (layer.id === id) {
+                layers = moveArray(layers, i, i + position)
+                break;
+            } else if (layer.type === LayerType.GroupLayer) {
+                layer = loopLayerPosition(id, position, layer);
+            }
+        }
 
         return layers;
     }

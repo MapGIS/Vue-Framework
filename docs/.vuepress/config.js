@@ -47,21 +47,7 @@ module.exports = {
                         title: "Guide",
                         collapsable: false,
                         children: [
-                            ["/guide/", "Quickstart"],
-                            ["/guide/basemap.md", "Base map"],
-                            ["/guide/composition.md", "Composition"],
-                            ["/guide/controls.md", "Controls"],
-                            ["/guide/markers&popups.md", "Markers and popups"],
-                            ["/guide/layers&sources.md", "Layers and sources"]
-                        ]
-                    },
-                    {
-                        title: "API",
-                        collapsable: false,
-                        children: [
-                            ["/api/", "GlMap"],
-                            ["/api/controls.md", "Controls"],
-                            ["/api/marker.md", "MapMarker"]
+                            ["/guide/", "快速上手"],
                         ]
                     },
                     {
@@ -71,7 +57,6 @@ module.exports = {
                             ["/typescript/warning.md", "警告"],
                         ]
                     },
-
                     // ['/plugins/', 'Plugins'],
                 ]
                 // search: false

@@ -65,8 +65,8 @@ export class Convert {
             if (type == LayerType.VectorTile) {
                 newSouce.type = 'vector'
                 newSouce.tiles = [url]
-                newSouce.minZoom = min
-                newSouce.maxZoom = max
+                newSouce.minZoom = min || 0
+                newSouce.maxZoom = max || 24
                 sources[key] = newSouce
             }
         }
@@ -80,16 +80,17 @@ export class Convert {
 
         let flats = doc.getFlatLayers()
         layers = flats.map(layer => {
-            let { sourceLayer, subtype, layout, style } = layer
+            let { sourceLayer, type, subtype, layout, style } = layer
 
             layer['type'] = this.docTomvtType(subtype)
+            layer['subtype'] = this.docTomvtSubtype(subtype)
             layer['layout'] = this.docTomvtLayout(layout)
             layer['paint'] = style || {}
 
-            if (subtype = VectorTileLayerDefine.Raster) {
+            if (type === VectorTileLayerDefine.Raster.type) {
                 layer['source-layer'] = 'null'
             } else {
-                layer['source-layer'] = sourceLayer
+                layer['source-layer'] = sourceLayer || 'null'
             }
 
             if (remove) {
@@ -116,6 +117,17 @@ export class Convert {
         } else if (VectorTileLayerDefine[subtype]
             && VectorTileLayerDefine[subtype].type) {
             type = VectorTileLayerDefine[subtype].type;
+        }
+        return type;
+    }
+
+    docTomvtSubtype(subtype) {
+        let type;
+        if (IgsLayerTypeDefine[subtype] && IgsLayerTypeDefine[subtype].type) {
+            type = IgsLayerTypeDefine[subtype].subtype
+        } else if (VectorTileLayerDefine[subtype]
+            && VectorTileLayerDefine[subtype].type) {
+            type = 'vectortile';
         }
         return type;
     }

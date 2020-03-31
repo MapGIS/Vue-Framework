@@ -1,9 +1,5 @@
-import {
-    EllipsoidMapgisType,
-    EllipsoidMapgisDefine
-} from './mapgis';
+import { EllipsoidMapgisType, EllipsoidMapgisDefine } from "./mapgis";
 
-export {
-    EllipsoidMapgisType,
-    EllipsoidMapgisDefine
-}
+import { Scale } from "./scale";
+
+export { EllipsoidMapgisType, EllipsoidMapgisDefine, Scale };

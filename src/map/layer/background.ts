@@ -5,6 +5,7 @@ export class BackGroundLayer extends ILayer {
   tileUrl: string;
   imgUrl: string;
   style?: BackGroundStyle;
+  token?: string;
 }
 
 //-------------------------------------BackGroundStyle----------------------------------

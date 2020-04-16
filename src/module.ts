@@ -22,7 +22,7 @@ import * as Service from './map/service'
 
 import * as Util from './utils'
 
-export default {
+export {
     Enum,
     Event,
     Service,

@@ -3,6 +3,7 @@
     "version": "1.0.1",
     "description": "中地数码Webclient全局上下文环境&存储结构",
     "main": "dist/webclient-store.js",
+    "module": "src/module.ts",
     "scripts": {
         "build": "webpack",
         "docs:serve": "vuepress dev docs",

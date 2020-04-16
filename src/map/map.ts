@@ -1,5 +1,5 @@
 import { BBox } from "@turf/helpers";
-import { MapRender } from './document';
+import { MapRender } from "./document";
 
 /**
  * @class BBox
@@ -22,6 +22,31 @@ export class GeoBounds {
   north: number;
   east: number;
   south: number;
+
+  constructor(west, south, east, north) {
+    this.west = west;
+    this.south = south;
+    this.east = east;
+    this.north = north;
+  }
+
+  geojson() {
+    return {
+      type: "Feature",
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [
+            [this.west, this.south],  
+            [this.east, this.south],
+            [this.east, this.north],
+            [this.west, this.north],
+            [this.west, this.south]
+          ]
+        ]
+      }
+    };
+  }
 }
 
 export type CornerBounds = [[number, number], [number, number]];
@@ -34,30 +59,34 @@ export function BoundsToMap(bounds: Bounds, map: MapRender) {
   let result = null;
 
   if (map == MapRender.MapBoxGL) {
-    if (!map || !bounds) return [[-180, -90], [180, 90]];
+    if (!map || !bounds)
+      return [
+        [-180, -90],
+        [180, 90]
+      ];
 
     bounds = bounds as GeoBounds;
-    result = [[bounds.west, bounds.south], [bounds.east, bounds.north]];
-
+    result = [
+      [bounds.west, bounds.south],
+      [bounds.east, bounds.north]
+    ];
   } else if (map == MapRender.Cesium) {
-
   }
   return result;
 }
 
-export function MapToBounds(bounds: any, map: MapRender) {
+export function MapToBounds(bounds: any, map: MapRender): GeoBounds {
   let result = null;
 
   if (map == MapRender.MapBoxGL) {
-    if (!map || !bounds) return { east: -180, south: -85, west: 180, north: 85 }
-    result = {
-      east: bounds.getEast(),
-      south: bounds.getSouth(),
-      west: bounds.getWest(),
-      north: bounds.getNorth()
-    };
+    if (!map || !bounds) return new GeoBounds(-180, -90, 180, 90);
+    result = new GeoBounds(
+      bounds.getEast(),
+      bounds.getSouth(),
+      bounds.getWest(),
+      bounds.getNorth()
+    );
   } else if (map == MapRender.Cesium) {
-
   }
   return result;
 }
@@ -102,15 +131,15 @@ export enum ViewState {
   Map = "map",
   Edit = "edit",
   Query = "query",
-  Print = 'print'
+  Print = "print"
 }
 
 /**
  * @see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md
  */
 export enum EditState {
-  SIMPLE = 'simple_select',
-  DIRECT = 'direct_select',
+  SIMPLE = "simple_select",
+  DIRECT = "direct_select",
   /**画点模式 */
   POINT = "draw_point",
   /**画线模式 */
@@ -118,7 +147,7 @@ export enum EditState {
   /**画区模式 */
   POLYGON = "draw_polygon",
   /**仿照上面DRAW_POINT的模式，实际上是 画点模式 */
-  TEXT = 'draw_text',
+  TEXT = "draw_text",
   /** 仿照上面DRAW_POLYGON的模式，实际上是调用map.trash()方法 */
   TRASH = "draw_trash"
 }
@@ -149,7 +178,7 @@ export let defaultCenter = [0, 0];
 export let defaultBbox: BBox = [-180, 90, 180, -90];
 export let defaultExtent: Extent = [-180, 90, 180, -90];
 export let defaultScale = 0;
-export let defaultBounds: Bounds = { west: -180, north: 90, east: 180, south: -90 };
+export let defaultBounds: Bounds = new GeoBounds(-180, -90, 180, 90);
 export let defaultPosition: [number, number, number] = [0, 0, 0];
 export let defaultViewState = ViewState.Query;
 export let defaultEditState = EditState.SIMPLE;

@@ -1,5 +1,6 @@
 import { ILayer, LayerType, IStyle, ILayout } from "./baselayer";
 import IDocument from "../document";
+import { uuid } from '../../utils/uuid'
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
 export class GeoJsonLayer extends ILayer {
@@ -9,6 +10,14 @@ export class GeoJsonLayer extends ILayer {
   layerData?: any;
   layout?: ILayout;
   style?: GeoJsonStyle;
+
+  constructor(name?: string, key?: string) {
+    super();
+    this.type = LayerType.GeoJSON;
+    this.title = this.name = name || 'GeoJSON'
+    this.key = this.id = key || uuid();
+  }
+
 }
 
 //-------------------------------------GeoJsonStyle----------------------------------

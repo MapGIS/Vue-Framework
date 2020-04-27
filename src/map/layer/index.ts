@@ -1,7 +1,8 @@
 import { BackGroundLayer } from "./background";
 import { RasterTileLayer } from "./rastertile";
 import { VectorTileLayer } from "./vectortile";
-import { IgsLayerType, IgsLayerTypeDefine } from './igserver';
+import { GeoJsonLayer } from './geojson';
+import { IgsLayerType, IgsLayerTypeDefine, IgsDocLayer } from './igserver';
 
 import {
     defaultId,
@@ -26,9 +27,11 @@ export {
     BackGroundLayer,
     RasterTileLayer,
     VectorTileLayer,
+    GeoJsonLayer,
 
     IgsLayerType,
     IgsLayerTypeDefine,
+    IgsDocLayer,
 
     defaultId,
     LayerType,

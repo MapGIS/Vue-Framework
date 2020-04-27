@@ -1,14 +1,7 @@
-import {
-    ServiceType,
-    Service,
-    defaultService
-} from './service';
+import { ServiceType, Service } from "./service";
 
-import * as IGServer from './igserver/service.js'
+import { defaultService } from "./defaultservice";
 
-export {
-    ServiceType,
-    Service,
-    IGServer,
-    defaultService
-}
+import * as IGServer from "./igserver/service.js";
+
+export { ServiceType, Service, IGServer, defaultService };

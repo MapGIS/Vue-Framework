@@ -39,7 +39,7 @@ import { moveArray } from "../utils/array";
 import { uuid } from "../utils/uuid";
 import { deepCopy } from "../utils/deepequal";
 import { Bounds, defaultBounds } from "./map";
-import { defaultService } from "./service/service";
+import { defaultService } from "./service/defaultservice";
 import { defaultSources, Source } from "./source/source";
 import { Crs, defaultCrs } from "./crs/crs";
 
@@ -293,7 +293,7 @@ export class IDocument {
   getFlatLayers(filtergroup: boolean = true) {
     let flats = [];
     this.layers.forEach(layer => {
-      if (layer.type == LayerType.GroupLayer) {
+      if (layer.type == LayerType.GroupLayer || layer.children) {
         let flat = flatLayers(layer, filtergroup);
         flats = flats.concat(flat);
       } else {
@@ -387,7 +387,9 @@ export class IDocument {
       this.layers.push(layer);
     } else {
       this.layers = this.layers.map(group => {
-        if (group.type == LayerType.GroupLayer) {
+        if (group.type == LayerType.GroupLayer ||
+            (group.children && group.children.length >= 0)
+        ) {
           group = addGroupItem(layer, parent, group);
         }
         return group;

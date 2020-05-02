@@ -60,7 +60,20 @@ export const defaultCurrent = {
   name: defaultId
 };
 
+export const defaultLayers: Array<ILayer> = [];
+//.concat(defaultGroupLayer)
+//.concat(defaultVectorTileLayer)
+//.concat(defaultRasterLayer)
+//.concat(defaultDemWmsLayer)
+
+export const defaultSource = defaultSources;
+
 export const defaultName = "默认地图文档";
+
+export const defaultSprites =
+    "http://localhost:6163/igs/rest/mrms/vtiles/sprite";
+export const defaultGlyphs =
+    "http://localhost:6163/igs/rest/mrms/vtiles/fonts/{fontstack}/{range}.pbf";
 
 /**
  * @author 潘卓然
@@ -719,14 +732,6 @@ export const defaultBacks: Array<BackGroundLayer> = [
   }
 ];
 
-export const defaultLayers: Array<ILayer> = [];
-//.concat(defaultGroupLayer)
-//.concat(defaultVectorTileLayer)
-//.concat(defaultRasterLayer)
-//.concat(defaultDemWmsLayer)
-
-export const defaultSource = defaultSources;
-
 export const defaultDocument: IDocument = new IDocument(
   defaultName,
   defaultCurrent,
@@ -735,11 +740,6 @@ export const defaultDocument: IDocument = new IDocument(
   defaultSources,
   MapRender.MapBoxGL
 );
-
-export const defaultSprites =
-  "http://localhost:6163/igs/rest/mrms/vtiles/sprite";
-export const defaultGlyphs =
-  "http://localhost:6163/igs/rest/mrms/vtiles/fonts/{fontstack}/{range}.pbf";
 
 export function cloneDocument(document: IDocument): IDocument {
   let {

@@ -5248,6 +5248,7 @@
         "background-color": {
             "type": "color",
             "default": "#000000",
+            "name": "背景颜色",
             "doc": "颜色.",
             "transition": true,
             "requires": [
@@ -5297,6 +5298,7 @@
             "default": 1,
             "minimum": 0,
             "maximum": 1,
+            "name": "背景透明",
             "doc": "透明度.",
             "transition": true,
             "sdk-support": {

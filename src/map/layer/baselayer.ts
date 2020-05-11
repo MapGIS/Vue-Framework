@@ -31,6 +31,10 @@ export let LayerDefine = {
   DemWMS: { type: "", name: "DEM" },
   GeoJSON: { type: "", name: "GeoJSON" },
   ShapeFile: { type: "", name: "ShapeFile" },
+  /**
+   * 三维图层
+   */
+  Cesium3DTileset: { type: "", name: "3D瓦片" },
   UnKnow: { type: "", name: "未知" },
 };
 

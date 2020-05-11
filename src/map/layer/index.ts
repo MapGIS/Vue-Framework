@@ -1,4 +1,5 @@
 import { BackGroundLayer } from "./background";
+import { BackColorLayer } from './backcolor';
 import { RasterTileLayer, RasterLayerType } from "./rastertile";
 import { VectorTileLayer } from "./vectortile";
 import { GeoJsonLayer } from './geojson';
@@ -25,6 +26,7 @@ import {
 
 export {
     BackGroundLayer,
+    BackColorLayer,
     RasterTileLayer,
     RasterLayerType,
     VectorTileLayer,

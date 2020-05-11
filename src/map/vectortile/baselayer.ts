@@ -16,47 +16,56 @@ export enum VectorTileType {
 
 export let VectorTileLayerDefine = {
     BackGround: {
-        type: "background", name: "背景", icon: "icon-background",
+        type: "background", subtype: "Background", 
+        name: "背景", icon: "icon-background",
         info: "背景图层，用来设置背景颜色",
         limit: [VectorTileType.BackGround]
     },
     Raster: {
-        type: "raster", name: "栅格瓦片", icon: "icon-background",
+        type: "raster", subtype: LayerType.RasterTile, 
+        name: "栅格瓦片", icon: "icon-background",
         info: "栅格图层，用来作为底图",
         limit: [VectorTileType.Raster]
     },
     Circle: {
-        type: "circle", name: "点", icon: "icon-pointer",
+        type: "circle", subtype: LayerType.VectorTile, 
+        name: "点", icon: "icon-pointer",
         info: "只能实现单纯的点的样式",
         limit: [VectorTileType.Circle, VectorTileType.Heatmap, VectorTileType.Symbol]
     },
     Line: {
-        type: "line", name: "线", icon: "icon-vectorpolyline",
+        type: "line", subtype: LayerType.VectorTile,
+        name: "线", icon: "icon-vectorpolyline",
         info: "尽量使用多图层实现道路贯通",
         limit: [VectorTileType.Line, VectorTileType.Symbol]
     },
     Fill: {
-        type: "fill", name: "区", icon: "icon-vector-polygon",
+        type: "fill", subtype: LayerType.VectorTile,
+        name: "区", icon: "icon-vector-polygon",
         info: "区要素，多使用抗锯齿",
         limit: [VectorTileType.Fill, VectorTileType.FillExtrusion, VectorTileType.Symbol]
     },
     FillExtrusion: {
-        type: "fill-extrusion", name: "面", icon: "icon-cube",
+        type: "fill-extrusion", subtype: LayerType.VectorTile,
+        name: "面", icon: "icon-cube",
         info: "区加上高程信息构建对应的面要素",
         limit: [VectorTileType.Fill, VectorTileType.FillExtrusion, VectorTileType.Symbol]
     },
     Symbol: {
-        type: "symbol", name: "符号", icon: "icon-dollar-symbol-1",
+        type: "symbol", subtype: LayerType.VectorTile,
+        name: "符号", icon: "icon-dollar-symbol-1",
         info: "分为文字和图片两部分",
         limit: [VectorTileType.Circle, VectorTileType.Line, VectorTileType.Fill, VectorTileType.FillExtrusion, VectorTileType.Symbol]
     },
     Heatmap: {
-        type: "heatmap", name: "热力图", icon: "icon-echarts_heatmap",
+        type: "heatmap", subtype: LayerType.VectorTile,
+        name: "热力图", icon: "icon-echarts_heatmap",
         info: "热力图，实现热力展示",
         limit: [VectorTileType.Circle, VectorTileType.Symbol]
     },
     HillShade: {
-        type: "hillshade", name: "地形阴影", icon: "icon-mountain-",
+        type: "hillshade", subtype: LayerType.VectorTile,
+        name: "地形阴影", icon: "icon-mountain-",
         info: "通过RGB组合计算阴影",
         limit: [VectorTileType.HillShade]
     }

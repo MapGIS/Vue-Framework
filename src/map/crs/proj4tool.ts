@@ -1,6 +1,9 @@
 import EPSG from "./epsg";
 
-import proj4 from "proj4/dist/proj4-src.js";
+// import * as proj4 from "proj4";
+// import proj4 = require('proj4')
+import * as proj4x from 'proj4';
+let proj4 = (proj4x as any).default;
 
 export class ProjectTool {
   static getProj4sCascader() {

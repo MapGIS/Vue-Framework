@@ -14,6 +14,10 @@ export enum LayerType {
   DemWMS = "DemWMS",
   GeoJSON = "GeoJSON",
   ShapeFile = "ShapeFile",
+  /**
+   * 三维图层
+   */
+  Cesium3DTileset = 'Cesium3DTileset',
   UnKnow = "UnKnow",
 }
 

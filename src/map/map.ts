@@ -37,14 +37,14 @@ export class GeoBounds {
         type: "Polygon",
         coordinates: [
           [
-            [this.west, this.south],  
+            [this.west, this.south],
             [this.east, this.south],
             [this.east, this.north],
             [this.west, this.north],
-            [this.west, this.south]
-          ]
-        ]
-      }
+            [this.west, this.south],
+          ],
+        ],
+      },
     };
   }
 }
@@ -53,7 +53,7 @@ export type CornerBounds = [[number, number], [number, number]];
 
 export type ArrayBounds = [number, number, number, number];
 
-export type Bounds = GeoBounds; //| BoxBounds; | ArrayBounds | CornerBounds;
+export type Bounds = GeoBounds | BoxBounds | ArrayBounds | CornerBounds;
 
 export function BoundsToMap(bounds: Bounds, map: MapRender) {
   let result = null;
@@ -62,13 +62,13 @@ export function BoundsToMap(bounds: Bounds, map: MapRender) {
     if (!map || !bounds)
       return [
         [-180, -90],
-        [180, 90]
+        [180, 90],
       ];
 
     bounds = bounds as GeoBounds;
     result = [
       [bounds.west, bounds.south],
-      [bounds.east, bounds.north]
+      [bounds.east, bounds.north],
     ];
   } else if (map == MapRender.Cesium) {
   }
@@ -87,6 +87,8 @@ export function MapToBounds(bounds: any, map: MapRender): GeoBounds {
       bounds.getNorth()
     );
   } else if (map == MapRender.Cesium) {
+    const { east, south, west, north } = bounds;
+    result = new GeoBounds(east, south, west, north);
   }
   return result;
 }
@@ -131,7 +133,7 @@ export enum ViewState {
   Map = "map",
   Edit = "edit",
   Query = "query",
-  Print = "print"
+  Print = "print",
 }
 
 /**
@@ -149,13 +151,13 @@ export enum EditState {
   /**仿照上面DRAW_POINT的模式，实际上是 画点模式 */
   TEXT = "draw_text",
   /** 仿照上面DRAW_POLYGON的模式，实际上是调用map.trash()方法 */
-  TRASH = "draw_trash"
+  TRASH = "draw_trash",
 }
 
 export enum HighLight {
   Single = "single",
   Multi = "multi",
-  None = "none"
+  None = "none",
 }
 
 export class State {
@@ -198,7 +200,7 @@ export let defaultMapState: State = {
   editState: defaultEditState,
   highLight: defaultHighLight,
   enableEventLink: defaultEnableEventLink,
-  enableZoom: defaultEnableZoom
+  enableZoom: defaultEnableZoom,
 };
 
 export interface MapStateEvent {

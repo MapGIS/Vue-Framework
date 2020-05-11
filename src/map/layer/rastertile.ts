@@ -3,6 +3,13 @@ import IDocument from "../document";
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 import { loopGroupProp } from './grouplayer';
 
+export enum RasterLayerType {
+  /**通用图层 */
+  Raster = "Raster",
+  ArcGIS = "ArcGIS",
+  UnKnow = "UnKnow"
+}
+
 export class RasterTileLayer extends ILayer {
   title?: string;
   tileUrl?: string;

@@ -30,6 +30,7 @@ import {
   copyGroupItem,
   specialGroupItem,
   loopLayerProp,
+  loopLayerStyle,
   loopLayerVisible,
   forceLayerVisible,
   loopLayerPosition
@@ -614,6 +615,26 @@ export class IDocument {
       } else {
         if (item.id == id) {
           item[propName] = propValue;
+        }
+      }
+    });
+
+    return layers;
+  }
+
+  changeLayerStyle(id, propName, propValue) {
+    let layers = this.layers;
+    if (!layers) return undefined;
+
+    layers.map(item => {
+      if (item.type == LayerType.GroupLayer) {
+        if (item.children) {
+          loopLayerStyle(id, propName, propValue, item);
+        }
+      } else {
+        if (item.id == id) {
+          if(!item.style) item.style = {}
+          item.style[propName] = propValue;
         }
       }
     });

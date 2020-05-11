@@ -1,4 +1,5 @@
-import { ILayer } from './baselayer';
+import { ILayer } from "./baselayer";
+import { Bounds } from '../map';
 
 export enum IgsLayerType {
   /**IGServer图层 */
@@ -38,10 +39,16 @@ export let IgsLayerTypeDefine = {
   },
 };
 
-class IgsLayer extends ILayer{
+class IgsLayer extends ILayer {
   protocol: string;
   ip: string;
   port: string;
+
+  /**
+   * @descrition 完整的地图请求路径。
+   */
+  url?: string;
+
   /**
    *
    * @param ip Igserver的ip，默认localhost
@@ -66,11 +73,6 @@ export class IgsDocLayer extends IgsLayer {
   serverName?: string;
 
   /**
-   * @descrition 完整的地图请求路径。
-   */
-  url?: string;
-
-  /**
    * @descrition 瓦片大小
    */
   tileSize?: number;
@@ -85,12 +87,6 @@ export class IgsDocLayer extends IgsLayer {
    * @descrition 投影参数设置，仅在非动态裁图时有意义，针对整个地图文档进行操作。当 cache 为 true 时此参数无效（仅在非动态裁图时才有意义）
    */
   proj?: string;
-
-  /**
-   * @description 支持懒加载,用于树控件的懒加载操作
-   * @default true
-   */
-  expand?: boolean;
 
   /**
    *  @description 是否使用动态裁图功能
@@ -124,11 +120,23 @@ export class IgsDocLayer extends IgsLayer {
    */
   mode?: string;
 
-  constructor() {  
-  // constructor(ip, port, serverName) {
+  constructor(l?: ILayer) {
+    // constructor(ip, port, serverName) {
     // super(ip, port);
     // this.serverName = serverName;
-    super();      
+    super();
+    if(!l) return;
+
+    if (l.children) this.children = l.children;
+    if (l.url) this.url = l.url;
+    if (l.name) this.name = l.name;
+    if (l.title) this.title = l.title;
+    if (l.id) this.id = l.id;
+    if (l.key) this.key = l.key;
+    if (l.style) this.style = l.style;
+    if (l.layout) this.layout = l.layout;
+
+    this.parseLayer(l);
   }
 
   /**
@@ -139,13 +147,13 @@ export class IgsDocLayer extends IgsLayer {
   parseUrl(url) {
     const doc = "/igs/rest/mrms/docs/";
     const ipReg = "/://[a-zA-Z0-9]+:*/g";
-    const portReg = "/:+[0-9]+\//g";
+    const portReg = "/:+[0-9]+//g";
     const indexServer = url.search(doc);
     const indexName = indexServer + doc.length;
     const serverName = url.substr(indexName);
-    const matchIp = url.match(/\:\/\/[a-zA-Z0-9]+\:*/g)[0];
+    const matchIp = url.match(/\:\/\/[a-zA-Z0-9.]+\:*/g)[0];
     const matchPort = url.match(/:+[0-9]+\//g)[0];
-    
+
     let ip, port;
     if (matchIp && matchIp.length > 3) {
       ip = matchIp.slice(3, matchIp.length - 1);
@@ -154,35 +162,164 @@ export class IgsDocLayer extends IgsLayer {
       port = matchPort.slice(1, matchPort.length - 1);
     }
 
-    if(this.children && this.children.length > 0) {
-      let rule = 'show:'
+    if (this.children && this.children.length > 0) {
+      let rule = "show:";
       this.children.forEach((child, i) => {
         if (!child.layout) {
-          rule = rule + i + ','
+          rule = rule + i + ",";
         } else if (child.layout.visible === true) {
-          rule = rule + i + ','
-        } else if (child.layout['visibility'] === 'visible') {
-          rule = rule + i + ','
+          rule = rule + i + ",";
+        } else if (child.layout["visibility"] === "visible") {
+          rule = rule + i + ",";
         }
       });
-      rule = rule.substr(0, rule.length - 1)
-      rule = rule.length > 4 ? rule : 'show:-1'
-      this.layers = rule
+      rule = rule.substr(0, rule.length - 1);
+      rule = rule.length > 4 ? rule : "show:-1";
+      this.layers = rule;
     }
 
     this.serverName = serverName || this.serverName;
-    this.ip = ip || this.ip
-    this.port = port || this.port
+    this.ip = ip || this.ip;
+    this.port = port || this.port;
   }
 
   parseLayer(layer: ILayer) {
-    if(layer.url) {
+    if (layer.url) {
       this.parseUrl(layer.url);
     }
   }
+
+  initQuaryParam(rect) {
+    /*
+    //创建查询结构对象
+    var queryStruct = new Zondy.Service.QueryFeatureStruct();
+    //是否包含几何图形信息
+    queryStruct.IncludeGeometry = true;
+    //是否包含属性信息
+    queryStruct.IncludeAttribute = true;
+    //是否包含图形显示参数
+    queryStruct.IncludeWebGraphic = false;
+    //创建一个用于查询的矩形
+    var geomObj = new Zondy.Object.Rectangle(rect[0], rect[1], rect[2], rect[3]);
+    //制定查询规则
+    var rule = new Zondy.Service.QueryFeatureRule({
+        //是否将要素的可见性计算在内
+        EnableDisplayCondition: false,
+        //是否完全包含
+        MustInside: false,
+        //是否仅比较要素的外包矩形
+        CompareRectOnly: false,
+        //是否相交
+        Intersect: true
+    });
+    //实例化查询参数对象
+    var queryParam = new Zondy.Service.QueryParameter({
+        //几何对象
+        geometry: geomObj,
+        //结果格式
+        resultFormat: "json",
+        //查询结构
+        struct: queryStruct,
+        //查询规则
+        rule: rule
+    });
+    //设置查询分页号
+    //设置查询要素数目
+    queryParam.recordNumber = 20;
+    queryParam.pageIndex = 0;
+    return queryParam;
+    */
+    return "";
+  }
+
+  queryByRect(rect: Bounds) {
+    this.initQuaryParam(rect);
+  }
+
+  queryByPoint(lng, lat, crs?:string) {
+    const radiu = 0.000000001;
+    const rect = [lng - radiu, lat - radiu, lng + radiu, lat - radiu];
+    this.initQuaryParam(rect);
+  }  
+
 }
 
 export class IgsWmsLayer extends IgsLayer {
-  // serverName: string;
-  expand: true; //支持懒加载
+  serverType: string;
+  serverName: string;
+  layers: Array<string>;
+
+  constructor(l?: ILayer){
+    super();
+    if(!l) return;
+
+    if (l.children) this.children = l.children;
+    if (l.url) this.url = l.url;
+    if (l.name) this.name = l.name;
+    if (l.title) this.title = l.title;
+    if (l.id) this.id = l.id;
+    if (l.key) this.key = l.key;
+    if (l.style) this.style = l.style;
+    if (l.layout) this.layout = l.layout;
+
+    this.parseLayer(this);
+  }
+
+  /**
+   * @param url
+   * @description 解析url的值,提取对应的值并赋给对应的ip port serverName
+   * @example http://localhost:6163/igs/rest/ogc/doc/OGC_4326_CHINA/WMSServer
+   */
+  parseUrl(url) {
+    const doc = "/igs/rest/ogc/doc/";
+    const ipReg = "/://[a-zA-Z0-9]+:*/g";
+    const portReg = "/:+[0-9]+//g";
+    const indexServer = url.search(doc);
+    const indexName = indexServer + doc.length;
+    const serverName = url.substr(indexName);
+    const matchIp = url.match(/\:\/\/[a-zA-Z0-9]+\:*/g)[0];
+    const matchPort = url.match(/:+[0-9]+\//g)[0];
+
+    let ip, port;
+    if (matchIp && matchIp.length > 3) {
+      ip = matchIp.slice(3, matchIp.length - 1);
+    }
+    if (matchPort && matchPort.length > 2) {
+      port = matchPort.slice(1, matchPort.length - 1);
+    }
+
+    if (this.children && this.children.length > 0) {
+      let rule = [];
+      this.children.forEach((child, i) => {
+        if (!child.layout) {
+          rule.push(child.name);
+        } else if (child.layout.visible === true) {
+          rule.push(child.name);
+        } else if (child.layout["visibility"] === "visible") {
+          rule.push(child.name);
+        }
+      });
+      this.layers = rule;
+    }
+
+    this.serverName = serverName || this.serverName;
+    this.ip = ip || this.ip;
+    this.port = port || this.port;
+  }
+
+  parseLayer(layer: ILayer) {
+    if (this.children && this.children.length > 0) {
+      let rule = [];
+      this.children.forEach((child, i) => {
+        if (!child.layout) {
+          rule.push(child.name);
+        } else if (child.layout.visible === true) {
+          rule.push(child.name);
+        } else if (child.layout["visibility"] === "visible") {
+          rule.push(child.name);
+        }
+      });
+      this.layers = rule;
+    }
+  }
 }

@@ -132,7 +132,7 @@ export class Convert {
   }
 
   docTomvtType(subtype) {
-    let type;
+    let type = subtype;
     if (IgsLayerTypeDefine[subtype] && IgsLayerTypeDefine[subtype].type) {
       type = IgsLayerTypeDefine[subtype].type;
     } else if (
@@ -145,14 +145,14 @@ export class Convert {
   }
 
   docTomvtSubtype(subtype) {
-    let type;
+    let type = subtype;
     if (IgsLayerTypeDefine[subtype] && IgsLayerTypeDefine[subtype].type) {
       type = IgsLayerTypeDefine[subtype].subtype;
     } else if (
       VectorTileLayerDefine[subtype] &&
       VectorTileLayerDefine[subtype].type
     ) {
-      type = "vectortile";
+      type = VectorTileLayerDefine[subtype].subtype;
     }
     return type;
   }

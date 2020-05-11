@@ -30,7 +30,7 @@ export function flatLayers(group, filtergroup: boolean = true): Array<ILayer> {
       if (child.type == LayerType.GroupLayer || child.children) {
         let innerLayers = flatLayers(child, filtergroup);
         layers = layers.concat(innerLayers);
-        if (child.type != LayerType.GroupLayer || child.children) {
+        if (child.type != LayerType.GroupLayer && child.children) {
           layers.push(child);
         }
       } else {
@@ -142,6 +142,37 @@ export function loopLayerProp(id, propName, propValue, group) {
         if (child.id == id) {
           if (child && child[propName] !== undefined) {
             child[propName] = propValue;
+          }
+        }
+      }
+    });
+  }
+  return group;
+}
+
+export function loopLayerStyle(id, propName, propValue, group) {
+  if (group.id == id) {
+    if (group) {
+      if (!group.style) {
+        group.style = {};  
+      } 
+      group.style[propName] = propValue;
+    }
+  }
+  if (group.type != LayerType.GroupLayer) {
+    return group;
+  }
+  if (group.children) {
+    group.children.map((child) => {
+      if (child.type == LayerType.GroupLayer) {
+        child = loopLayerStyle(id, propName, propValue, child);
+      } else {
+        if (child.id == id) {
+          if (child) {
+            if (!child.style) {
+              child.style = {};  
+            } 
+            child.style[propName] = propValue;
           }
         }
       }

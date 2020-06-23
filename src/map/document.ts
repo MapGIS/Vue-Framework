@@ -96,6 +96,9 @@ export class IDocument {
 
   crs?: Crs;
 
+  layout?: Object;
+  widget?: Object;
+
   //构造函数
   constructor(
     name: string,
@@ -121,6 +124,8 @@ export class IDocument {
     this.sprite = sprite ? sprite : defaultSprites;
     this.glyphs = glyphs ? glyphs : defaultGlyphs;
     this.crs = crs ? crs : defaultCrs;
+    this.layout = {};
+    this.widget = { drag: {}, slot: []};
   }
 
   //实例方法
@@ -325,7 +330,6 @@ export class IDocument {
       flats = idoc.getFlatLayers();
     } else {
       flats = this.getFlatLayers();
-      console.log("flats", flats);
     }
 
     flats.forEach(layer => {
@@ -681,6 +685,10 @@ export class IDocument {
       glyphs,
       service
     );
+
+    copy.layout = document.layout;
+    copy.widget = document.widget;
+    
     return copy;
   }
 
@@ -701,6 +709,8 @@ export class IDocument {
     } = document;
     let newLayers = [];
 
+    if(!document.layers) return document;
+
     layers.forEach(layer => {
       let newLayer = deepCopy(layer);
       newLayers.push(newLayer);
@@ -719,7 +729,15 @@ export class IDocument {
       service,
       crs
     );
+
+    copy.layout = deepCopy(document.layout);
+    copy.widget = deepCopy(document.widget);
+
     return copy;
+  }
+
+  static deepCopy(document: IDocument): IDocument {
+    return deepCopy(document);
   }
 
   static Default(): IDocument {

@@ -16,6 +16,11 @@ export class RasterTileLayer extends ILayer {
   imgUrl?: string;
   layout?: ILayout;
   style?: RasterTileStyle;
+
+  constructor() {
+    super();
+    this.type = LayerType.RasterTile;
+  }
 }
 
 //-------------------------------------RasterTileStyle----------------------------------

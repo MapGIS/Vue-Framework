@@ -6,7 +6,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     context: path.resolve(__dirname),
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -20,6 +20,7 @@ module.exports = {
             './src/index.ts'
         ]
     },
+    devtool: 'inline-source-map',
     resolve: {
         extensions: [
             '.ts'

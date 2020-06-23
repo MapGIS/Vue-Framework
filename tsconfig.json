@@ -10,14 +10,22 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "sourceMap": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
         "baseUrl": ".",
         "types": [
-            "webpack-env"
+            "node"
+        ],
+        "typeRoots": [
+            "node_modules/@types"
         ],
         "paths": {
             "@/*": [
                 "src/*"
-            ]
+            ],
+            "axios": [
+                "node_modules/axios"
+            ],
         },
         "lib": [
             "esnext",
@@ -26,6 +34,12 @@
             "scripthost"
         ]
     },
+    "types": [
+        "node"
+    ],
+    "typeRoots": [
+        "node_modules/@types"
+    ],
     "include": [
         "src/**/*.ts",
         "tests/**/*.ts",

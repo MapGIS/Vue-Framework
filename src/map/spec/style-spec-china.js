@@ -3792,6 +3792,7 @@
         "line-blur": {
             "type": "number",
             "default": 0,
+            "maximum": 100,
             "minimum": 0,
             "transition": true,
             "units": "pixels",
@@ -3984,6 +3985,8 @@
         "circle-blur": {
             "type": "number",
             "default": 0,
+            "maximum": 100,
+            "minimum": 0,
             "name": "模糊度",
             "doc": "模糊度，越高越模糊.",
             "transition": true,
@@ -4556,6 +4559,7 @@
         "icon-halo-blur": {
             "type": "number",
             "default": 0,
+            "maximum": 100,
             "minimum": 0,
             "transition": true,
             "units": "pixels",
@@ -4796,6 +4800,7 @@
         "text-halo-blur": {
             "type": "number",
             "default": 0,
+            "maximum": 100,
             "minimum": 0,
             "transition": true,
             "units": "pixels",

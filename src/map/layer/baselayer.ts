@@ -1,4 +1,4 @@
-import IDocument, { MapRender } from "../document";
+import { IDocument, MapRender } from "../document";
 import { Bounds } from "../map";
 import { deepEqual } from "../../utils/deepequal";
 
@@ -17,7 +17,7 @@ export enum LayerType {
   /**
    * 三维图层
    */
-  Cesium3DTileset = 'Cesium3DTileset',
+  Cesium3DTileset = "Cesium3DTileset",
   UnKnow = "UnKnow",
 }
 
@@ -338,7 +338,7 @@ function loopGroupVisible(ids, group) {
             result.layout.visible = true;
             // 针对wms doclayer的子图层的优化
             if (group.type !== LayerType.GroupLayer) {
-                group.layout = { visible: true };
+              group.layout = { visible: true };
             }
           }
         });

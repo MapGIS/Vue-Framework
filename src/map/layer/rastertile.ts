@@ -1,13 +1,13 @@
 import { ILayer, LayerType, IStyle, ILayout } from "./baselayer";
-import IDocument from "../document";
+import { IDocument } from "../document";
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
-import { loopGroupProp } from './grouplayer';
+import { loopGroupProp } from "./grouplayer";
 
 export enum RasterLayerType {
   /**通用图层 */
   Raster = "Raster",
   ArcGIS = "ArcGIS",
-  UnKnow = "UnKnow"
+  UnKnow = "UnKnow",
 }
 
 export class RasterTileLayer extends ILayer {
@@ -55,11 +55,17 @@ export interface IRasterTileSytle {
 }
 
 export const defaultOpacity: PropertyValueSpecification<number> = {
-  stops: [[0, 1], [5, 1], [10, 1], [15, 1], [20, 1]]
+  stops: [
+    [0, 1],
+    [5, 1],
+    [10, 1],
+    [15, 1],
+    [20, 1],
+  ],
 };
 
 export const defaultHue: PropertyValueSpecification<number> = {
-  stops: [[0, 0]]
+  stops: [[0, 0]],
 };
 
 export const defaultRasterTileStyle: RasterTileStyle = new RasterTileStyle(
@@ -75,7 +81,7 @@ export function changeRasterTileStyle(
   let layers = document.layers;
   if (!layers) return undefined;
 
-  layers.map(layer => {
+  layers.map((layer) => {
     if (layer.type == LayerType.GroupLayer) {
       if (layer.children) {
         loopGroupProp(raster.id, "style", style, layer);
@@ -117,7 +123,6 @@ export const defaultRasterTileLayout: RasterTileLayout = new RasterTileLayout(
   defaultVisible
 );
 
-
 export function changeRasterTileLayout(
   raster: ILayer,
   layout: RasterTileLayout,
@@ -126,7 +131,7 @@ export function changeRasterTileLayout(
   let layers = document.layers;
   if (!layers) return undefined;
 
-  layers.map(layer => {
+  layers.map((layer) => {
     if (layer.type == LayerType.GroupLayer) {
       if (layer.children) {
         loopGroupProp(raster.id, "layout", layout, layer);

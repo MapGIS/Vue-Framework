@@ -52,7 +52,8 @@ module.exports = {
                         loader: 'ts-loader',
                         options: {
                             transpileOnly: true,
-                            happyPackMode: true
+                            happyPackMode: true,
+                            allowTsInNodeModules: true
                         }
                     }
                 ]

@@ -1,6 +1,6 @@
 import { ILayer, LayerType, IStyle, ILayout } from "./baselayer";
-import IDocument from "../document";
-import { uuid } from '../../utils/uuid'
+import { IDocument } from "../document";
+import { uuid } from "../../utils/uuid";
 import { PropertyValueSpecification } from "@mapbox/mapbox-gl-style-spec/types";
 
 export class GeoJsonLayer extends ILayer {
@@ -14,10 +14,9 @@ export class GeoJsonLayer extends ILayer {
   constructor(name?: string, key?: string) {
     super();
     this.type = LayerType.GeoJSON;
-    this.title = this.name = name || 'GeoJSON'
+    this.title = this.name = name || "GeoJSON";
     this.key = this.id = key || uuid();
   }
-
 }
 
 //-------------------------------------GeoJsonStyle----------------------------------
@@ -52,11 +51,17 @@ export interface IGeoJsonSytle {
 }
 
 export const defaultOpacity: PropertyValueSpecification<number> = {
-  stops: [[0, 1], [5, 1], [10, 1], [15, 1], [20, 1]]
+  stops: [
+    [0, 1],
+    [5, 1],
+    [10, 1],
+    [15, 1],
+    [20, 1],
+  ],
 };
 
 export const defaultHue: PropertyValueSpecification<number> = {
-  stops: [[0, 0]]
+  stops: [[0, 0]],
 };
 
 export const defaultGeoJsonStyle: GeoJsonStyle = new GeoJsonStyle(

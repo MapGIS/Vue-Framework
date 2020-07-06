@@ -1,5 +1,5 @@
 import { ILayer, ILayout, IStyle, IFilter, LayerType } from "../layer";
-import IDocument from "../document";
+import { IDocument } from "../document";
 import { loopGroupProp } from '../layer/grouplayer';
 
 export enum VectorTileType {

@@ -1,3 +1,4 @@
-import { Sprite } from './sprite';
+import { Sprite } from "./sprite";
 
 export { Sprite };
+export default { Sprite };

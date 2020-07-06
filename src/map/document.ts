@@ -1,14 +1,3 @@
-import backgrouds, {
-  defaultBackground,
-  getBackground
-} from "./config/backgroud";
-
-import {
-  defaultRasterLayer,
-  defaultVectorLayer,
-  defaultGroupLayer
-} from "./config/layers";
-
 import {
   LayerType,
   ILayer,
@@ -845,4 +834,20 @@ export function deepcloneDocument(document: IDocument): IDocument {
   return copy;
 }
 
-export default IDocument;
+export default {
+  IDocument,
+  MapRender,
+  Current,
+  defaultCurrent,
+  defaultLayers,
+  defaultSource,
+  defaultName,
+  defaultSprites,
+  defaultGlyphs,
+  defaultMapRender,
+  defaultLayer,
+  defaultBacks,
+  defaultDocument,
+  cloneDocument,
+  deepcloneDocument
+};

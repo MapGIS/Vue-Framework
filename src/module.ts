@@ -1,49 +1,91 @@
-import * as Doc from './map/document'
-import { IDocument } from './map/document'
+/**
+ * @description 地图文档类
+ */
+import * as  Doc from "./map/document";
 
-import * as Enum from './map/enum'
+/**
+ * @description 地图文档抽象类
+ */
+import { IDocument } from "./map/document";
 
-import * as Crs from './map/crs'
-import * as Ellipsoid from './map/ellipsoid'
-import * as Source from './map/source'
+import * as Enum from "./map/enum";
 
-import * as Map from './map/map'
-import * as Layer from './map/layer'
-import * as Feature from './map/feature'
-import * as Geometry from './map/geom'
-import * as VectorTile from './map/vectortile'
+import * as Crs from "./map/crs";
+import * as Ellipsoid from "./map/ellipsoid";
+import * as Source from "./map/source";
 
-import * as Theme from './map/theme'
-import * as Spec from './map/spec'
-import * as Style from './map/style'
+import * as Map from "./map/map";
+import * as Layer from "./map/layer";
+import * as Feature from "./map/feature";
+import * as Geometry from "./map/geom";
+import * as VectorTile from "./map/vectortile";
 
-import * as Event from './map/mapevent'
-import * as Service from './map/service'
+import * as Format from "./map/format";
 
-import * as Util from './utils'
+import * as Theme from "./map/theme";
+import * as Spec from "./map/spec";
+import * as Style from "./map/style";
+
+/**
+ * @description 这个typescript如果要使用的话只能通过
+ * import {MapEvent} from '@mapgis/webclient-store' 的方式
+ **/
+import * as Event from "./map/mapevent";
+
+import * as Services from "./map/service";
+
+import * as Util from "./utils";
 
 export {
-    Enum,
-    Event,
-    Service,
+  Enum,
+  Event,
+  Services,
 
-    Source,
-    Ellipsoid,
-    Crs,
+  Source,
+  Ellipsoid,
+  Crs,
 
-    IDocument,
-    Doc,
-    Map,
-    Layer,
-    Feature,
-    Geometry,
+  IDocument,
+  Doc,
+  Map,
+  Layer,
+  Feature,
+  Geometry,
 
-    VectorTile,
+  VectorTile,
 
-    Style,
-    Theme,
-    Spec,
+  Format,
 
-    Util
+  Style,
+  Theme,
+  Spec,
+
+  Util,
 };
 
+export default {
+  Enum,
+  Event,
+  Services,
+
+  Source,
+  Ellipsoid,
+  Crs,
+
+  IDocument,
+  Doc,
+  Map,
+  Layer,
+  Feature,
+  Geometry,
+
+  VectorTile,
+
+  Format,
+
+  Style,
+  Theme,
+  Spec,
+
+  Util,
+};

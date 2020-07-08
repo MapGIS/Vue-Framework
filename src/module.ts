@@ -15,6 +15,7 @@ import * as Ellipsoid from "./map/ellipsoid";
 import * as Source from "./map/source";
 
 import * as Map from "./map/map";
+import * as Action from "./map/mapaction";
 import * as Layer from "./map/layer";
 import * as Feature from "./map/feature";
 import * as Geometry from "./map/geom";
@@ -39,6 +40,7 @@ import * as Util from "./utils";
 export {
   Enum,
   Event,
+  Action,
   Services,
 
   Source,
@@ -66,6 +68,7 @@ export {
 export default {
   Enum,
   Event,
+  Action,
   Services,
 
   Source,

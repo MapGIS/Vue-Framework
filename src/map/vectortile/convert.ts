@@ -1,5 +1,6 @@
-import * as d3color from "d3-color";
-import * as d3interpolate from "d3-interpolate";
+import { color } from "d3-color";
+import * as d3interpolate from "d3-scale-chromatic";
+const d3color = color;
 
 import {
   IDocument,

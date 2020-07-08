@@ -1,5 +1,4 @@
 import { BBox } from "@turf/helpers";
-import { MapRender } from "./document";
 
 /**
  * @class BBox
@@ -60,44 +59,6 @@ export type ArrayBounds = [number, number, number, number];
 
 export type Bounds = GeoBounds | BoxBounds | ArrayBounds | CornerBounds;
 
-export function BoundsToMap(bounds: Bounds, map: MapRender) {
-    let result = null;
-
-    if (map == MapRender.MapBoxGL) {
-        if (!map || !bounds)
-            return [
-                [-180, -90],
-                [180, 90],
-            ];
-
-        bounds = bounds as GeoBounds;
-        result = [
-            [bounds.west, bounds.south],
-            [bounds.east, bounds.north],
-        ];
-    } else if (map == MapRender.Cesium) {
-    }
-    return result;
-}
-
-export function MapToBounds(bounds: any, map: MapRender): GeoBounds {
-    let result = null;
-
-    if (map == MapRender.MapBoxGL) {
-        if (!map || !bounds) return new GeoBounds(-180, -90, 180, 90);
-        result = new GeoBounds(
-            bounds.getEast(),
-            bounds.getSouth(),
-            bounds.getWest(),
-            bounds.getNorth()
-        );
-    } else if (map == MapRender.Cesium) {
-        const { east, south, west, north } = bounds;
-        result = new GeoBounds(east, south, west, north);
-    }
-    return result;
-}
-
 /**
  * @class Position 封装类
  * @description Positon = Positon2d | Positon3d | Positon2dArray | Positon3dArray;
@@ -134,7 +95,7 @@ export type Positon /* Positon2d | Positon3d | */ =
     | Positon2dArray
     | Positon3dArray;
 
-enum ViewState {
+export enum ViewState {
     Map = "map",
     Edit = "edit",
     Query = "query",
@@ -144,7 +105,7 @@ enum ViewState {
 /**
  * @see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md
  */
-enum EditState {
+export enum EditState {
     SIMPLE = "simple_select",
     DIRECT = "direct_select",
     /**画点模式 */
@@ -159,13 +120,13 @@ enum EditState {
     TRASH = "draw_trash",
 }
 
-enum HighLight {
+export enum HighLight {
     Single = "single",
     Multi = "multi",
     None = "none",
 }
 
-class State {
+export class State {
     zoom: number;
     center: Array<number>;
     bbox: BBox;
@@ -180,20 +141,20 @@ class State {
     enableZoom?: boolean;
 }
 
-let defaultZoom = 0;
-let defaultCenter = [0, 0];
-let defaultBbox: BBox = [-180, 90, 180, -90];
-let defaultExtent: Extent = [-180, 90, 180, -90];
-let defaultScale = 0;
-let defaultBounds: Bounds = new GeoBounds(-180, -90, 180, 90);
-let defaultPosition: [number, number, number] = [0, 0, 0];
-let defaultViewState = ViewState.Query;
-let defaultEditState = EditState.SIMPLE;
-let defaultHighLight = HighLight.None;
-let defaultEnableEventLink = false;
-let defaultEnableZoom = false;
+export let defaultZoom = 0;
+export let defaultCenter = [0, 0];
+export let defaultBbox: BBox = [-180, 90, 180, -90];
+export let defaultExtent: Extent = [-180, 90, 180, -90];
+export let defaultScale = 0;
+export let defaultBounds: Bounds = new GeoBounds(-180, -90, 180, 90);
+export let defaultPosition: [number, number, number] = [0, 0, 0];
+export let defaultViewState = ViewState.Query;
+export let defaultEditState = EditState.SIMPLE;
+export let defaultHighLight = HighLight.None;
+export let defaultEnableEventLink = false;
+export let defaultEnableZoom = false;
 
-let defaultMapState: State = {
+export let defaultMapState: State = {
     zoom: defaultZoom,
     center: defaultCenter,
     bbox: defaultBbox,
@@ -230,42 +191,44 @@ export interface MapMouseEvent {
     click(event: any);
 }
 
-export {
-    ViewState,
-    EditState,
-    HighLight,
-    State,
-    defaultZoom,
-    defaultCenter,
-    defaultBbox,
-    defaultExtent,
-    defaultScale,
-    defaultBounds,
-    defaultPosition,
-    defaultViewState,
-    defaultEditState,
-    defaultHighLight,
-    defaultEnableEventLink,
-    defaultEnableZoom,
-    defaultMapState
-}
+// export {
+//     ViewState,
+//     EditState,
+//     HighLight,
+//     GeoBounds,
+//     State,
+//     defaultZoom,
+//     defaultCenter,
+//     defaultBbox,
+//     defaultExtent,
+//     defaultScale,
+//     defaultBounds,
+//     defaultPosition,
+//     defaultViewState,
+//     defaultEditState,
+//     defaultHighLight,
+//     defaultEnableEventLink,
+//     defaultEnableZoom,
+//     defaultMapState
+// }
 
-export default {
-    ViewState,
-    EditState,
-    HighLight,
-    State,
-    defaultZoom,
-    defaultCenter,
-    defaultBbox,
-    defaultExtent,
-    defaultScale,
-    defaultBounds,
-    defaultPosition,
-    defaultViewState,
-    defaultEditState,
-    defaultHighLight,
-    defaultEnableEventLink,
-    defaultEnableZoom,
-    defaultMapState
-}
+// export default {
+//     ViewState,
+//     EditState,
+//     HighLight,
+//     State,
+//     GeoBounds,
+//     defaultZoom,
+//     defaultCenter,
+//     defaultBbox,
+//     defaultExtent,
+//     defaultScale,
+//     defaultBounds,
+//     defaultPosition,
+//     defaultViewState,
+//     defaultEditState,
+//     defaultHighLight,
+//     defaultEnableEventLink,
+//     defaultEnableZoom,
+//     defaultMapState
+// }

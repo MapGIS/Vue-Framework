@@ -1,7 +1,18 @@
-import { VectorTileType, VectorTileLayerDefine, BaseLayer } from "./baselayer";
+import {
+  VectorTileType,
+  VectorTileLayerDefine,
+  BaselayerAction,
+  BaseLayer,
+} from "./baselayer";
 import { Convert } from "./convert";
 
-export { VectorTileType, VectorTileLayerDefine, BaseLayer, Convert };
+export {
+  VectorTileType,
+  VectorTileLayerDefine,
+  BaselayerAction,
+  BaseLayer,
+  Convert,
+};
 
 export default {
   VectorTileType,

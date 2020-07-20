@@ -1,7 +1,7 @@
 /**
  * @description 地图文档类
  */
-import * as  Doc from "./map/document";
+import * as Doc from "./map/document";
 
 /**
  * @description 地图文档抽象类
@@ -12,7 +12,8 @@ import * as Enum from "./map/enum";
 
 import * as Crs from "./map/crs";
 import * as Ellipsoid from "./map/ellipsoid";
-import * as Source from "./map/source";
+import * as Sources from "./map/source";
+import * as OGC from "./map/ogc";
 
 import * as Map from "./map/map";
 import * as Action from "./map/mapaction";
@@ -42,26 +43,21 @@ export {
   Event,
   Action,
   Services,
-
-  Source,
+  Sources,
   Ellipsoid,
   Crs,
-
+  OGC,
   IDocument,
   Doc,
   Map,
   Layer,
   Feature,
   Geometry,
-
   VectorTile,
-
   Format,
-
   Style,
   Theme,
   Spec,
-
   Util,
 };
 
@@ -71,9 +67,10 @@ export default {
   Action,
   Services,
 
-  Source,
+  Sources,
   Ellipsoid,
   Crs,
+  OGC,
 
   IDocument,
   Doc,

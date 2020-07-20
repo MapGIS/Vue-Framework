@@ -1,5 +1,36 @@
 import { MapRender } from "./document";
-import { GeoBounds } from "./map";
+
+class GeoBounds {
+    west: number;
+    north: number;
+    east: number;
+    south: number;
+
+    constructor(west, south, east, north) {
+        this.west = west;
+        this.south = south;
+        this.east = east;
+        this.north = north;
+    }
+
+    geojson() {
+        return {
+            type: "Feature",
+            geometry: {
+                type: "Polygon",
+                coordinates: [
+                    [
+                        [this.west, this.south],
+                        [this.east, this.south],
+                        [this.east, this.north],
+                        [this.west, this.north],
+                        [this.west, this.south],
+                    ],
+                ],
+            },
+        };
+    }
+}
 
 export function BoundsToMap(bounds: any, map: MapRender) {
     let result = null;

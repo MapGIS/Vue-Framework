@@ -1,5 +1,5 @@
 import { ILayer } from "./baselayer";
-import { Bounds } from '../map';
+import { Bounds } from "../map";
 
 export enum IgsLayerType {
   /**IGServer图层 */
@@ -8,6 +8,8 @@ export enum IgsLayerType {
   IgsVectorLayer = "IgsVectorLayer",
   IgsWmsLayer = "IgsWmsLayer",
   IgsWmtsLayer = "IgsWmtsLayer",
+  IgsTdtLayer = "IgsTdtLayer",
+  IgsArcgisLayer = "IgsArcgisLayer",
 }
 
 export let IgsLayerTypeDefine = {
@@ -36,6 +38,16 @@ export let IgsLayerTypeDefine = {
     type: "raster",
     subtype: "IgsWmtsLayer",
     name: "WMTS服务",
+  },
+  IgsTdtLayer: {
+    type: "raster",
+    subtype: "IgsTdtLayer",
+    name: "天地图服务",
+  },
+  IgsArcgisLayer: {
+    type: "raster",
+    subtype: "IgsArcgisLayer",
+    name: "ArcGIS服务",
   },
 };
 
@@ -125,7 +137,7 @@ export class IgsDocLayer extends IgsLayer {
     // super(ip, port);
     // this.serverName = serverName;
     super();
-    if(!l) return;
+    if (!l) return;
 
     if (l.children) this.children = l.children;
     if (l.url) this.url = l.url;
@@ -236,12 +248,11 @@ export class IgsDocLayer extends IgsLayer {
     this.initQuaryParam(rect);
   }
 
-  queryByPoint(lng, lat, crs?:string) {
+  queryByPoint(lng, lat, crs?: string) {
     const radiu = 0.000000001;
     const rect = [lng - radiu, lat - radiu, lng + radiu, lat - radiu];
     this.initQuaryParam(rect);
-  }  
-
+  }
 }
 
 export class IgsWmsLayer extends IgsLayer {
@@ -249,9 +260,9 @@ export class IgsWmsLayer extends IgsLayer {
   serverName: string;
   layers: Array<string>;
 
-  constructor(l?: ILayer){
+  constructor(l?: ILayer) {
     super();
-    if(!l) return;
+    if (!l) return;
 
     if (l.children) this.children = l.children;
     if (l.url) this.url = l.url;

@@ -1,5 +1,5 @@
-import { Source } from "./source";
+import { Source, SourceType } from "./source";
 import China from "./china";
 
-export { Source, China };
-export default { Source, China };
+export { Source, SourceType, China };
+export default { Source, SourceType, China };

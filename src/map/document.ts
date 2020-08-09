@@ -1,3 +1,5 @@
+import { Story } from "./style/story";
+
 import {
   LayerType,
   ILayer,
@@ -5,7 +7,7 @@ import {
   BackGroundLayer,
   RasterTileLayer,
   VectorTileLayer,
-  changeLayersVisible
+  changeLayersVisible,
 } from "./layer";
 
 import {
@@ -22,7 +24,7 @@ import {
   loopLayerStyle,
   loopLayerVisible,
   forceLayerVisible,
-  loopLayerPosition
+  loopLayerPosition,
 } from "./layer/grouplayer";
 
 import { moveArray } from "../utils/array";
@@ -32,10 +34,11 @@ import { Bounds, defaultBounds } from "./map";
 import { defaultService } from "./service/defaultservice";
 import { defaultSources, Source } from "./source/source";
 import { Crs, defaultCrs } from "./crs/crs";
+import { Convert } from "./layer/convert";
 
 export enum MapRender {
   MapBoxGL = "mapboxgl",
-  Cesium = "cesium"
+  Cesium = "cesium",
 }
 
 export class Current {
@@ -47,7 +50,7 @@ export class Current {
 export const defaultCurrent = {
   id: defaultId,
   type: LayerType.UnKnow,
-  name: defaultId
+  name: defaultId,
 };
 
 export const defaultLayers: Array<ILayer> = [];
@@ -61,9 +64,9 @@ export const defaultSource = defaultSources;
 export const defaultName = "默认地图文档";
 
 export const defaultSprites =
-    "http://localhost:6163/igs/rest/mrms/vtiles/sprite";
+  "http://localhost:6163/igs/rest/mrms/vtiles/sprite";
 export const defaultGlyphs =
-    "http://localhost:6163/igs/rest/mrms/vtiles/fonts/{fontstack}/{range}.pbf";
+  "http://localhost:6163/igs/rest/mrms/vtiles/fonts/{fontstack}/{range}.pbf";
 
 /**
  * @author 潘卓然
@@ -87,6 +90,7 @@ export class IDocument {
 
   layout?: Object;
   widget?: Object;
+  story?: Story;
 
   //构造函数
   constructor(
@@ -114,7 +118,8 @@ export class IDocument {
     this.glyphs = glyphs ? glyphs : defaultGlyphs;
     this.crs = crs ? crs : defaultCrs;
     this.layout = {};
-    this.widget = { drag: {}, slot: []};
+    this.widget = { drag: {}, slot: [] };
+    this.story = new Story();
   }
 
   //实例方法
@@ -228,6 +233,13 @@ export class IDocument {
     return style;
   }
 
+  getCurrentStory() {
+    if (!this.story || !this.story.books || this.story.current === "")
+      return undefined;
+    let book = this.story.getCurrentBook();
+    return book;
+  }
+
   getCurrentLayout() {
     let layers = this.getCurrentLayers();
     let layout = undefined;
@@ -300,7 +312,7 @@ export class IDocument {
 
   getFlatLayers(filtergroup: boolean = true) {
     let flats = [];
-    this.layers.forEach(layer => {
+    this.layers.forEach((layer) => {
       if (layer.type == LayerType.GroupLayer || layer.children) {
         let flat = flatLayers(layer, filtergroup);
         flats = flats.concat(flat);
@@ -309,6 +321,17 @@ export class IDocument {
       }
     });
     return flats;
+  }
+
+  /**
+   * @description 针对图层进行对应的处理，满足条件的返回处理后的图层，否则返回原始图层
+   * @param {Boolean} [filtergroup=true] 是否过滤组图层,默认true剔除组图层
+   * @return {Array<ILayer>} layers
+   */
+  getConvertLayers(filtergroup: boolean = true) {
+    let conv = new Convert();
+    let layers = conv.docToMvtLayers(this);
+    return layers;
   }
 
   getCheckedLayers(document?: IDocument) {
@@ -321,7 +344,7 @@ export class IDocument {
       flats = this.getFlatLayers();
     }
 
-    flats.forEach(layer => {
+    flats.forEach((layer) => {
       if (
         (!layer.layout && layer.type != LayerType.GroupLayer) ||
         (layer.layout && layer.layout.visible == true)
@@ -393,9 +416,10 @@ export class IDocument {
     if (!parent) {
       this.layers.push(layer);
     } else {
-      this.layers = this.layers.map(group => {
-        if (group.type == LayerType.GroupLayer ||
-            (group.children && group.children.length >= 0)
+      this.layers = this.layers.map((group) => {
+        if (
+          group.type == LayerType.GroupLayer ||
+          (group.children && group.children.length >= 0)
         ) {
           group = addGroupItem(layer, parent, group);
         }
@@ -409,11 +433,11 @@ export class IDocument {
     if (!where) {
       this.layers.push(layer);
     } else {
-      let children = this.layers.map(child => {
+      let children = this.layers.map((child) => {
         return child;
       });
       let parent = { children: this.layers };
-      children.map(group => {
+      children.map((group) => {
         group = addItemNearItem(layer, where, group, parent, before);
       });
       //this.layers = parent.children;
@@ -489,7 +513,7 @@ export class IDocument {
             name: name,
             title: name,
             special: special,
-            icon: iconfont
+            icon: iconfont,
           };
         } else {
         }
@@ -501,7 +525,7 @@ export class IDocument {
   }
 
   deleteLayer(id: string) {
-    this.layers = this.layers.filter(layer => {
+    this.layers = this.layers.filter((layer) => {
       if (layer.type == LayerType.GroupLayer) {
         if (layer.id == id) return false;
         layer = deleteGroupItem(id, layer);
@@ -561,7 +585,7 @@ export class IDocument {
     let layers = this.layers;
     if (!layers) return undefined;
 
-    layers.map(item => {
+    layers.map((item) => {
       if (item.type == LayerType.GroupLayer) {
         if (item.id === id) {
           forceLayerVisible(visible, item);
@@ -577,7 +601,7 @@ export class IDocument {
           } else {
             item.layout = {
               ...item.layout,
-              visible: visible
+              visible: visible,
             };
           }
         }
@@ -588,7 +612,7 @@ export class IDocument {
   }
 
   checkVisibleLayers(visibleIds) {
-    this.layers = changeLayersVisible(visibleIds, this)
+    this.layers = changeLayersVisible(visibleIds, this);
     return this.layers;
   }
 
@@ -613,7 +637,7 @@ export class IDocument {
     let layers = this.layers;
     if (!layers) return undefined;
 
-    layers.map(item => {
+    layers.map((item) => {
       if (item.type == LayerType.GroupLayer) {
         if (item.children) {
           loopLayerProp(id, propName, propValue, item);
@@ -632,14 +656,14 @@ export class IDocument {
     let layers = this.layers;
     if (!layers) return undefined;
 
-    layers.map(item => {
+    layers.map((item) => {
       if (item.type == LayerType.GroupLayer) {
         if (item.children) {
           loopLayerStyle(id, propName, propValue, item);
         }
       } else {
         if (item.id == id) {
-          if(!item.style) item.style = {}
+          if (!item.style) item.style = {};
           item.style[propName] = propValue;
         }
       }
@@ -660,7 +684,8 @@ export class IDocument {
       bounds,
       sprite,
       glyphs,
-      service
+      service,
+      story,
     } = document;
     let copy = new IDocument(
       name,
@@ -677,7 +702,8 @@ export class IDocument {
 
     copy.layout = document.layout;
     copy.widget = document.widget;
-    
+    copy.story = Story.wrapper(story);
+
     return copy;
   }
 
@@ -694,13 +720,14 @@ export class IDocument {
       sprite,
       glyphs,
       service,
-      crs
+      crs,
+      story,
     } = document;
     let newLayers = [];
 
-    if(!document.layers) return document;
+    if (!document.layers) return document;
 
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       let newLayer = deepCopy(layer);
       newLayers.push(newLayer);
     });
@@ -721,6 +748,7 @@ export class IDocument {
 
     copy.layout = deepCopy(document.layout);
     copy.widget = deepCopy(document.widget);
+    copy.story = Story.wrapper(story);
 
     return copy;
   }
@@ -740,7 +768,7 @@ export const defaultLayer: ILayer = {
   type: LayerType.UnKnow,
   name: LayerType.UnKnow,
   id: LayerType.UnKnow,
-  key: LayerType.UnKnow
+  key: LayerType.UnKnow,
 };
 
 export const defaultBacks: Array<BackGroundLayer> = [
@@ -756,8 +784,8 @@ export const defaultBacks: Array<BackGroundLayer> = [
     tileUrl:
       "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
     imgUrl:
-      "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png"
-  }
+      "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png",
+  },
 ];
 
 export const defaultDocument: IDocument = new IDocument(
@@ -780,7 +808,7 @@ export function cloneDocument(document: IDocument): IDocument {
     bounds,
     sprite,
     glyphs,
-    service
+    service,
   } = document;
   let copy = new IDocument(
     name,
@@ -809,11 +837,11 @@ export function deepcloneDocument(document: IDocument): IDocument {
     sprite,
     glyphs,
     service,
-    crs
+    crs,
   } = document;
   let newLayers = [];
 
-  layers.forEach(layer => {
+  layers.forEach((layer) => {
     let newLayer = deepCopy(layer);
     newLayers.push(newLayer);
   });
@@ -849,5 +877,5 @@ export default {
   defaultBacks,
   defaultDocument,
   cloneDocument,
-  deepcloneDocument
+  deepcloneDocument,
 };

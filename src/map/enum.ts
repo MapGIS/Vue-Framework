@@ -1,4 +1,4 @@
-enum ViewState {
+export enum ViewState {
   Map = "map",
   Edit = "edit",
   Query = "query",
@@ -8,7 +8,7 @@ enum ViewState {
 /**
  * @see https://github.com/mapbox/mapbox-gl-draw/blob/master/docs/API.md
  */
-enum EditState {
+export enum EditState {
   SIMPLE = "simple_select",
   DIRECT = "direct_select",
   /**画点模式 */
@@ -23,13 +23,13 @@ enum EditState {
   TRASH = "draw_trash",
 }
 
-enum HighLight {
+export enum HighLight {
   Single = "single",
   Multi = "multi",
   None = "none",
 }
 
-enum LayerType {
+export enum LayerType {
   GroupLayer = "GroupLayer",
   BackGround = "BackGround",
   BackColor = "BackColor",
@@ -41,7 +41,7 @@ enum LayerType {
   UnKnow = "UnKnow",
 }
 
-export { ViewState, EditState, HighLight, LayerType };
+// export { ViewState, EditState, HighLight, LayerType };
 
 export default {
   ViewState,

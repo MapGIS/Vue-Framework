@@ -37,6 +37,7 @@ import * as Event from "./map/mapevent";
 import * as Services from "./map/service";
 
 import * as Util from "./utils";
+import * as Flux from './flux';
 
 export {
   Enum,
@@ -59,6 +60,7 @@ export {
   Theme,
   Spec,
   Util,
+  Flux
 };
 
 export default {
@@ -88,4 +90,5 @@ export default {
   Spec,
 
   Util,
+  Flux
 };

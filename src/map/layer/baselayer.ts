@@ -14,6 +14,11 @@ export enum LayerType {
   DemWMS = "DemWMS",
   GeoJSON = "GeoJSON",
   ShapeFile = "ShapeFile",
+  OverLayer = "OverLayer",
+  /**
+   * 故事图层
+   */
+  BookLayer = "BookLayer",
   /**
    * 三维图层
    */
@@ -67,6 +72,24 @@ export class ILayer {
   children?: Array<ILayer>;
   subtype?: any;
   bounds?: Bounds;
+
+  constructor(l?: ILayer) {
+    if (!l) return;
+    if (l.subtype) this.subtype = l.subtype;
+
+    let id = l.id || l.name || l.title || l.key;
+
+    if (l.children) this.children = l.children;
+    if (l.url) this.url = l.url;
+
+    this.name = id;
+    this.title = id;
+    this.id = id;
+    this.key = id;
+
+    if (l.style) this.style = l.style;
+    if (l.layout) this.layout = l.layout;
+  }
 
   changeLayerName?(layer: ILayer, name: string, document: IDocument) {
     let layers = document.layers;

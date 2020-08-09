@@ -1,5 +1,6 @@
 import {
   VectorTileType,
+  VectorTileGeomType,
   VectorTileLayerDefine,
   BaselayerAction,
   BaseLayer,
@@ -8,6 +9,7 @@ import { Convert } from "./convert";
 
 export {
   VectorTileType,
+  VectorTileGeomType,
   VectorTileLayerDefine,
   BaselayerAction,
   BaseLayer,
@@ -16,6 +18,7 @@ export {
 
 export default {
   VectorTileType,
+  VectorTileGeomType,
   VectorTileLayerDefine,
   BaseLayer,
   Convert,

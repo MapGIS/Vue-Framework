@@ -1,1 +1,0 @@
-import { NameSpaceDocument } from "../model";

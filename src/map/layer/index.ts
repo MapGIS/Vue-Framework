@@ -10,6 +10,7 @@ import {
 } from "./rastertile";
 import { VectorTileLayer } from "./vectortile";
 import { GeoJsonLayer } from "./geojson";
+import { EchartsLayer } from "./echartslayer";
 import { OverLayerType, OverLayer } from "./overlayer";
 import {
   IgsLayerType,
@@ -23,6 +24,7 @@ import {
 import {
   defaultId,
   LayerType,
+  LayerGroup,
   LayerDefine,
   ILayer,
   IInfo,
@@ -49,19 +51,18 @@ export {
   defaultRasterTileLayout,
   VectorTileLayer,
   GeoJsonLayer,
-
   OverLayerType,
   OverLayer,
-
+  EchartsLayer,
   IgsLayerType,
   IgsLayerTypeDefine,
   IgsDocLayer,
   IgsTileLayer,
   IgsVectorLayer,
   IgsWmsLayer,
-  
   defaultId,
   LayerType,
+  LayerGroup,
   LayerDefine,
   ILayer,
   IInfo,
@@ -91,6 +92,7 @@ export default {
 
   OverLayerType,
   OverLayer,
+  EchartsLayer,
 
   IgsLayerType,
   IgsLayerTypeDefine,

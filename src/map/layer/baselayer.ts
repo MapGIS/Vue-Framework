@@ -24,23 +24,89 @@ export enum LayerType {
    */
   Cesium3DTileset = "Cesium3DTileset",
   UnKnow = "UnKnow",
+  /**
+   * 通用覆盖图层
+   */
+  EchartsLayer = "EchartsLayer",
+  MapvLayer = "MapvLayer",
+}
+
+export enum LayerGroup {
+  Common = "通用图层",
+  Three = "三维图层",
+  Overlay = "覆盖图层",
 }
 
 export let LayerDefine = {
   /**通用图层 */
-  GroupLayer: { type: "", name: "组图层" },
-  BackColor: { type: "", name: "背景颜色" },
-  BackGround: { type: "", name: "背景底图" },
-  RasterTile: { type: "", name: "栅格瓦片" },
-  VectorTile: { type: "", name: "矢量瓦片" },
-  DemWMS: { type: "", name: "DEM" },
-  GeoJSON: { type: "", name: "GeoJSON" },
-  ShapeFile: { type: "", name: "ShapeFile" },
+  GroupLayer: {
+    type: LayerType.GroupLayer,
+    group: LayerGroup.Common,
+    name: "组图层",
+  },
+  BackColor: {
+    type: LayerType.BackColor,
+    group: LayerGroup.Common,
+    name: "背景颜色",
+  },
+  BackGround: {
+    type: LayerType.BackGround,
+    group: LayerGroup.Common,
+    name: "背景底图",
+  },
+  RasterTile: {
+    type: LayerType.RasterTile,
+    group: LayerGroup.Common,
+    name: "栅格瓦片",
+  },
+  VectorTile: {
+    type: LayerType.VectorTile,
+    group: LayerGroup.Common,
+    name: "矢量瓦片",
+  },
+  DemWMS: { type: LayerType.DemWMS, group: LayerGroup.Common, name: "DEM" },
+  GeoJSON: {
+    type: LayerType.GeoJSON,
+    group: LayerGroup.Common,
+    name: "GeoJSON",
+  },
+  ShapeFile: {
+    type: LayerType.ShapeFile,
+    group: LayerGroup.Common,
+    name: "ShapeFile",
+  },
+  OverLayer: {
+    type: LayerType.OverLayer,
+    group: LayerGroup.Common,
+    name: "OverLayer",
+  },
+  BookLayer: {
+    type: LayerType.BookLayer,
+    group: LayerGroup.Common,
+    name: "BookLayer",
+  },
+  UnKnow: { type: LayerType.UnKnow, group: LayerGroup.Common, name: "未知" },
   /**
    * 三维图层
    */
-  Cesium3DTileset: { type: "", name: "3D瓦片" },
-  UnKnow: { type: "", name: "未知" },
+  Cesium3DTileset: {
+    type: LayerType.Cesium3DTileset,
+    group: LayerGroup.Three,
+    name: "3D瓦片",
+  },
+  /**
+   * 通用覆盖图层
+   */
+  EchartsLayer: {
+    type: LayerType.EchartsLayer,
+    group: LayerGroup.Overlay,
+    name: "EchartsLayer",
+  },
+  MapvLayer: {
+    type: LayerType.MapvLayer,
+    group: LayerGroup.Overlay,
+    name: "MapvLayer",
+  },
 };
 
 export class ILayer {

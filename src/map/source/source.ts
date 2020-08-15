@@ -8,7 +8,6 @@ export enum SourceType {
   GeoJson = "GeoJson",
   VectorTile = "VectorTile",
   RasterTile = "RasterTile",
-  M3D = "M3D",
 }
 
 export class Source {
@@ -23,7 +22,7 @@ export class Source {
     if (!url) return;
     // var regip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
     // var regport = /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
-    
+
     const matchIp = url.match(/\:\/\/[a-zA-Z0-9]+\:*/g)[0];
     const matchPort = url.match(/:+[0-9]+\//g)[0];
 
@@ -122,15 +121,26 @@ export const defaultSource: Source = {
 };
 
 export const vtSource: Source = {
-  name: "IGServer",
+  name: "默认矢量瓦片数据源",
   type: SourceType.VectorTile,
   url:
-    "http://192.168.10.186:6163/igs/rest/mrms/tile/矢量瓦片湖北/{z}/{y}/{x}?type=cpbf",
+    "http://localhost:6163/igs/rest/mrms/tile/矢量瓦片数据/{z}/{y}/{x}?type=cpbf",
   min: 0,
   max: 24,
   description: "IGServer矢量瓦片数据源测试案例.",
 };
+
+export const datastoreSource: Source = {
+  name: "默认大数据数据源",
+  type: SourceType.DataStore,
+  url: "http://192.168.96.101:9091",
+  min: 0,
+  max: 24,
+  description: "DataStore大数据数据源测试案例.",
+};
+
 export const defaultSources: Object = {
   默认数据源: defaultSource,
-  IGServer: vtSource,
+  默认矢量瓦片数据源: vtSource,
+  默认大数据数据源: datastoreSource,
 };

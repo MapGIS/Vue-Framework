@@ -29,6 +29,7 @@ export enum LayerType {
    */
   EchartsLayer = "EchartsLayer",
   MapvLayer = "MapvLayer",
+  SpaceTimeAggregationLayer = "SpaceTimeAggregationLayer",
 }
 
 export enum LayerGroup {
@@ -100,12 +101,17 @@ export let LayerDefine = {
   EchartsLayer: {
     type: LayerType.EchartsLayer,
     group: LayerGroup.Overlay,
-    name: "EchartsLayer",
+    name: "Echarts图层",
   },
   MapvLayer: {
     type: LayerType.MapvLayer,
     group: LayerGroup.Overlay,
-    name: "MapvLayer",
+    name: "Mapv图层",
+  },
+  SpaceTimeAggregationLayer: {
+    type: LayerType.SpaceTimeAggregationLayer,
+    group: LayerGroup.Overlay,
+    name: "时空聚合图层",
   },
 };
 

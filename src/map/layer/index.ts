@@ -11,7 +11,9 @@ import {
 import { VectorTileLayer } from "./vectortile";
 import { GeoJsonLayer } from "./geojson";
 import { EchartsLayer } from "./echartslayer";
+import { MapvLayer } from "./mapvlayer";
 import { OverLayerType, OverLayer } from "./overlayer";
+import { LayoutType, LayoutLegendType, LayoutLegendDefine } from "./layout";
 import {
   IgsLayerType,
   IgsLayerTypeDefine,
@@ -54,6 +56,10 @@ export {
   OverLayerType,
   OverLayer,
   EchartsLayer,
+  MapvLayer,
+  LayoutType,
+  LayoutLegendType,
+  LayoutLegendDefine,
   IgsLayerType,
   IgsLayerTypeDefine,
   IgsDocLayer,
@@ -93,6 +99,11 @@ export default {
   OverLayerType,
   OverLayer,
   EchartsLayer,
+  MapvLayer,
+
+  LayoutType,
+  LayoutLegendType,
+  LayoutLegendDefine,
 
   IgsLayerType,
   IgsLayerTypeDefine,

@@ -3,6 +3,7 @@ export enum ViewState {
   Edit = "edit",
   Query = "query",
   Print = "print",
+  Layout = "layout",
 }
 
 /**

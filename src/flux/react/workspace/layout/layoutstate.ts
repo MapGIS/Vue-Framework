@@ -1,4 +1,4 @@
-import { NameSpaceLayoutState } from "../../../index";
+import { NameSpaceLayoutState } from "../../../namespace";
 
 export default {
   namespace: NameSpaceLayoutState,

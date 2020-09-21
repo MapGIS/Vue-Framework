@@ -1,4 +1,4 @@
-import { NameSpaceMapState } from "../../../index";
+import { NameSpaceMapState } from "../../../namespace";
 
 const defaultMapState = {
   zoom: 0,

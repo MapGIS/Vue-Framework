@@ -1,4 +1,4 @@
-import { NameSpaceMapOption } from "../../../index";
+import { NameSpaceMapOption } from "../../../namespace";
 import { Bounds } from "../../../../map/map";
 
 export default {

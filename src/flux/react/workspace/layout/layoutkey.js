@@ -1,4 +1,4 @@
-import { NameSpaceLayoutKey } from "../../../index";
+import { NameSpaceLayoutKey } from "../../../namespace";
 
 export default {
   namespace: NameSpaceLayoutKey,

@@ -1,4 +1,4 @@
-import { NameSpaceMapStyle } from "../../../index";
+import { NameSpaceMapStyle } from "../../../namespace";
 
 export default {
   namespace: NameSpaceMapStyle,

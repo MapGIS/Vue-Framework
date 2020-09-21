@@ -1,5 +1,3 @@
-
-
 import ReduxDocument from "./document/document";
 
 export { ReduxDocument };

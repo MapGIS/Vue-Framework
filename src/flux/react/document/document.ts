@@ -1,4 +1,4 @@
-import { NameSpaceDocument } from "../../index";
+import { NameSpaceDocument } from "../../namespace";
 import { getBackground } from "../../../map/config/backgroud";
 
 import {

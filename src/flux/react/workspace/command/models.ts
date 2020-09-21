@@ -1,4 +1,4 @@
-import { NameSpaceCommand } from "../../../index";
+import { NameSpaceCommand } from "../../../namespace";
 
 export default {
   namespace: NameSpaceCommand,

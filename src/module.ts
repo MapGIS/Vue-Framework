@@ -39,6 +39,8 @@ import * as Services from "./map/service";
 import * as Util from "./utils";
 import * as Flux from './flux';
 
+import * as Layout from "./layout";
+
 export {
   Enum,
   Event,
@@ -60,7 +62,8 @@ export {
   Theme,
   Spec,
   Util,
-  Flux
+  Flux,
+  Layout
 };
 
 export default {
@@ -90,5 +93,6 @@ export default {
   Spec,
 
   Util,
-  Flux
+  Flux,
+  Layout
 };

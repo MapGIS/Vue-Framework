@@ -28,6 +28,8 @@ import * as Theme from "./map/theme";
 import * as Spec from "./map/spec";
 import * as Style from "./map/style";
 
+import * as Layout from "./layout";
+
 /**
  * @description 这个typescript如果要使用的话只能通过
  * import {MapEvent} from '@mapgis/webclient-store' 的方式
@@ -37,7 +39,7 @@ import * as Event from "./map/mapevent";
 import * as Services from "./map/service";
 
 import * as Util from "./utils";
-import * as Flux from './flux';
+import * as Flux from "./flux";
 
 export {
   Enum,
@@ -60,7 +62,8 @@ export {
   Theme,
   Spec,
   Util,
-  Flux
+  Flux,
+  Layout
 };
 
 export default {
@@ -90,5 +93,6 @@ export default {
   Spec,
 
   Util,
-  Flux
+  Flux,
+  Layout
 };

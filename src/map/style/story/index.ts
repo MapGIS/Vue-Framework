@@ -451,6 +451,22 @@ export class Story {
       this.books[bookIndex].current = currentEvent.key;
     }
   }
+
+  /**
+   * @description 向地图文档的特定的书籍播放指定位置的书签事件
+   * @param index 需要定位的事件序号
+   */
+  moveToStoryEvent(index: number) {
+    if (!this.books) {
+      this.books = [];
+      return;
+    }
+    let book = this.getCurrentBook();
+    if (!book || !book.events) return;
+    if (index < book.events.length) {
+      book.current = book.events[index].key;
+    }
+  }
 }
 
 /**
@@ -504,10 +520,26 @@ export class StoryBook {
     for (let i = 0; i < count; i++) {
       let event = this.events[i];
       if (event.key === this.current) {
-        return (i + 1) * 100 / count;
+        return ((i + 1) * 100) / count;
       }
     }
     return 0;
+  }
+
+  serialEvent(events: Array<StoryEvent>, funcs: Array<Function>) {
+    if (events.length <= 0) return;
+    const start = events[0];
+    funcs.reduce((prev, cur, index) => {
+      let event = events[index];
+      return prev.then(() => cur(event));
+    }, Promise.resolve(start));
+  }
+
+  replayEvent() {
+    this.serialEvent(
+      this.events,
+      this.events.map((e) => e.play)
+    );
   }
 
   static wrapper(book: StoryBook) {
@@ -517,7 +549,7 @@ export class StoryBook {
     obj.key = key;
     obj.type = type;
     obj.current = current;
-    obj.events = events;
+    obj.events = events.map((e) => StoryEvent.wrapper(e));
     obj.center = center;
     obj.geojson = geojson;
     obj.bounds = bounds;
@@ -537,4 +569,43 @@ export class StoryEvent {
   url: string = "./static/data/story/";
   /** 持续时间： 默认5秒 */
   duration: number = 5;
+
+  /**
+   * @description 可在外面的业务代码重写改函数实现外部的业务逻辑
+   */
+  onPlayed() {
+    console.warn("播放完毕", this.title);
+  }
+
+  play(event: StoryEvent) {
+    return new Promise((resolve, reject) => {
+      window.setTimeout(() => {
+        event.onPlayed();
+        resolve(event);
+      }, event.duration * 1000);
+    });
+  }
+
+  static wrapper(event: StoryEvent) {
+    let obj = new StoryEvent();
+    const {
+      title,
+      subtitle,
+      key,
+      type,
+      detail,
+      url,
+      duration,
+      onPlayed,
+    } = event;
+    obj.title = title;
+    obj.key = key;
+    obj.subtitle = subtitle;
+    obj.type = type;
+    obj.detail = detail;
+    obj.url = url;
+    obj.duration = duration;
+    obj.onPlayed = onPlayed;
+    return obj;
+  }
 }

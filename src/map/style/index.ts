@@ -8,6 +8,17 @@ import {
   StoryEvent,
 } from "./story";
 
+import {
+  Schemes,
+  Interpolates,
+  interpolateStepsPercent,
+  schemeStepsPercent,
+  scaleLinear,
+  scaleOrdinal,
+  scaleQuantize,
+  scaleSequential,
+} from "./color";
+
 export {
   Sprite,
   StoryType,
@@ -16,6 +27,14 @@ export {
   Story,
   StoryBook,
   StoryEvent,
+  Schemes,
+  Interpolates,
+  interpolateStepsPercent,
+  schemeStepsPercent,
+  scaleLinear,
+  scaleOrdinal,
+  scaleQuantize,
+  scaleSequential,
 };
 
 export default {
@@ -26,4 +45,12 @@ export default {
   Story,
   StoryBook,
   StoryEvent,
+  Schemes,
+  Interpolates,
+  interpolateStepsPercent,
+  schemeStepsPercent,
+  scaleLinear,
+  scaleOrdinal,
+  scaleQuantize,
+  scaleSequential,
 };

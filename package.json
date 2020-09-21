@@ -1,6 +1,6 @@
 {
     "name": "@mapgis/webclient-store",
-    "version": "1.0.5",
+    "version": "1.0.9",
     "description": "中地数码Webclient全局上下文环境&存储结构",
     "main": "dist/webclient-store.js",
     "module1": "src/module.ts",

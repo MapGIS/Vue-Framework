@@ -27,6 +27,7 @@
             "axios": [
                 "node_modules/axios"
             ],
+            "*": ["types/*"]
         },
         "lib": [
             "esnext",

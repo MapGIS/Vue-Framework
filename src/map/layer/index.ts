@@ -15,7 +15,6 @@ import { MapvLayer } from "./mapvlayer";
 import { OverLayerType, OverLayer } from "./overlayer";
 import { LayoutType, LayoutLegendType, LayoutLegendDefine } from "./layout";
 import {
-  IgsLayerType,
   IgsLayerTypeDefine,
   IgsDocLayer,
   IgsTileLayer,
@@ -26,6 +25,7 @@ import {
 import {
   defaultId,
   LayerType,
+  SubLayerType,
   LayerGroup,
   LayerDefine,
   ILayer,
@@ -60,7 +60,6 @@ export {
   LayoutType,
   LayoutLegendType,
   LayoutLegendDefine,
-  IgsLayerType,
   IgsLayerTypeDefine,
   IgsDocLayer,
   IgsTileLayer,
@@ -68,6 +67,7 @@ export {
   IgsWmsLayer,
   defaultId,
   LayerType,
+  SubLayerType,
   LayerGroup,
   LayerDefine,
   ILayer,
@@ -105,7 +105,6 @@ export default {
   LayoutLegendType,
   LayoutLegendDefine,
 
-  IgsLayerType,
   IgsLayerTypeDefine,
   IgsDocLayer,
   IgsTileLayer,
@@ -114,6 +113,7 @@ export default {
 
   defaultId,
   LayerType,
+  SubLayerType,
   LayerDefine,
   ILayer,
   IInfo,

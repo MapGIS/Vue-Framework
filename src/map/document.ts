@@ -108,8 +108,8 @@ export class IDocument {
   ) {
     this.name = name ? name : defaultName;
     this.current = current ? current : defaultCurrent;
-    this.backgrounds = backgrounds ? backgrounds : defaultBacks;
-    this.layers = layers ? layers : defaultLayers;
+    this.backgrounds = backgrounds ? backgrounds : [defaultBack];
+    this.layers = layers ? layers : [];
     this.sources = sources ? sources : defaultSources;
     this.service = service ? service : defaultService;
     this.maprender = maprender ? maprender : MapRender.MapBoxGL;
@@ -330,7 +330,7 @@ export class IDocument {
    */
   getConvertLayers(filtergroup: boolean = true) {
     let conv = new Convert();
-    let layers = conv.docToMvtLayers(this);
+    let layers = conv.docTomvtLayers(this);
     return layers;
   }
 
@@ -771,22 +771,22 @@ export const defaultLayer: ILayer = {
   key: LayerType.UnKnow,
 };
 
-export const defaultBacks: Array<BackGroundLayer> = [
-  {
-    title: "浅色背景",
-    name: "MapBox浅色背景",
-    id: "mapboxlight",
-    key: "mapboxlight",
-    description: "MapboxGL提供的浅色背景图，版本是v4, WMTS服务",
-    icon: "icon-background",
-    type: LayerType.BackGround,
-    url: "",
-    tileUrl:
-      "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
-    imgUrl:
-      "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png",
-  },
-];
+export const defaultBack: BackGroundLayer = {
+  title: "浅色背景",
+  name: "MapBox浅色背景",
+  id: "mapboxlight",
+  key: "mapboxlight",
+  description: "MapboxGL提供的浅色背景图，版本是v4, WMTS服务",
+  icon: "icon-background",
+  type: LayerType.BackGround,
+  url: "",
+  tileUrl:
+    "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
+  imgUrl:
+    "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png",
+};
+
+export const defaultBacks: Array<BackGroundLayer> = [ defaultBack ];
 
 export const defaultDocument: IDocument = new IDocument(
   defaultName,

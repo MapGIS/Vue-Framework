@@ -14,22 +14,58 @@ export enum LayerType {
   DemWMS = "DemWMS",
   GeoJSON = "GeoJSON",
   ShapeFile = "ShapeFile",
+  KML = "KML",
+  KMZ = "KMZ",
   OverLayer = "OverLayer",
+
   /**
    * 故事图层
    */
   BookLayer = "BookLayer",
+
   /**
    * 三维图层
    */
+  M3D = "M3D",
   Cesium3DTileset = "Cesium3DTileset",
-  UnKnow = "UnKnow",
+  CesiumLanguage = "CesiumLanguage",
+  PointCloud = "PointCloud",
+
   /**
    * 通用覆盖图层
    */
   EchartsLayer = "EchartsLayer",
   MapvLayer = "MapvLayer",
   SpaceTimeAggregationLayer = "SpaceTimeAggregationLayer",
+
+  /**
+   * 未知图层
+   */
+  UnKnow = "UnKnow",
+}
+
+export enum SubLayerType {
+  // 二维图层  
+  // 栅格瓦片
+  // 栅格瓦片 - igserver
+  IgsDocLayer = "IgsDocLayer",
+  IgsTileLayer = "IgsTileLayer",
+  IgsVectorLayer = "IgsVectorLayer",  
+  // 栅格瓦片 - 其他厂商
+  RasterBaiduLayer = "",
+  RasterGaodeLayer = "",
+  RasterGoogleLayer = "",
+  RasterOpenweatherLayer = "",
+  RasterTiandituLayer = "RasterTiandituLayer",
+  RasterArcgisLayer = "RasterArcgisLayer",
+  // 栅格瓦片 - OGC
+  OgcWmsLayer = "OgcWmsLayer",
+  OgcWmtsLayer = "OgcWmtsLayer",
+
+  // 三维图层
+  // 三维图层 - igserver
+  IgsDoc3dLayer = "",
+  IgsTile3dLayer = "",
 }
 
 export enum LayerGroup {

@@ -1,16 +1,5 @@
-import { ILayer, LayerType } from "./baselayer";
+import { ILayer, LayerType, SubLayerType } from "./baselayer";
 import { Bounds } from "../map";
-
-export enum IgsLayerType {
-  /**IGServer图层 */
-  IgsDocLayer = "IgsDocLayer",
-  IgsTileLayer = "IgsTileLayer",
-  IgsVectorLayer = "IgsVectorLayer",
-  IgsWmsLayer = "IgsWmsLayer",
-  IgsWmtsLayer = "IgsWmtsLayer",
-  IgsTdtLayer = "IgsTdtLayer",
-  IgsArcgisLayer = "IgsArcgisLayer",
-}
 
 export let IgsLayerTypeDefine = {
   /**IGServer图层 */
@@ -28,26 +17,6 @@ export let IgsLayerTypeDefine = {
     type: "raster",
     subtype: "IgsVectorLayer",
     name: "矢量图层",
-  },
-  IgsWmsLayer: {
-    type: "raster",
-    subtype: "IgsWmsLayer",
-    name: "WMS服务",
-  },
-  IgsWmtsLayer: {
-    type: "raster",
-    subtype: "IgsWmtsLayer",
-    name: "WMTS服务",
-  },
-  IgsTdtLayer: {
-    type: "raster",
-    subtype: "IgsTdtLayer",
-    name: "天地图服务",
-  },
-  IgsArcgisLayer: {
-    type: "raster",
-    subtype: "IgsArcgisLayer",
-    name: "ArcGIS服务",
   },
 };
 
@@ -93,8 +62,10 @@ class IgsLayer extends ILayer {
     const indexServer = url.search(doc);
     const indexName = indexServer + doc.length;
     const serverName = url.substr(indexName);
-    const matchIp = url.match(/\:\/\/[a-zA-Z0-9.]+\:*/g)[0];
-    const matchPort = url.match(/:+[0-9]+\//g)[0];
+    const ips = url.match(/\:\/\/[a-zA-Z0-9.]+\:*/g);
+    const ports = url.match(/:+[0-9]+\//g);
+    const matchIp = ips ? ips[0] : "://localhost";
+    const matchPort = ports ? ports[0] : ":6163";
 
     let ip, port;
     if (matchIp && matchIp.length > 3) {
@@ -228,7 +199,7 @@ export class IgsDocLayer extends IgsLayer {
     super();
 
     this.type = LayerType.RasterTile;
-    this.subtype = IgsLayerType.IgsDocLayer;
+    this.subtype = SubLayerType.IgsDocLayer;
 
     if (!l) return;
 
@@ -317,7 +288,7 @@ export class IgsTileLayer extends IgsLayer {
     super();
 
     this.type = LayerType.RasterTile;
-    this.subtype = IgsLayerType.IgsTileLayer;
+    this.subtype = SubLayerType.IgsTileLayer;
 
     if (!l) return;
 
@@ -354,7 +325,7 @@ export class IgsVectorLayer extends IgsLayer {
     super(l);
 
     this.type = LayerType.RasterTile;
-    this.subtype = IgsLayerType.IgsVectorLayer;
+    this.subtype = SubLayerType.IgsVectorLayer;
 
     if (!l) return;
 
@@ -390,7 +361,7 @@ export class IgsWmsLayer extends IgsLayer {
     if (!l) return;
 
     this.type = LayerType.RasterTile;
-    this.subtype = IgsLayerType.IgsWmsLayer;
+    this.subtype = SubLayerType.OgcWmsLayer;
 
     if (l.children) this.children = l.children;
     if (l.url) this.url = l.url;

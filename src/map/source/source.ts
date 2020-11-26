@@ -22,9 +22,10 @@ export class Source {
     if (!url) return;
     // var regip = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
     // var regport = /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
-
-    const matchIp = url.match(/\:\/\/[a-zA-Z0-9]+\:*/g)[0];
-    const matchPort = url.match(/:+[0-9]+\//g)[0];
+    const ips = url.match(/\:\/\/[a-zA-Z0-9.]+\:*/g);
+    const ports = url.match(/:+[0-9]+\//g);
+    const matchIp = ips ? ips[0] : "://localhost";
+    const matchPort = ports ? ports[0] : ":6163";
 
     let ip, port;
     if (matchIp && matchIp.length > 3) {

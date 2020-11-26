@@ -5,7 +5,7 @@ import {
   BaselayerAction,
   BaseLayer,
 } from "./baselayer";
-import { Convert } from "./convert";
+import { Convert } from "../layer/convert";
 
 export {
   VectorTileType,

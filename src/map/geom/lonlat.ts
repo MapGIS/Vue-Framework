@@ -1,7 +1,7 @@
 export const maxLongitude = 180;
 export const minLongitude = -180;
-export const maxLatitude = 180;
-export const minLatitude = -180;
+export const maxLatitude = 90;
+export const minLatitude = -90;
 
 export const defautPrecision = 0.0000000001;
 

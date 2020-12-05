@@ -1,4 +1,4 @@
-import { Bounds, GeoBounds, Positon } from "../../map";
+import { Bounds, GeoBounds, Position } from "../../map";
 
 /**
  * @description 故事类型
@@ -479,7 +479,7 @@ export class StoryBook {
   /** 当前地图故事正在播放的事件 */
   current: string;
   events: Array<StoryEvent> = [];
-  center: Positon = [114.350511, 30.585856];
+  center: Position = [114.350511, 30.585856];
   geojson: any = {
     type: "FeatureCollection",
     features: [

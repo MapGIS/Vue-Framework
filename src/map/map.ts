@@ -61,12 +61,12 @@ export type Bounds = GeoBounds | BoxBounds | ArrayBounds | CornerBounds;
 
 /**
  * @class Position 封装类
- * @description Positon = Positon2d | Positon3d | Positon2dArray | Positon3dArray;
+ * @description Position = Position2d | Position3d | Position2dArray | Position3dArray;
  */
-export type Positon2dArray = [number, number];
-export type Positon3dArray = [number, number, number];
+export type Position2dArray = [number, number];
+export type Position3dArray = [number, number, number];
 
-export class Positon2d {
+export class Position2d {
     x: number;
     y: number;
 
@@ -76,7 +76,7 @@ export class Positon2d {
     }
 }
 
-export class Positon3d {
+export class Position3d {
     x: number;
     y: number;
     z: number;
@@ -91,9 +91,9 @@ export class Positon3d {
 /**
  * @description 后来实际发现结合dva/redux等框架的前提下， 使用属性x/y/z存在映射问题，先使用数组形式，潘卓然
  */
-export type Positon /* Positon2d | Positon3d | */ =
-    | Positon2dArray
-    | Positon3dArray;
+export type Position /* Position2d | Position3d | */ =
+    | Position2dArray
+    | Position3dArray;
 
 export enum ViewState {
     Map = "map",
@@ -134,7 +134,7 @@ export class State {
     extent: Extent;
     scale: number;
     bounds: Bounds;
-    mousePosition: Positon;
+    mousePosition: Position;
     viewState: ViewState;
     editState?: EditState;
     highLight?: HighLight;
@@ -174,7 +174,7 @@ export interface MapStateEvent {
     /**
      * @description 返回当前地图中心点位置
      */
-    center(center: Positon): Positon;
+    center(center: Position): Position;
 }
 
 export interface MapMouseEvent {
@@ -183,7 +183,7 @@ export interface MapMouseEvent {
     /**
      * @description 返回当前地图鼠标移动的点位置
      */
-    currentPosition(point: Positon): Positon;
+    currentPosition(point: Position): Position;
 
     /**
      * @param event 这里的event和对应实现的地图引擎返回的e一致

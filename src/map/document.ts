@@ -333,9 +333,9 @@ export class IDocument {
      * @param {Boolean} [filtergroup=true] 是否过滤组图层,默认true剔除组图层
      * @return {Array<ILayer>} layers
      */
-    getConvertLayers(filtergroup: boolean = true) {
+    getConvertLayers(filtergroup: boolean = true, remove: boolean = false) {
         let conv = new Convert();
-        let layers = conv.docTomvtLayers(this);
+        let layers = conv.docTomvtLayers(this, remove);
         return layers;
     }
 

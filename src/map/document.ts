@@ -331,6 +331,7 @@ export class IDocument {
     /**
      * @description 针对图层进行对应的处理，满足条件的返回处理后的图层，否则返回原始图层
      * @param {Boolean} [filtergroup=true] 是否过滤组图层,默认true剔除组图层
+     * @param {Boolean} [remove=true] 是否移除非必要属性,默认false保留所有属性
      * @return {Array<ILayer>} layers
      */
     getConvertLayers(filtergroup: boolean = true, remove: boolean = false) {

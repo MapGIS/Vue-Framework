@@ -10,12 +10,10 @@ import {
     defaultBacks,
 } from "../document";
 import { defaultSources, Source } from "../source/source";
-import { LayerType, SubLayerType } from "../layer";
+import { LayerType, SubLayerType, SubLayerDefine } from "../layer";
 import { VectorTileLayerDefine } from "../vectortile/baselayer";
 import { deepCopy } from "../../utils/deepequal";
 import { uuid } from "../../utils/uuid";
-
-import { IgsLayerTypeDefine } from "../layer/igserver";
 
 export const defaultId = "cesium vector tiles";
 export const defaultSprite =
@@ -134,8 +132,8 @@ export class Convert {
 
     docTomvtType(subtype) {
         let type = subtype;
-        if (IgsLayerTypeDefine[subtype] && IgsLayerTypeDefine[subtype].type) {
-            type = IgsLayerTypeDefine[subtype].type;
+        if (SubLayerDefine[subtype] && SubLayerDefine[subtype].type) {
+            type = SubLayerDefine[subtype].type;
         } else if (
             VectorTileLayerDefine[subtype] &&
                 VectorTileLayerDefine[subtype].type
@@ -147,8 +145,8 @@ export class Convert {
 
     docTomvtSubtype(subtype) {
         let type = subtype;
-        if (IgsLayerTypeDefine[subtype] && IgsLayerTypeDefine[subtype].type) {
-            type = IgsLayerTypeDefine[subtype].subtype;
+        if (SubLayerDefine[subtype] && SubLayerDefine[subtype].type) {
+            type = SubLayerDefine[subtype].subtype;
         } else if (
             VectorTileLayerDefine[subtype] &&
                 VectorTileLayerDefine[subtype].type

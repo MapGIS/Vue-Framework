@@ -45,12 +45,12 @@ export enum LayerType {
 }
 
 export enum SubLayerType {
-  // 二维图层  
+  // 二维图层
   // 栅格瓦片
   // 栅格瓦片 - igserver
   IgsDocLayer = "IgsDocLayer",
   IgsTileLayer = "IgsTileLayer",
-  IgsVectorLayer = "IgsVectorLayer",  
+  IgsVectorLayer = "IgsVectorLayer",
   // 栅格瓦片 - 其他厂商
   RasterBaiduLayer = "",
   RasterGaodeLayer = "",
@@ -148,6 +148,94 @@ export let LayerDefine = {
     type: LayerType.SpaceTimeAggregationLayer,
     group: LayerGroup.Overlay,
     name: "时空聚合图层",
+  },
+};
+
+export let SubLayerDefine = {
+  // 二维图层
+  // 栅格瓦片
+  // 栅格瓦片 - igserver
+  IgsDocLayer: {
+    type: 'raster',
+    subtype: SubLayerType.IgsDocLayer,
+    group: LayerGroup.Common,
+    name: "地图文档图层",
+  },
+  IgsTileLayer: {
+    type: 'raster',
+    subtype: SubLayerType.IgsTileLayer,
+    group: LayerGroup.Common,
+    name: "地图瓦片图层",
+  },
+  IgsVectorLayer: {
+    type: 'raster',
+    subtype: SubLayerType.IgsVectorLayer,
+    group: LayerGroup.Common,
+    name: "地图矢量图层",
+  },
+  // 栅格瓦片 - 其他厂商
+  RasterBaiduLayer: {
+    type: 'raster',
+    subtype: SubLayerType.RasterBaiduLayer,
+    group: LayerGroup.Common,
+    name: "栅格百度瓦片",
+  },
+  RasterGaodeLayer: {
+    type: 'raster',
+    subtype: SubLayerType.RasterGaodeLayer,
+    group: LayerGroup.Common,
+    name: "栅格高德瓦片",
+  },
+  RasterGoogleLayer: {
+    type: 'raster',
+    subtype: SubLayerType.RasterGoogleLayer,
+    group: LayerGroup.Common,
+    name: "栅格谷歌瓦片",
+  },
+  RasterOpenweatherLayer: {
+    type: 'raster',
+    subtype: SubLayerType.RasterOpenweatherLayer,
+    group: LayerGroup.Common,
+    name: "栅格开放天气瓦片",
+  },
+  RasterTiandituLayer: {
+    type: 'raster',
+    subtype: SubLayerType.RasterTiandituLayer,
+    group: LayerGroup.Common,
+    name: "栅格天地图瓦片",
+  },
+  RasterArcgisLayer: {
+    type: 'raster',
+    subtype: SubLayerType.RasterArcgisLayer,
+    group: LayerGroup.Common,
+    name: "栅格ArcGIS瓦片",
+  },
+  // 栅格瓦片 - OGC
+  OgcWmsLayer: {
+    type: 'raster',
+    subtype: SubLayerType.OgcWmsLayer,
+    group: LayerGroup.Common,
+    name: "栅格WMS瓦片",
+  },
+  OgcWmtsLayer: {
+    type: 'raster',
+    subtype: SubLayerType.OgcWmtsLayer,
+    group: LayerGroup.Common,
+    name: "栅格WMTS瓦片",
+  },
+  // 三维图层
+  // 三维图层 - igserver
+  IgsDoc3dLayer: {
+    type: 'raster',
+    subtype: SubLayerType.IgsDoc3dLayer,
+    group: LayerGroup.Common,
+    name: "三维地图文档图层",
+  },
+  IgsTile3dLayer: {
+    type: 'raster',
+    subtype: SubLayerType.IgsTile3dLayer,
+    group: LayerGroup.Common,
+    name: "三维地图瓦片图层",
   },
 };
 

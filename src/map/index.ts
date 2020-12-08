@@ -1,7 +1,7 @@
 import {
     Extent,
     Bounds,
-    Positon,
+    Position,
     ViewState,
     State,
     MapMouseEvent
@@ -10,7 +10,7 @@ import {
 export {
     Extent,
     Bounds,
-    Positon,
+    Position,
     ViewState,
     State,
     MapMouseEvent

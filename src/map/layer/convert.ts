@@ -71,6 +71,7 @@ export class Convert {
             let newSouce = {
                 type: "",
                 tiles: [],
+                path: '',
                 minZoom: 0,
                 maxZoom: 24,
             };
@@ -81,6 +82,14 @@ export class Convert {
                 newSouce.minZoom = min || 0;
                 newSouce.maxZoom = max || 24;
                 sources[key] = newSouce;
+                delete newSouce.path;
+            } else if (type == LayerType.MBTiles) {
+                newSouce.type = "mbtiles";
+                newSouce.path = url;
+                newSouce.minZoom = min || 0;
+                newSouce.maxZoom = max || 24;
+                sources[key] = newSouce;
+                delete newSouce.tiles;
             }
         }
 

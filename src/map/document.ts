@@ -850,7 +850,7 @@ export const defaultBack: BackGroundLayer = {
     type: LayerType.BackGround,
     url: "",
     tileUrl:
-    "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=sk.eyJ1IjoiY2hlbmdkYWRhIiwiYSI6ImNqZDFjaGo0ZjFzcnoyeG54enoxdnNuZHUifQ.hTWXXBUQ0wdGeuDF3GWeUw",
+    "static/tiles/EPSG3857/{z}/{x}/{y}.png",
     imgUrl:
     "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png",
 };

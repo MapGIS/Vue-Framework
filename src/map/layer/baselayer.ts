@@ -39,6 +39,11 @@ export enum LayerType {
   SpaceTimeAggregationLayer = "SpaceTimeAggregationLayer",
 
   /**
+   * 移动端
+   */
+  MBTiles = "MBTiles",
+
+  /**
    * 未知图层
    */
   UnKnow = "UnKnow",

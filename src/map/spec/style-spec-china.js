@@ -3397,7 +3397,7 @@
         },
         "fill-color": {
             "type": "color",
-            "default": "#000000",
+            "default": "#1890ff",
             "name": "颜色",
             "doc": "颜色.",
             "transition": true,
@@ -3432,6 +3432,7 @@
         },
         "fill-outline-color": {
             "type": "color",
+            "default": "#ffffff",
             "name": "边线颜色",
             "doc": "边线颜色，注意没有边线宽度这个参数.",
             "transition": true,
@@ -3598,7 +3599,7 @@
             "type": "color",
             "name": "颜色",
             "doc": "颜色.",
-            "default": "#000000",
+            "default": "#4F4F4F",
             "transition": true,
             "requires": [
                 {

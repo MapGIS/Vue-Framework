@@ -40,6 +40,7 @@ import * as Util from "./utils";
 import * as Flux from './flux';
 
 import * as Layout from "./layout";
+import * as Config from './map/config';
 
 export {
   Enum,
@@ -63,7 +64,8 @@ export {
   Spec,
   Util,
   Flux,
-  Layout
+  Layout,
+  Config
 };
 
 export default {
@@ -94,5 +96,6 @@ export default {
 
   Util,
   Flux,
-  Layout
+  Layout,
+  Config
 };

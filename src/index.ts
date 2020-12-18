@@ -29,6 +29,7 @@ import * as Spec from "./map/spec";
 import * as Style from "./map/style";
 
 import * as Layout from "./layout";
+import * as Config from './map/config';
 
 /**
  * @description 这个typescript如果要使用的话只能通过
@@ -40,6 +41,8 @@ import * as Services from "./map/service";
 
 import * as Util from "./utils";
 import * as Flux from "./flux";
+
+
 
 export {
   Enum,
@@ -63,7 +66,8 @@ export {
   Spec,
   Util,
   Flux,
-  Layout
+  Layout,
+  Config
 };
 
 export default {
@@ -94,5 +98,6 @@ export default {
 
   Util,
   Flux,
-  Layout
+  Layout,
+  Config
 };

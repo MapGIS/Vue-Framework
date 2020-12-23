@@ -17,7 +17,7 @@ export enum LayerType {
   KML = "KML",
   KMZ = "KMZ",
   OverLayer = "OverLayer",
-
+  VectorTileLayer = "VectorTileLayer",
   /**
    * 故事图层
    */
@@ -57,10 +57,10 @@ export enum SubLayerType {
   IgsTileLayer = "IgsTileLayer",
   IgsVectorLayer = "IgsVectorLayer",
   // 栅格瓦片 - 其他厂商
-  RasterBaiduLayer = "",
-  RasterGaodeLayer = "",
-  RasterGoogleLayer = "",
-  RasterOpenweatherLayer = "",
+  RasterBaiduLayer = "RasterBaiduLayer",
+  RasterGaodeLayer = "RasterGaodeLayer",
+  RasterGoogleLayer = "RasterGoogleLayer",
+  RasterOpenweatherLayer = "RasterOpenweatherLayer",
   RasterTiandituLayer = "RasterTiandituLayer",
   RasterArcgisLayer = "RasterArcgisLayer",
   // 栅格瓦片 - OGC
@@ -69,8 +69,9 @@ export enum SubLayerType {
 
   // 三维图层
   // 三维图层 - igserver
-  IgsDoc3dLayer = "",
-  IgsTile3dLayer = "",
+  IgsDoc3dLayer = "IgsDoc3dLayer",
+  IgsTile3dLayer = "IgsTile3dLayer",
+  Terrain = "Terrain",
 }
 
 export enum LayerGroup {
@@ -161,69 +162,69 @@ export let SubLayerDefine = {
   // 栅格瓦片
   // 栅格瓦片 - igserver
   IgsDocLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsDocLayer,
     group: LayerGroup.Common,
     name: "地图文档图层",
   },
   IgsTileLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsTileLayer,
     group: LayerGroup.Common,
     name: "地图瓦片图层",
   },
   IgsVectorLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsVectorLayer,
     group: LayerGroup.Common,
     name: "地图矢量图层",
   },
   // 栅格瓦片 - 其他厂商
   RasterBaiduLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterBaiduLayer,
     group: LayerGroup.Common,
     name: "栅格百度瓦片",
   },
   RasterGaodeLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterGaodeLayer,
     group: LayerGroup.Common,
     name: "栅格高德瓦片",
   },
   RasterGoogleLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterGoogleLayer,
     group: LayerGroup.Common,
     name: "栅格谷歌瓦片",
   },
   RasterOpenweatherLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterOpenweatherLayer,
     group: LayerGroup.Common,
     name: "栅格开放天气瓦片",
   },
   RasterTiandituLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterTiandituLayer,
     group: LayerGroup.Common,
     name: "栅格天地图瓦片",
   },
   RasterArcgisLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterArcgisLayer,
     group: LayerGroup.Common,
     name: "栅格ArcGIS瓦片",
   },
   // 栅格瓦片 - OGC
   OgcWmsLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.OgcWmsLayer,
     group: LayerGroup.Common,
     name: "栅格WMS瓦片",
   },
   OgcWmtsLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.OgcWmtsLayer,
     group: LayerGroup.Common,
     name: "栅格WMTS瓦片",
@@ -231,13 +232,13 @@ export let SubLayerDefine = {
   // 三维图层
   // 三维图层 - igserver
   IgsDoc3dLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsDoc3dLayer,
     group: LayerGroup.Common,
     name: "三维地图文档图层",
   },
   IgsTile3dLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsTile3dLayer,
     group: LayerGroup.Common,
     name: "三维地图瓦片图层",

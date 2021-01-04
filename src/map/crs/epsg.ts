@@ -156,23 +156,27 @@ export const EPSG = {
 };
 
 
-export function epsgId(epsg: string) {
-    let str = epsg.toUpperCase()
-    let result;
-
-    if (str.indexOf('EPSG:') >= 0) {
-        result = str.split('EPSG:')
-    } else if (str.indexOf('EPSG_') >= 0) {
-        result = str.split('EPSG_')
-    } else if (str.indexOf('EPSG') >= 0) {
-        result = str.split('EPSG')
+export function epsgId(epsg: string | number) {
+    if(typeof epsg === 'string') {
+        let str = epsg.toUpperCase()
+        let result;
+    
+        if (str.indexOf('EPSG:') >= 0) {
+            result = str.split('EPSG:')
+        } else if (str.indexOf('EPSG_') >= 0) {
+            result = str.split('EPSG_')
+        } else if (str.indexOf('EPSG') >= 0) {
+            result = str.split('EPSG')
+        } else {
+            return parseInt(epsg)
+        }
+        if (result.length >= 2) {
+            return parseInt(result[1])
+        } else {
+            return 4326
+        }
     } else {
-        return parseInt(epsg)
-    }
-    if (result.length >= 2) {
-        return parseInt(result[1])
-    } else {
-        return 4326
+        return epsg;
     }
 }
 

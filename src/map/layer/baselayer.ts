@@ -1,5 +1,6 @@
 import { IDocument, MapRender } from "../document";
-import { Bounds } from "../map";
+import { Bounds, Position } from "../map";
+import { Crs } from "../crs";
 import { deepEqual } from "../../utils/deepequal";
 
 export const defaultId: string = "unknow";
@@ -66,6 +67,9 @@ export enum SubLayerType {
   // 栅格瓦片 - OGC
   OgcWmsLayer = "OgcWmsLayer",
   OgcWmtsLayer = "OgcWmtsLayer",
+  // 实时渲染
+  QuikeDisplayVectorTile = "QuikeDisplayVectorTile",
+  QuikeDisplayRasterTile = "QuikeDisplayRasterTile",
 
   // 三维图层
   // 三维图层 - igserver
@@ -161,69 +165,69 @@ export let SubLayerDefine = {
   // 栅格瓦片
   // 栅格瓦片 - igserver
   IgsDocLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsDocLayer,
     group: LayerGroup.Common,
     name: "地图文档图层",
   },
   IgsTileLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsTileLayer,
     group: LayerGroup.Common,
     name: "地图瓦片图层",
   },
   IgsVectorLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsVectorLayer,
     group: LayerGroup.Common,
     name: "地图矢量图层",
   },
   // 栅格瓦片 - 其他厂商
   RasterBaiduLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterBaiduLayer,
     group: LayerGroup.Common,
     name: "栅格百度瓦片",
   },
   RasterGaodeLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterGaodeLayer,
     group: LayerGroup.Common,
     name: "栅格高德瓦片",
   },
   RasterGoogleLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterGoogleLayer,
     group: LayerGroup.Common,
     name: "栅格谷歌瓦片",
   },
   RasterOpenweatherLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterOpenweatherLayer,
     group: LayerGroup.Common,
     name: "栅格开放天气瓦片",
   },
   RasterTiandituLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterTiandituLayer,
     group: LayerGroup.Common,
     name: "栅格天地图瓦片",
   },
   RasterArcgisLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.RasterArcgisLayer,
     group: LayerGroup.Common,
     name: "栅格ArcGIS瓦片",
   },
   // 栅格瓦片 - OGC
   OgcWmsLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.OgcWmsLayer,
     group: LayerGroup.Common,
     name: "栅格WMS瓦片",
   },
   OgcWmtsLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.OgcWmtsLayer,
     group: LayerGroup.Common,
     name: "栅格WMTS瓦片",
@@ -231,18 +235,30 @@ export let SubLayerDefine = {
   // 三维图层
   // 三维图层 - igserver
   IgsDoc3dLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsDoc3dLayer,
     group: LayerGroup.Common,
     name: "三维地图文档图层",
   },
   IgsTile3dLayer: {
-    type: 'raster',
+    type: "raster",
     subtype: SubLayerType.IgsTile3dLayer,
     group: LayerGroup.Common,
     name: "三维地图瓦片图层",
   },
 };
+
+export class IMetadata {
+  crs: Crs;
+  topleftcorner: Position;
+  tilematrixset: Array<String | Number>;
+
+  constructor() {
+    this.crs = new Crs();
+    this.topleftcorner = [-180, 90];
+    this.tilematrixset = new Array(20).fill("").map((item, index) => index);
+  }
+}
 
 export class ILayer {
   type: LayerType;
@@ -251,7 +267,7 @@ export class ILayer {
   key: string;
 
   description?: string;
-
+  
   /**
    * @member UI框架用来进行文字绑定的关键字与name一致即可
    */
@@ -261,11 +277,15 @@ export class ILayer {
    * @member 地图url
    */
   url?: string;
-  info?: IInfo;
 
+  /**
+   * @member 元数据信息
+   */
+  metadata?: IMetadata;
   filter?: IFilter;
   layout?: ILayout;
   style?: IStyle;
+  info?: IInfo;
   /**
    * @member 表示font图标，和iconfont强绑定
    */

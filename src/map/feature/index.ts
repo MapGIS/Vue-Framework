@@ -1,9 +1,6 @@
 import { Calculator } from "./calculator";
-import { Filter } from "./filter";
+import { Filter, FilterOpt } from "./filter";
 
-export { Calculator, Filter };
+export { Calculator, Filter, FilterOpt };
 
-export default {
-  Calculator,
-  Filter,
-};
+export default { Calculator, Filter, FilterOpt };

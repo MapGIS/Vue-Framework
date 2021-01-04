@@ -18,7 +18,7 @@ export enum LayerType {
   KML = "KML",
   KMZ = "KMZ",
   OverLayer = "OverLayer",
-
+  VectorTileLayer = "VectorTileLayer",
   /**
    * 故事图层
    */
@@ -58,10 +58,10 @@ export enum SubLayerType {
   IgsTileLayer = "IgsTileLayer",
   IgsVectorLayer = "IgsVectorLayer",
   // 栅格瓦片 - 其他厂商
-  RasterBaiduLayer = "",
-  RasterGaodeLayer = "",
-  RasterGoogleLayer = "",
-  RasterOpenweatherLayer = "",
+  RasterBaiduLayer = "RasterBaiduLayer",
+  RasterGaodeLayer = "RasterGaodeLayer",
+  RasterGoogleLayer = "RasterGoogleLayer",
+  RasterOpenweatherLayer = "RasterOpenweatherLayer",
   RasterTiandituLayer = "RasterTiandituLayer",
   RasterArcgisLayer = "RasterArcgisLayer",
   // 栅格瓦片 - OGC
@@ -73,8 +73,9 @@ export enum SubLayerType {
 
   // 三维图层
   // 三维图层 - igserver
-  IgsDoc3dLayer = "",
-  IgsTile3dLayer = "",
+  IgsDoc3dLayer = "IgsDoc3dLayer",
+  IgsTile3dLayer = "IgsTile3dLayer",
+  Terrain = "Terrain",
 }
 
 export enum LayerGroup {

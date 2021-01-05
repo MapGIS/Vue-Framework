@@ -24,16 +24,16 @@ export class VectorTileLayer extends ILayer {
     let reg, rep;
     if (tolerance && filter) {
       if (url.indexOf("tolerance") >= 0 && url.indexOf("filter") >= 0) {
-        reg = RegExp("tolerance=(d+)&filter=(d+)", "g");
+        reg = RegExp("tolerance=[0-9]+[.]*[0-9]*&filter=[0-9]+[.]*[0-9]*", "g");
         rep = `tolerance=${tolerance}&filter=${filter}`;
         this.url = url.replace(reg, rep);
       } else if (url.indexOf("tolerance") >= 0) {
-        reg = RegExp("tolerance=(d+)", "g");
+        reg = RegExp("tolerance=[0-9]+[.]*[0-9]*", "g");
         rep = `tolerance=${tolerance}`;
         this.url = url.replace(reg, rep);
         this.url += `&filter=${filter}`;
       } else if (url.indexOf("filter") >= 0) {
-        reg = RegExp("filter=(d+)", "g");
+        reg = RegExp("filter=[0-9]+[.]*[0-9]*", "g");
         rep = `filter=${filter}`;
         this.url = url.replace(reg, rep);
         this.url += `&tolerance=${tolerance}`;
@@ -43,7 +43,7 @@ export class VectorTileLayer extends ILayer {
       }
     } else if (tolerance) {
       if (url.indexOf("tolerance") >= 0) {
-        reg = RegExp("tolerance=(d+)", "g");
+        reg = RegExp("tolerance=[0-9]+[.]*[0-9]*", "g");
         rep = `tolerance=${tolerance}`;
         this.url = url.replace(reg, rep);
       } else {
@@ -51,14 +51,14 @@ export class VectorTileLayer extends ILayer {
       }
     } else if (filter) {
       if (url.indexOf("filter") >= 0) {
-        reg = RegExp("filter=(d+)", "g");
+        reg = RegExp("filter=[0-9]+[.]*[0-9]*", "g");
         rep = `filter=${filter}`;
         this.url = url.replace(reg, rep);
       } else {
         this.url += `&filter=${filter}`;
       }
     } else {
-      reg = RegExp("tolerance=(d+)&filter=(d+)", "g");
+      reg = RegExp("tolerance=[0-9]+[.]*[0-9]*&filter=[0-9]+[.]*[0-9]*", "g");
       rep = ``;
       this.url = url.replace(reg, rep);
     }

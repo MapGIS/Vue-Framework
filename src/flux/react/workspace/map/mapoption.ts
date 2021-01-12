@@ -69,7 +69,7 @@ export let actions = {
   toggleZoomOut() {
     return { type: NameSpaceMapOption + "/zoomOut" };
   },
-  toggoleFitBounds(bounds: Bounds) {
+  toggleFitBounds(bounds: Bounds) {
     return { type: NameSpaceMapOption + "/fitBounds", payload: bounds };
   },
 };

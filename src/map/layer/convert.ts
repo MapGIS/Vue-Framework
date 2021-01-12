@@ -129,7 +129,9 @@ export class Convert {
                 delete layer.sourceLayer;
                 delete layer.title;
                 delete layer.name;
-                delete layer.url;
+                // delete layer.url;  
+                // 这个地方是为了解决实时出后台矢量瓦片导致的tolerance&filter的变化，请看MapboxGL-React/VectorTile
+                // let changeUrl = layer.url != vectortile.url ? true : false;
             }
 
             // layer.key = uuid();

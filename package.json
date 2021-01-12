@@ -2,8 +2,8 @@
     "name": "@mapgis/webclient-store",
     "version": "1.0.14",
     "description": "中地数码Webclient全局上下文环境&存储结构",
-    "main": "dist/webclient-store.js",
-    "module1": "src/module.ts",
+    "main1": "dist/webclient-store.js",
+    "module": "src/module.ts",
     "scripts": {
         "build": "webpack",
         "docs:serve": "vuepress dev docs",

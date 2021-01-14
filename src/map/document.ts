@@ -63,10 +63,8 @@ export const defaultSource = defaultSources;
 
 export const defaultName = "默认地图文档";
 
-export const defaultSprites =
-    "http://localhost:6163/igs/rest/mrms/vtiles/sprite";
-export const defaultGlyphs =
-    "http://localhost:6163/igs/rest/mrms/vtiles/fonts/{fontstack}/{range}.pbf";
+export const defaultSprites = "static/sprites/sprite-mapgis";
+export const defaultGlyphs = "static/font/{fontstack}/{range}.pbf";
 
 /**
  * @author 潘卓然

@@ -18,11 +18,6 @@ export enum LayerType {
   KML = "KML",
   KMZ = "KMZ",
   OverLayer = "OverLayer",
-  VectorTileLayer = "VectorTileLayer",
-  /**
-   * 故事图层
-   */
-  BookLayer = "BookLayer",
 
   /**
    * 三维图层
@@ -31,6 +26,7 @@ export enum LayerType {
   Cesium3DTileset = "Cesium3DTileset",
   CesiumLanguage = "CesiumLanguage",
   PointCloud = "PointCloud",
+  Terrain = "Terrain",
 
   /**
    * 通用覆盖图层
@@ -43,6 +39,12 @@ export enum LayerType {
    * 移动端
    */
   MBTiles = "MBTiles",
+
+  /**
+   * 故事图层
+   */
+  BookLayer = "BookLayer",
+
 
   /**
    * 未知图层
@@ -74,8 +76,7 @@ export enum SubLayerType {
   // 三维图层
   // 三维图层 - igserver
   IgsDoc3dLayer = "IgsDoc3dLayer",
-  IgsTile3dLayer = "IgsTile3dLayer",
-  Terrain = "Terrain",
+  IgsTile3dLayer = "IgsTile3dLayer"
 }
 
 export enum LayerGroup {
@@ -140,6 +141,11 @@ export let LayerDefine = {
     type: LayerType.Cesium3DTileset,
     group: LayerGroup.Three,
     name: "3D瓦片",
+  },
+  Terrain: {
+    type: LayerType.Cesium3DTileset,
+    group: LayerGroup.Three,
+    name: "地形",
   },
   /**
    * 通用覆盖图层

@@ -1,4 +1,8 @@
-import { Sprite } from "./sprite";
+import {
+  Sprite,
+  SpriteManager
+} from "./sprite";
+
 import {
   StoryType,
   StoryEventType,
@@ -21,6 +25,7 @@ import {
 
 export {
   Sprite,
+  SpriteManager,
   StoryType,
   StoryEventType,
   StoryEventOptions,

@@ -316,7 +316,7 @@ export class IDocument {
     getFlatLayers(filtergroup: boolean = true) {
         let flats = [];
         this.layers.forEach((layer) => {
-            if (layer.type == LayerType.GroupLayer || layer.children) {
+            if (layer.type === LayerType.GroupLayer || layer.children) {
                 let flat = flatLayers(layer, filtergroup);
                 flats = flats.concat(flat);
             } else {

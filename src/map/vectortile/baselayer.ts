@@ -43,7 +43,7 @@ export let VectorTileLayerDefine = {
     type: "circle",
     subtype: LayerType.VectorTile,
     name: "点",
-    icon: "icon-pointer",
+    icon: "icon-erweidian",
     info: "只能实现单纯的点的样式",
     limit: [
       VectorTileType.Circle,
@@ -55,7 +55,7 @@ export let VectorTileLayerDefine = {
     type: "line",
     subtype: LayerType.VectorTile,
     name: "线",
-    icon: "icon-vectorpolyline",
+    icon: "icon-erweixian",
     info: "尽量使用多图层实现道路贯通",
     limit: [VectorTileType.Line, VectorTileType.Symbol],
   },
@@ -75,7 +75,7 @@ export let VectorTileLayerDefine = {
     type: "fill-extrusion",
     subtype: LayerType.VectorTile,
     name: "面",
-    icon: "icon-cube",
+    icon: "icon-erweiqu",
     info: "区加上高程信息构建对应的面要素",
     limit: [
       VectorTileType.Fill,
@@ -201,13 +201,13 @@ export class BaseLayer extends ILayer {
         this.icon = "icon-tiaoseban";
         break;
       case VectorTileType.Circle:
-        this.icon = "icon-vectorcirclevariant";
+        this.icon = "icon-erweidian";
         break;
       case VectorTileType.Line:
-        this.icon = "icon-vectorpolyline";
+        this.icon = "icon-erweixian";
         break;
       case VectorTileType.Fill:
-        this.icon = "icon-vector-polygon";
+        this.icon = "icon-erweiqu";
         break;
       case VectorTileType.FillExtrusion:
         this.icon = "icon-vector-polygon";

@@ -124,6 +124,7 @@ export class IDocument {
 
         copy.layout = document.layout;
         copy.widget = document.widget;
+        copy.query = document.query;
         copy.story = Story.wrapper(story);
 
         return copy;
@@ -144,6 +145,7 @@ export class IDocument {
             service,
             crs,
             story,
+            query,
         } = document;
         const newLayers = [];
 
@@ -171,6 +173,7 @@ export class IDocument {
         copy.layout = deepCopy(document.layout);
         copy.widget = deepCopy(document.widget);
         copy.story = Story.wrapper(story);
+        copy.query = query;
 
         return copy;
     }
@@ -223,7 +226,7 @@ export class IDocument {
             name, current, backgrounds, layers,    // 地图文档
             sources, service,                      // 数据源与服务
             sprite, glyphs,                        // 符号库
-            maprender, crs, center, bounds, maxbounds,     // 地图信息
+            maprender, crs, center, bounds, maxbounds, query    // 地图信息
         } = options;
 
         const doc = new IDocument(
@@ -242,6 +245,7 @@ export class IDocument {
 
         doc.center = center || doc.center || defaultPosition;
         doc.maxbounds = maxbounds || doc.maxbounds || defaultBounds;
+        doc.query = query;
 
         return doc;
     }
@@ -311,6 +315,11 @@ export class IDocument {
     maxbounds?: Bounds;
 
     /**
+     * @member 地图查询范围
+     */
+    query?: Bounds;
+
+    /**
      * @member 堆顶图层
      */
     before?: string;
@@ -355,7 +364,7 @@ export class IDocument {
     ) {
         this.name = name ? name : defaultName;
         this.current = current ? current : defaultCurrent;
-        this.backgrounds = backgrounds ? backgrounds : [defaultBack];
+        this.backgrounds = backgrounds ? backgrounds : [];
         this.layers = layers ? layers : [];
         this.sources = sources ? sources : defaultSources;
         this.service = service ? service : defaultService;
@@ -368,6 +377,7 @@ export class IDocument {
         this.layout = {};
         this.widget = { drag: {}, slot: [] };
         this.story = new Story();
+        this.query = defaultBounds;
     }
 
     getBackgrouds() {
@@ -949,7 +959,7 @@ export const defaultBack: BackGroundLayer = {
     "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png",
 };
 
-export const defaultBacks: BackGroundLayer[] = [ defaultBack ];
+export const defaultBacks: BackGroundLayer[] = [];
 
 export const defaultDocument: IDocument = new IDocument(
     defaultName,

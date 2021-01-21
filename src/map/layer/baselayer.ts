@@ -287,7 +287,7 @@ export let SubLayerDefine = {
 export class IMetadata {
     crs: Crs;
     topleftcorner: Position;
-    tilematrixset: Array<String | Number>;
+    tilematrixset: string[] | number[];
 
     constructor() {
         this.crs = new Crs();
@@ -303,7 +303,7 @@ export class ILayer {
     key: string;
 
     description?: string;
-    
+
     /**
      * @member UI框架用来进行文字绑定的关键字与name一致即可
      */
@@ -326,39 +326,39 @@ export class ILayer {
      * @member 表示font图标，和iconfont强绑定
      */
     icon?: string;
-    children?: Array<ILayer>;
+    children?: ILayer[];
     subtype?: any;
     bounds?: Bounds;
 
     constructor(l?: ILayer) {
-        if (!l) return;
-        if (l.subtype) this.subtype = l.subtype;
+        if (!l) { return; }
+        if (l.subtype) { this.subtype = l.subtype; }
 
         let id = l.id || l.name || l.title || l.key;
 
-        if (l.children) this.children = l.children;
-        if (l.url) this.url = l.url;
+        if (l.children) { this.children = l.children; }
+        if (l.url) { this.url = l.url; }
 
         this.name = id;
         this.title = id;
         this.id = id;
         this.key = id;
 
-        if (l.style) this.style = l.style;
-        if (l.layout) this.layout = l.layout;
+        if (l.style) { this.style = l.style; }
+        if (l.layout) { this.layout = l.layout; }
     }
 
     changeLayerName?(layer: ILayer, name: string, document: IDocument) {
-        let layers = document.layers;
-        if (!layers) return undefined;
+        const layers = document.layers;
+        if (!layers) { return undefined; }
 
         layers.map((item) => {
-            if (item.type == LayerType.GroupLayer) {
+            if (item.type === LayerType.GroupLayer) {
                 if (item.children) {
                     this.loopGroupName(layer.id, name, item);
                 }
             } else {
-                if (item.name == layer.name) {
+                if (item.name === layer.name) {
                     item.title = item.name = name;
                 }
             }
@@ -369,31 +369,28 @@ export class ILayer {
 
     changeSelfVisible?(visible: boolean) {
         if (!this.layout) {
-            this.layout = { visible: visible };
+            this.layout = { visible };
         } else {
-            this.layout = {
-                ...this.layout,
-                visible: visible,
-            };
+            this.layout = { ...this.layout, visible };
         }
     }
 
     loopGroupName?(id, name, group) {
-        if (group.id == id) {
-            if (group && group["name"]) group["name"] = name;
-            if (group && group["title"]) group["title"] = name;
+        if (group.id === id) {
+            if (group && group.name) { group.name = name; }
+            if (group && group.title) { group.title = name; }
         }
-        if (group.type != LayerType.GroupLayer) {
+        if (group.type !== LayerType.GroupLayer) {
             return group;
         }
         if (group.children) {
             group.children.map((child) => {
-                if (child.type == LayerType.GroupLayer) {
+                if (child.type === LayerType.GroupLayer) {
                     child = loopGroupName(id, name, child);
                 } else {
-                    if (child.id == id) {
-                        if (child && child.name !== undefined) child.name = name;
-                        if (child && child.title !== undefined) child.title = name;
+                    if (child.id === id) {
+                        if (child && child.name !== undefined) { child.name = name; }
+                        if (child && child.title !== undefined) { child.title = name; }
                     }
                 }
             });
@@ -440,7 +437,7 @@ export function changeLayerProperty(layer, property, value) {
  */
 export function getLayerById(map, id: string, render: MapRender) {
     let ids = [];
-    if (render == MapRender.MapBoxGL) {
+    if (render === MapRender.MapBoxGL) {
         const { layers } = map.getStyle();
 
         if (layers) {
@@ -455,16 +452,16 @@ export function changeLayerName(
     name: string,
     document: IDocument
 ) {
-    let layers = document.layers;
-    if (!layers) return undefined;
+    const layers = document.layers;
+    if (!layers) { return undefined; }
 
     layers.map((item) => {
-        if (item.type == LayerType.GroupLayer) {
+        if (item.type === LayerType.GroupLayer) {
             if (item.children) {
                 loopGroupName(layer.id, name, item);
             }
         } else {
-            if (item.name == layer.name) {
+            if (item.name === layer.name) {
                 item.title = item.name = name;
             }
         }
@@ -475,27 +472,24 @@ export function changeLayerName(
 
 export function changeSelfVisible(layer, visible) {
     if (!layer.layout) {
-        layer.layout = { visible: visible };
+        layer.layout = { visible };
     } else {
-        layer.layout = {
-            ...layer.layout,
-            visible: visible,
-        };
+        layer.layout = { ...layer.layout, visible };
     }
     return layer;
 }
 
 export function changeLayerId(layer: ILayer, id: string, document: IDocument) {
-    let layers = document.layers;
-    if (!layers) return undefined;
+    const layers = document.layers;
+    if (!layers) { return undefined; }
 
     layers.map((item) => {
-        if (item.type == LayerType.GroupLayer) {
+        if (item.type === LayerType.GroupLayer) {
             if (item.children) {
                 loopGroupId(layer.id, id, item);
             }
         } else {
-            if (item.id == layer.id) {
+            if (item.id === layer.id) {
                 item.title = item.id = id;
             }
         }
@@ -504,7 +498,7 @@ export function changeLayerId(layer: ILayer, id: string, document: IDocument) {
     return layers;
 }
 
-export function checkLayerVisible(visibleIds: Array<string>, id: string) {
+export function checkLayerVisible(visibleIds: string[], id: string) {
     for (var i = 0; i < visibleIds.length; i++) {
         let visibleId = visibleIds[i];
         if (id == visibleId) return true;
@@ -513,14 +507,14 @@ export function checkLayerVisible(visibleIds: Array<string>, id: string) {
 }
 
 export function changeLayersVisible(
-    visibleIds: Array<string>,
+    visibleIds: string[],
     document: IDocument
 ) {
     let layers = document.layers;
-    if (!layers) return undefined;
+    if (!layers) { return undefined; }
 
     layers = layers.map((layer) => {
-        if (layer.type == LayerType.GroupLayer || layer.children) {
+        if (layer.type === LayerType.GroupLayer || layer.children) {
             if (layer.children) {
                 if (checkLayerVisible(visibleIds, layer.id)) {
                     layer.layout = { visible: true };
@@ -530,10 +524,10 @@ export function changeLayersVisible(
                 loopGroupVisible(visibleIds, layer);
             }
         } else {
-            if (!layer.layout) layer.layout = new ILayout();
+            if (!layer.layout) { layer.layout = new ILayout(); }
             layer.layout.visible = false;
             visibleIds.forEach((id) => {
-                if (id == layer.id) {
+                if (id === layer.id) {
                     layer.layout.visible = true;
                 }
             });
@@ -541,27 +535,25 @@ export function changeLayersVisible(
         return layer;
     });
 
-    // console.log("changelayervisible", visibleIds, layers);
-
     return layers;
 }
 
 function loopGroupName(id, name, group) {
-    if (group.id == id) {
-        if (group && group["name"]) group["name"] = name;
-        if (group && group["title"]) group["title"] = name;
+    if (group.id === id) {
+        if (group && group.name) { group.name = name; }
+        if (group && group.title) { group.title = name; }
     }
-    if (group.type != LayerType.GroupLayer) {
+    if (group.type !== LayerType.GroupLayer) {
         return group;
     }
     if (group.children) {
         group.children.map((child) => {
-            if (child.type == LayerType.GroupLayer) {
+            if (child.type === LayerType.GroupLayer) {
                 child = loopGroupName(id, name, child);
             } else {
-                if (child.id == id) {
-                    if (child && child.name !== undefined) child.name = name;
-                    if (child && child.title !== undefined) child.title = name;
+                if (child.id === id) {
+                    if (child && child.name !== undefined) { child.name = name; }
+                    if (child && child.title !== undefined) { child.title = name; }
                 }
             }
         });
@@ -570,21 +562,21 @@ function loopGroupName(id, name, group) {
 }
 
 function loopGroupId(id, newid, group) {
-    if (group.id == id) {
-        if (group && group["id"]) group["id"] = newid;
-        if (group && group["title"]) group["title"] = newid;
+    if (group.id === id) {
+        if (group && group.id) { group.id = newid; }
+        if (group && group.title) { group.title = newid; }
     }
-    if (group.type != LayerType.GroupLayer) {
+    if (group.type !== LayerType.GroupLayer) {
         return group;
     }
     if (group.children) {
         group.children.map((child) => {
-            if (child.type == LayerType.GroupLayer) {
+            if (child.type === LayerType.GroupLayer) {
                 child = loopGroupId(id, newid, child);
             } else {
-                if (child.id == id) {
-                    if (child && child.id !== undefined) child.id = newid;
-                    if (child && child.title !== undefined) child.title = newid;
+                if (child.id === id) {
+                    if (child && child.id !== undefined) { child.id = newid; }
+                    if (child && child.title !== undefined) { child.title = newid; }
                 }
             }
         });
@@ -593,28 +585,27 @@ function loopGroupId(id, newid, group) {
 }
 
 function loopGroupVisible(ids, group) {
-    let idArray = ids.checked || ids;
-    if (group.type != LayerType.GroupLayer && !group.children) {
+    const idArray = ids.checked || ids;
+    if (group.type !== LayerType.GroupLayer && !group.children) {
         return group;
     }
-    //if (group.type === LayerType.GroupLayer) {
+
     if (checkLayerVisible(idArray, group.id)) {
         group.layout = { visible: true };
     } else {
         group.layout = { visible: false };
     }
-    //}
 
     if (group.children) {
         group.children = group.children.map((child) => {
             let result = { ...child };
-            if (child.type == LayerType.GroupLayer || child.children) {
+            if (child.type === LayerType.GroupLayer || child.children) {
                 result = loopGroupVisible(idArray, result);
             } else {
-                if (!result.layout) result.layout = new ILayout();
+                if (!result.layout) { result.layout = new ILayout(); }
                 result.layout.visible = false;
                 idArray.forEach((id) => {
-                    if (id == result.id) {
+                    if (id === result.id) {
                         result.layout.visible = true;
                         // 针对wms doclayer的子图层的优化
                         if (group.type !== LayerType.GroupLayer) {
@@ -625,18 +616,17 @@ function loopGroupVisible(ids, group) {
             }
             return result;
         });
-        //group.children = result;
     }
     return group;
 }
 
-export function compareLayers(layersa: Array<ILayer>, layersb: Array<ILayer>) {
-    if (!layersa || !layersb) return false;
-    if (layersa.length != layersb.length) return false;
+export function compareLayers(layersa: ILayer[], layersb: ILayer[]) {
+    if (!layersa || !layersb) { return false; }
+    if (layersa.length !== layersb.length) { return false; }
     for (let i = 0; i < layersa.length; i++) {
-        let a = layersa[i];
-        let b = layersb[i];
-        if (deepEqual(a, b) == false) return false;
+        const a = layersa[i];
+        const b = layersb[i];
+        if (deepEqual(a, b) === false) { return false; }
     }
     return true;
 }

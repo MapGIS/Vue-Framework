@@ -1,17 +1,16 @@
 import { MapRender } from '../document';
-import * as mapboxgl from '@mapgis/mapbox-gl';
-
 const DefaultFilter = ['any', ['!=', 'mode', 'draw_polygon'], ['!=', 'meta', 'feature']];
 
-export class Calculator {
+export class Query {
     /**
      * @param {Array<any>} [options.filter] ['any', ['!=', 'mode', 'draw_polygon'],['!=', 'meta', 'feature']]
      * @param {string} options.type mapbox vectortile type(MVT) circle line fill symbol ...
      * @param {Array<string>} options.layerIds 图层名数组
-     * @param {Geobounds} options.bounds 框选空间范围
+     * @param {Geobounds} options.bounds 框选空间范围 [{x: 10, y:10}, {x: 20, y30}]
      */
     static getAllFeatures(map, render: MapRender, options) {
-        const { type, filter, layerIds } = options;
+        const { type, ids, bounds } = options;
+        let { filter }  = options;
         let result = [];
         let layerIds = [];
         filter = filter ? filter : DefaultFilter;
@@ -26,11 +25,8 @@ export class Calculator {
                         .forEach((layer) => layerIds.push(layer.id));
                 }
             }
-            if (geobound) {
-                const {west, south, east, north} = bounds;
-                const sw = map.project(new mapboxgl.LngLat(west, south));
-                const ne = map.project(new mapboxgl.LngLat(east, north));
-                result = map.queryRenderedFeatures([sw, ne], { layers: layerIds, filter });
+            if (bounds) {
+                result = map.queryRenderedFeatures(bounds, { layers: layerIds, filter });
             } else {
                 result = map.queryRenderedFeatures({ layers: layerIds, filter });
             }
@@ -42,12 +38,15 @@ export class Calculator {
     /**
      * @param {Array<any>} [options.filter] ['any', ['!=', 'mode', 'draw_polygon'],['!=', 'meta', 'feature']]
      * @param {string} options.type mapbox vectortile type(MVT) circle line fill symbol ...
-     * @param {string} options.id 图层名
+     * @param {Array<string>} options.ids 图层名数组
      * @param {Geobounds} options.bounds 框选空间范围
      */
     static getLayerFeatures(map, render: MapRender, options) {
+        const { type, ids, bounds } = options;
+        let { filter }  = options;
         let result = [];
         let layerIds = [];
+        filter = filter ? filter : DefaultFilter;
         if (render === MapRender.MapBoxGL) {
             if (ids && ids.length > 0) {
                 layerIds = ids;
@@ -56,14 +55,11 @@ export class Calculator {
                 if (layers) {
                     layers
                         .filter((layer) => layer.type === type)
-                        .forEach((layer) => { if (id === layer.id) { layerIds.push(layer.id) } });
+                        .forEach((layer) => { if (layerIds.indexOf(layer.id) >= 0) { layerIds.push(layer.id) } });
                 }
             }
-            if (geobound) {
-                const {west, south, east, north} = bounds;
-                const sw = map.project(new mapboxgl.LngLat(west, south));
-                const ne = map.project(new mapboxgl.LngLat(east, north));
-                result = map.queryRenderedFeatures([sw, ne], { layers: layerIds, filter });
+            if (bounds) {
+                result = map.queryRenderedFeatures(bounds, { layers: layerIds, filter });
             } else {
                 result = map.queryRenderedFeatures({ layers: layerIds, filter });
             }
@@ -72,3 +68,4 @@ export class Calculator {
     }
 }
 
+export default Query;

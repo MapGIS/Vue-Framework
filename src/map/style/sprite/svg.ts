@@ -1,3 +1,6 @@
 export default class SVG {
-    static parse() { }
+
+  static parse() {
+    // 解析SVG
+  }
 }

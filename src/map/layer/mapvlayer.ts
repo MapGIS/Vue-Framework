@@ -1,20 +1,20 @@
 import { ILayer, LayerType, IStyle, ILayout } from "./baselayer";
 
 export class MapvLayer extends ILayer {
-  url: string;
-  data?: any;
-  options: Object;
+    url: string;
+    data?: any;
+    options: object;
 
-  title?: string;
-  layout?: ILayout;
-  style?: MapvLayerStyle;
+    title?: string;
+    layout?: ILayout;
+    style?: MapvLayerStyle;
 
-  constructor(url?: string, options?: Object) {
-    super();
-    this.type = LayerType.MapvLayer;
-    this.url = url;
-    this.options = options;
-  }
+    constructor(url?: string, options?: object) {
+        super();
+        this.type = LayerType.MapvLayer;
+        this.url = url;
+        this.options = options;
+    }
 }
 
 /**
@@ -28,14 +28,14 @@ export class MapvLayerStyle extends IStyle {}
  * @description MapvLayer布局
  */
 export class MapvLayerLayout extends ILayout {
-  visible?: boolean;
+    visible?: boolean;
 
-  constructor(visible: boolean) {
-    super();
-    this.visible = visible;
-  }
+    constructor(visible: boolean) {
+        super();
+        this.visible = visible;
+    }
 
-  setOpacity(visible: boolean) {
-    this.visible = visible;
-  }
+    setOpacity(visible: boolean) {
+        this.visible = visible;
+    }
 }

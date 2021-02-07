@@ -8,21 +8,21 @@ import {
 
 export interface GroupSpriteProperty {
     groupProp: GroupProperty;
-    spriteProp: Array<SpriteProperty>;
+    spriteProp: SpriteProperty[];
 }
 export interface KeyProperty {
-    key: String | Number;
+    key: string | number;
 }
 export interface GroupProperty {
-    group: String;
-    descText: String;
-    symbol: String;
+    group: string;
+    descText: string;
+    symbol: string;
 }
 /**
  * @author 创新中心-潘卓然
  */
 export interface SpriteProperty {
-    key: String | number;
+    key: string | number;
     svg: SvgProperty;
 }
 

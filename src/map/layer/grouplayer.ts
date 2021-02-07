@@ -34,8 +34,7 @@ export function flatLayers(group, filtergroup: boolean = true): ILayer[] {
                     layers.push(child);
                 }
             } else {
-                child.icon = 
-                layers.push(child);
+                child.icon = layers.push(child);
             }
         });
     } else {
@@ -93,7 +92,7 @@ export function findLayersByType(type, group): ILayer[] {
                 const innerLayers = findLayersByType(type, child);
                 layers = layers.concat(innerLayers);
             } else {
-                if (child.type == type) {
+                if (child.type === type) {
                     layers.push(child);
                 }
             }
@@ -304,7 +303,7 @@ export function addItemNearItem(
         parent.children.splice(index, 0, layer);
     } else {
         if (group.children) {
-            let children = group.children.map((child) => {
+            const children = group.children.map((child) => {
                 return child;
             });
             children.map((child, i) => {
@@ -331,7 +330,7 @@ export function deleteGroupItem(id: string, group) {
         group = undefined;
     } else {
         if (group.children) {
-            let result = group.children.filter((child) => {
+            const result = group.children.filter((child) => {
                 if (child.type === LayerType.GroupLayer) {
                     if (child.id === id) {
                         return false;
@@ -361,7 +360,7 @@ export function copyGroupItem(id: string, group) {
             let position = -1;
             let valid = false;
             let copy;
-            let result = group.children.map((child, index) => {
+            const result = group.children.map((child, index) => {
                 if (child.type === LayerType.GroupLayer) {
                     /*                     if (child.id === id) {
                                            position = index + 1;
@@ -374,16 +373,20 @@ export function copyGroupItem(id: string, group) {
                 } else {
                     if (child.id === id) {
                         position = index + 1;
-                        let key = uuid();
-                        let name = child.title + "复制";
+                        const key = uuid();
+                        const name = child.title + "复制";
                         copy = deepCopy(child);
-                        copy = { ...copy, key: key, id: key, name: name, title: name };
-                        if (copy.key !== child.key) valid = true;
+                        copy = { ...copy, key, id: key, name, title: name };
+                        if (copy.key !== child.key) {
+                            valid = true;
+                        }
                     }
                 }
                 return child;
             });
-            if (valid && position > 0) result.splice(position, 0, copy);
+            if (valid && position > 0) {
+                result.splice(position, 0, copy);
+            }
             group.children = result;
         }
     }
@@ -401,7 +404,9 @@ export function specialGroupItem(id: string, group, type: string) {
         if (group.children) {
             let position = -1;
             let valid = false;
-            let copy, typeName, iconfont;
+            let copy;
+            let typeName;
+            let iconfont;
             switch (type) {
                 case "monodrome":
                     typeName = "单值";
@@ -424,7 +429,7 @@ export function specialGroupItem(id: string, group, type: string) {
                     iconfont = "icon-dengji";
                     break;
             }
-            let result = group.children.map((child, index) => {
+            const result = group.children.map((child, index) => {
                 if (child.type === LayerType.GroupLayer) {
                     /*                     if (child.id === id) {
                                            position = index + 1;
@@ -437,25 +442,29 @@ export function specialGroupItem(id: string, group, type: string) {
                 } else {
                     if (child.id === id) {
                         position = index + 1;
-                        let key = uuid();
-                        let name = child.title + "-" + typeName + "专题图";
-                        let special = type;
+                        const key = uuid();
+                        const name = child.title + "-" + typeName + "专题图";
+                        const special = type;
                         copy = deepCopy(child);
                         copy = {
                             ...copy,
-                            key: key,
+                            key,
                             id: key,
-                            name: name,
+                            name,
                             title: name,
-                            special: special,
+                            special,
                             icon: iconfont,
                         };
-                        if (copy.key !== child.key) valid = true;
+                        if (copy.key !== child.key) {
+                            valid = true;
+                        }
                     }
                 }
                 return child;
             });
-            if (valid && position > 0) result.splice(position, 0, copy);
+            if (valid && position > 0) {
+                result.splice(position, 0, copy);
+            }
             group.children = result;
         }
     }

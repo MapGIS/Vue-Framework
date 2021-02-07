@@ -334,7 +334,7 @@ export class ILayer {
         if (!l) { return; }
         if (l.subtype) { this.subtype = l.subtype; }
 
-        let id = l.id || l.name || l.title || l.key;
+        const id = l.id || l.name || l.title || l.key;
 
         if (l.children) { this.children = l.children; }
         if (l.url) { this.url = l.url; }
@@ -499,11 +499,13 @@ export function changeLayerId(layer: ILayer, id: string, document: IDocument) {
 }
 
 export function checkLayerVisible(visibleIds: string[], id: string) {
-    for (var i = 0; i < visibleIds.length; i++) {
-        let visibleId = visibleIds[i];
-        if (id == visibleId) return true;
+    let find = false;
+    for (const visibleId of visibleIds) {
+        if (id === visibleId) {
+            find = true;
+        }
     }
-    return false;
+    return find;
 }
 
 export function changeLayersVisible(

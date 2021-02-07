@@ -1,19 +1,19 @@
 import { ILayer, LayerType, IStyle, ILayout } from "./baselayer";
 
 export class EchartsLayer extends ILayer {
-  url: string;
-  options: Object;
+    url: string;
+    options: object;
 
-  title?: string;
-  layout?: ILayout;
-  style?: EchartsLayerStyle;
+    title?: string;
+    layout?: ILayout;
+    style?: EchartsLayerStyle;
 
-  constructor(url?: string, options?: Object) {
-    super();
-    this.type = LayerType.EchartsLayer;
-    this.url = url;
-    this.options = options;
-  }
+    constructor(url?: string, options?: object) {
+        super();
+        this.type = LayerType.EchartsLayer;
+        this.url = url;
+        this.options = options;
+    }
 }
 
 /**
@@ -27,14 +27,14 @@ export class EchartsLayerStyle extends IStyle {}
  * @description EchartsLayer布局
  */
 export class EchartsLayerLayout extends ILayout {
-  visible?: boolean;
+    visible?: boolean;
 
-  constructor(visible: boolean) {
-    super();
-    this.visible = visible;
-  }
+    constructor(visible: boolean) {
+        super();
+        this.visible = visible;
+    }
 
-  setOpacity(visible: boolean) {
-    this.visible = visible;
-  }
+    setOpacity(visible: boolean) {
+        this.visible = visible;
+    }
 }

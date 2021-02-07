@@ -1,7 +1,6 @@
-import { color } from "d3-color";
+import { color as d3color } from "d3-color";
 import * as d3interpolate from "d3-scale-chromatic";
-const d3color = color;
-
+// const d3color = color;
 import {
     IDocument,
     MapRender,
@@ -65,7 +64,7 @@ export class Convert {
             return sources;
         }
 
-        for (const key in doc.sources) {
+        for (const key of Object.keys(doc.sources)) {
             const source = doc.sources[key];
             if (!source) {
                 continue;
@@ -397,11 +396,13 @@ export class Convert {
     }
 
     convertSelectlayer(layer) {
-        if (!layer)
+        if (!layer) {
             layer = {
                 filter: ["all"],
                 paint: {},
             };
+        }
+
         let unFilter = deepCopy(layer);
 
         if (layer.filter) {

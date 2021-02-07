@@ -1,79 +1,79 @@
 import { ILayer, IStyle, ILayout } from "./baselayer";
 
 export class BackGroundLayer extends ILayer {
-  title: string;
-  tileUrl: string;
-  imgUrl: string;
-  style?: BackGroundStyle;
-  token?: string;
+    title: string;
+    tileUrl: string;
+    imgUrl: string;
+    style?: BackGroundStyle;
+    token?: string;
 }
 
-//-------------------------------------BackGroundStyle----------------------------------
-//---------------------------------------背景样式-开始-----------------------------------
-//-------------------------------------BackGroundStyle----------------------------------
+// -------------------------------------BackGroundStyle----------------------------------
+// ---------------------------------------背景样式-开始-----------------------------------
+// -------------------------------------BackGroundStyle----------------------------------
 export class BackGroundStyle extends IStyle {
-  visible: boolean;
-  opacity: number;
-  hue: number;
+    visible: boolean;
+    opacity: number;
+    hue: number;
 
-  constructor(visible: boolean, opacity: number, hue: number) {
-    super();
-    this.visible = visible ? true : false;
-    this.opacity = opacity ? opacity : 1;
-    this.hue = hue ? hue : 0;
-  }
+    constructor(visible: boolean, opacity: number, hue: number) {
+        super();
+        this.visible = visible ? true : false;
+        this.opacity = opacity ? opacity : 1;
+        this.hue = hue ? hue : 0;
+    }
 
-  setOpacity(opacity: number) {
-    this.opacity = opacity;
-  }
+    setOpacity(opacity: number) {
+        this.opacity = opacity;
+    }
 
-  setHue(hue: number) {
-    this.hue = hue;
-  }
+    setHue(hue: number) {
+        this.hue = hue;
+    }
 }
 
 export interface IBackGroundSytle {
-  dispatchStyleChange(
-    backgrounds: Array<BackGroundLayer>,
-    style: BackGroundStyle
-  );
-  onOpacityChange(opacity: number);
-  onHueChange(hue: number);
+    dispatchStyleChange(
+        backgrounds: BackGroundLayer[],
+        style: BackGroundStyle
+    );
+    onOpacityChange(opacity: number);
+    onHueChange(hue: number);
 }
 
 export const defaultBackGroundStyle: BackGroundStyle = new BackGroundStyle(
-  true,
-  1,
-  0
+    true,
+    1,
+    0
 );
 
-//-------------------------------------BackGroundStyle----------------------------------
-//---------------------------------------背景样式-结束-----------------------------------
-//-------------------------------------BackGroundStyle----------------------------------
+// -------------------------------------BackGroundStyle----------------------------------
+// ---------------------------------------背景样式-结束-----------------------------------
+// -------------------------------------BackGroundStyle----------------------------------
 
-//-------------------------------------RasterTileLayout----------------------------------
-//---------------------------------------栅格布局-开始-----------------------------------
-//-------------------------------------RasterTileLayout----------------------------------
+// -------------------------------------RasterTileLayout----------------------------------
+// ---------------------------------------栅格布局-开始-----------------------------------
+// -------------------------------------RasterTileLayout----------------------------------
 export class BackGroundLayout extends ILayout {
-  visible?: boolean;
+    visible?: boolean;
 
-  constructor(visible: boolean) {
-    super();
-    this.visible = visible;
-  }
+    constructor(visible: boolean) {
+        super();
+        this.visible = visible;
+    }
 
-  setOpacity(visible: boolean) {
-    this.visible = visible;
-  }
+    setOpacity(visible: boolean) {
+        this.visible = visible;
+    }
 }
 
 export const defaultVisible: boolean = true;
 
 export const defaultRasterTileLayout: BackGroundLayout = new BackGroundLayout(
-  defaultVisible
+    defaultVisible
 );
 
 
-//-------------------------------------RasterTileLayout----------------------------------
-//---------------------------------------栅格布局-结束-----------------------------------
-//-------------------------------------RasterTileLayout----------------------------------
+// -------------------------------------RasterTileLayout----------------------------------
+// ---------------------------------------栅格布局-结束-----------------------------------
+// -------------------------------------RasterTileLayout----------------------------------

@@ -1,4 +1,4 @@
-import * as turf from "@turf/turf";
+import turfbbox from "@turf/bbox";
 import { MapRender } from "../document";
 
 export class GeojsonFeature {
@@ -41,7 +41,7 @@ export class GeojsonFeature {
   }
 
   bbox() {
-    this.bounds = turf.bbox(this.feature);
+    this.bounds = turfbbox(this.feature);
     return this.bounds;
   }
 }
@@ -92,7 +92,7 @@ export class GeojsonCollection {
   }
 
   bbox() {
-    this.bounds = turf.bbox(this.data);
+    this.bounds = turfbbox(this.data);
     return this.bounds;
   }
 }

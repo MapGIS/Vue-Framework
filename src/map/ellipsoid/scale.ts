@@ -1,4 +1,5 @@
-import { point, distance } from "@turf/turf";
+import { point } from "@turf/helpers";
+import distance from "@turf/distance";
 import { Lnglat } from "../geom";
 
 export class Scale {

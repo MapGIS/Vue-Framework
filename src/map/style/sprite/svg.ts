@@ -1,3 +1,3 @@
-export default SVG {
+export default class SVG {
     static parse() { }
 }

@@ -25,7 +25,6 @@ import * as VectorTile from "./map/vectortile";
 import * as Format from "./map/format";
 
 import * as Theme from "./map/theme";
-import * as Spec from "./map/spec";
 import * as Style from "./map/style";
 
 /**
@@ -61,7 +60,6 @@ export {
   Format,
   Style,
   Theme,
-  Spec,
   Util,
   Flux,
   Layout,
@@ -92,7 +90,6 @@ export default {
 
   Style,
   Theme,
-  Spec,
 
   Util,
   Flux,

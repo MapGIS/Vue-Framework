@@ -14,6 +14,7 @@ import { LayerType, SubLayerType, SubLayerDefine } from "../layer";
 import { VectorTileLayerDefine } from "../vectortile/baselayer";
 import { deepCopy } from "../../utils/deepequal";
 import { uuid } from "../../utils/uuid";
+import { FeatureCollection } from '../format/geojson';
 
 export const defaultId = "cesium vector tiles";
 export const defaultSprite =
@@ -36,7 +37,7 @@ export class Convert {
      * @param doc
      */
     docTomvt(doc: IDocument) {
-        let style = {
+        const style = {
             version: 8,
             id: defaultId,
             name: defaultId,
@@ -59,16 +60,20 @@ export class Convert {
     }
 
     docTomvtSources(doc: IDocument) {
-        let sources = {};
-        if (!doc) return sources;
+        const sources = {};
+        if (!doc) {
+            return sources;
+        }
 
-        for (let key in doc.sources) {
-            let source = doc.sources[key];
-            if (!source) continue;
+        for (const key in doc.sources) {
+            const source = doc.sources[key];
+            if (!source) {
+                continue;
+            }
 
-            let { url, type, min, max } = source;
+            const { url, type, min, max } = source;
 
-            let newSouce = {
+            const newSouce = {
                 type: "",
                 tiles: [],
                 path: '',
@@ -76,14 +81,14 @@ export class Convert {
                 maxZoom: 24,
             };
 
-            if (type == LayerType.VectorTile) {
+            if (type === LayerType.VectorTile) {
                 newSouce.type = "vector";
                 newSouce.tiles = [url];
                 newSouce.minZoom = min || 0;
                 newSouce.maxZoom = max || 24;
                 sources[key] = newSouce;
                 delete newSouce.path;
-            } else if (type == LayerType.MBTiles) {
+            } else if (type === LayerType.MBTiles) {
                 newSouce.type = "mbtiles";
                 newSouce.path = url;
                 newSouce.minZoom = min || 0;
@@ -93,24 +98,40 @@ export class Convert {
             }
         }
 
+        const flats = doc.getFlatLayers();
+        flats.forEach((layer) => {
+            const { type, url, key } = layer;
+            if (type === LayerType.GeoJSON) {
+                sources[key] = {
+                    type: 'geojson',
+                    data: url ||  FeatureCollection
+                };
+            }
+        });
+
         return sources;
     }
 
     docTomvtLayers(doc: IDocument, remove: boolean = true) {
         let layers = [];
-        if (!doc) return layers;
+        if (!doc) {
+            return layers;
+        }
 
-        let flats = doc.getFlatLayers();
+        const flats = doc.getFlatLayers();
         layers = flats.map((layer) => {
-            let { sourceLayer, type, subtype, layout, style, children } = layer;
+            const { key, sourceLayer, type, subtype, layout, style, paint, children, url } = layer;
 
-            layer["type"] = this.docTomvtType(subtype);
-            layer["subtype"] = this.docTomvtSubtype(subtype);
-            layer["layout"] = this.docTomvtLayout(layout);
-            layer["paint"] = style || {};
+            layer.type = this.docTomvtType(subtype);
+            layer.subtype = this.docTomvtSubtype(subtype);
+            layer.layout = this.docTomvtLayout(layout);
+            layer.paint = style || paint || {};
 
             if (type === VectorTileLayerDefine.Raster.type) {
                 layer["source-layer"] = "null";
+            } else if (type === LayerType.GeoJSON) {
+                // do not has source-layer props
+                layer.source = key;
             } else {
                 layer["source-layer"] = sourceLayer || "null";
             }
@@ -129,7 +150,7 @@ export class Convert {
                 delete layer.sourceLayer;
                 delete layer.title;
                 delete layer.name;
-                // delete layer.url;  
+                // delete layer.url;
                 // 这个地方是为了解决实时出后台矢量瓦片导致的tolerance&filter的变化，请看MapboxGL-React/VectorTile
                 // let changeUrl = layer.url != vectortile.url ? true : false;
             }
@@ -168,13 +189,15 @@ export class Convert {
     }
 
     docTomvtLayout(layout) {
-        if (!layout) layout = { visibility: "visible" };
-        if (layout.visible == undefined) {
-            layout["visibility"] = "visible";
+        if (!layout)  {
+            layout = { visibility: "visible" };
+        }
+        if (layout.visible === undefined) {
+            layout.visibility = "visible";
         } else if (layout.visible) {
-            layout["visibility"] = "visible";
+            layout.visibility = "visible";
         } else {
-            layout["visibility"] = "none";
+            layout.visibility = "none";
         }
         delete layout.visible;
         return layout;
@@ -185,11 +208,11 @@ export class Convert {
      * @param doc
      */
     mvtTodoc(mvt): IDocument {
-        let name = mvt.name || "地图样式";
-        let sources = this.mvtTodocSources(mvt.sources);
-        let layers = this.mvtTodocLayers(mvt.layers);
+        const name = mvt.name || "地图样式";
+        const sources = this.mvtTodocSources(mvt.sources);
+        const layers = this.mvtTodocLayers(mvt.layers);
 
-        let doc = new IDocument(
+        const doc = new IDocument(
             defaultName,
             defaultCurrent,
             defaultBacks,
@@ -202,20 +225,20 @@ export class Convert {
     }
 
     mvtTodocSources(sources) {
-        if (!sources) return defaultSources;
-        let keys = Object.keys(sources);
-        let key = "";
+        if (!sources) {
+            return defaultSources;
+        }
+        const keys = Object.keys(sources);
         let news = {};
-        for (let index = 0; index < keys.length; index++) {
-            key = keys[index];
-            let source = sources[key];
-            if (source.type != "vector") {
+        for (const key of keys) {
+            const source = sources[key];
+            if (source.type !== "vector") {
                 continue;
             } else {
-                let tiles = source.tiles;
-                if (!tiles) continue;
-                if (tiles.length <= 0) continue;
-                let url = tiles[0];
+                const tiles = source.tiles;
+                if (!tiles) { continue; }
+                if (tiles.length <= 0) { continue; }
+                const url = tiles[0];
                 source.name = key;
                 source.url = url;
                 source.type = LayerType.VectorTile;
@@ -233,56 +256,55 @@ export class Convert {
     mvtTodocLayers(layers) {
         let flats = [];
         flats = layers.filter((layer) => {
-            let { id, type, paint, layout } = layer;
+            const { id, type, paint, layout } = layer;
 
-            layer["sourceLayer"] = layer["source-layer"];
+            layer.sourceLayer = layer["source-layer"];
 
-            layer["title"] = id;
-            layer["id"] = id;
-            layer["name"] = id;
-            layer["key"] = id;
+            layer.title = id;
+            layer.id = id;
+            layer.name = id;
+            layer.key = id;
 
-            if (GeometryTypes.indexOf(layer["type"]) < 0) return false;
+            if (GeometryTypes.indexOf(layer.type) < 0) { return false; }
 
-            layer["type"] = LayerType.VectorTile;
-            layer["subtype"] = this.mvtTodocType(type);
-            layer["icon"] = VectorTileLayerDefine[layer.subtype].icon;
+            layer.type = LayerType.VectorTile;
+            layer.subtype = this.mvtTodocType(type);
+            layer.icon = VectorTileLayerDefine[layer.subtype].icon;
 
-            layer["info"] = "";
-            layer["description"] = "";
+            layer.info = "";
+            layer.description = "";
 
-            layer["style"] = paint || {};
-            layer["layout"] = this.mvtTodocLayout(layout) || {};
+            layer.style = paint || {};
+            layer.layout = this.mvtTodocLayout(layout) || {};
 
-            layer["url"] = undefined;
+            layer.url = undefined;
 
             delete layer.paint;
             // delete layer['source-layer']
             // return layer
             return true;
         });
-        console.log("flats", flats);
         return flats;
     }
 
     mvtTodocType(type) {
-        let keys = Object.keys(VectorTileLayerDefine);
-        let types = keys.map((key) => {
+        const keys = Object.keys(VectorTileLayerDefine);
+        const types = keys.map((key) => {
             return VectorTileLayerDefine[key].type;
         });
-        let index = types.indexOf(type);
-        if (index >= 0) return keys[index];
+        const index = types.indexOf(type);
+        if (index >= 0) { return keys[index]; }
         return undefined;
     }
 
     mvtTodocLayout(layout) {
-        if (!layout) layout = { visible: true };
-        if (layout.visibility == undefined) {
-            layout["visible"] = true;
+        if (!layout) { layout = { visible: true }; }
+        if (layout.visibility === undefined) {
+            layout.visible = true;
         } else if (layout.visibility === "visible") {
-            layout["visible"] = true;
+            layout.visible = true;
         } else {
-            layout["visible"] = false;
+            layout.visible = false;
         }
         delete layout.visibility;
         return layout;
@@ -294,34 +316,34 @@ export class Convert {
     convertInspectLayers(layers, inspectId) {
         // '#424242'  #181818  #222222
         // let lineColor = d3.interpolateGreys;
-        let select = undefined;
-        let unselectLayers = layers.filter((layer) => {
-            if (layer.id == inspectId) select = layer;
-            return layer.id != inspectId;
+        let select;
+        const unselectLayers = layers.filter((layer) => {
+            if (layer.id === inspectId) { select = layer; }
+            return layer.id !== inspectId;
         });
-        let fills = unselectLayers.filter((layer) => {
-            return layer.type == "fill" || layer.type == "fill-extrusion";
+        const fills = unselectLayers.filter((layer) => {
+            return layer.type === "fill" || layer.type === "fill-extrusion";
         });
-        let lines = unselectLayers.filter((layer) => {
-            return layer.type == "line";
+        const lines = unselectLayers.filter((layer) => {
+            return layer.type === "line";
         });
-        let circles = unselectLayers.filter((layer) => {
-            return layer.type == "circle";
+        const circles = unselectLayers.filter((layer) => {
+            return layer.type === "circle";
         });
-        let symbols = unselectLayers.filter((layer) => {
-            return layer.type == "symbol";
+        const symbols = unselectLayers.filter((layer) => {
+            return layer.type === "symbol";
         });
-        let selects = layers.filter((layer) => {
-            return layer.id == inspectId;
+        const selects = layers.filter((layer) => {
+            return layer.id === inspectId;
         });
         if (selects.length > 0) {
             select = selects[0];
         }
 
-        let unselectFill = this.convertUnselectLayer(fills, 0.8, 1.0);
-        let unselectLine = this.convertUnselectLayer(lines, 0.7, 0.9);
-        let unselectCircle = this.convertUnselectLayer(circles, 0.2, 0.4);
-        let unselectSymbol = this.convertUnselectLayer(symbols, 0.6, 0.8);
+        const unselectFill = this.convertUnselectLayer(fills, 0.8, 1.0);
+        const unselectLine = this.convertUnselectLayer(lines, 0.7, 0.9);
+        const unselectCircle = this.convertUnselectLayer(circles, 0.2, 0.4);
+        const unselectSymbol = this.convertUnselectLayer(symbols, 0.6, 0.8);
 
         select = this.convertSelectlayer(select);
         return []
@@ -333,11 +355,11 @@ export class Convert {
     }
 
     convertUnselectLayer(layers, startPercent, endPercent) {
-        let count = layers.length;
-        let inspects = layers.map((layer, index) => {
-            let percent =
+        const count = layers.length;
+        const inspects = layers.map((layer, index) => {
+            const percent =
                 startPercent + (index / count) * (endPercent - startPercent);
-            let color = d3color(d3interpolate.interpolateGreys(percent))
+            const color = d3color(d3interpolate.interpolateGreys(percent))
                 .copy({ opacity: 0.5 })
                 .toString();
             if (layer.paint) {
@@ -384,9 +406,9 @@ export class Convert {
 
         if (layer.filter) {
             unFilter.id = layer.id + "_unfilter";
-            if (unFilter.filter[0] == "all") {
+            if (unFilter.filter[0] === "all") {
                 unFilter.filter[0] = "none";
-            } else if (unFilter.filter[0] == "none") {
+            } else if (unFilter.filter[0] === "none") {
                 unFilter.filter[0] = "any";
             }
             if (unFilter.paint["circle-color"]) {
@@ -421,6 +443,7 @@ export class Convert {
                 layer.paint["text-halo-color"] = "rgba(91, 255, 142, 0.7)";
             }
         } else {
+            // other
         }
 
         layer = [layer];
@@ -430,9 +453,9 @@ export class Convert {
     }
 
     convertInspectMode(doc: IDocument) {
-        let origins = this.docTomvtLayers(doc);
-        let inpsectid = doc.getCurrent().id;
-        let inspects = this.convertInspectLayers(origins, inpsectid);
+        const origins = this.docTomvtLayers(doc);
+        const inpsectid = doc.getCurrent().id;
+        const inspects = this.convertInspectLayers(origins, inpsectid);
         return inspects;
     }
 }

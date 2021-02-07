@@ -4,6 +4,8 @@ const DefinePlugin = require("webpack").DefinePlugin;
 const CaseSensitivePathsPlugin = require("case-sensitive-paths-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = {
   mode: "development", //  development production
@@ -108,9 +110,11 @@ module.exports = {
           },
         },
       }),
+      new UglifyJsPlugin(),
     ],
   },
   plugins: [
+    new BundleAnalyzerPlugin({ analyzerPort: 8919 }), //依赖图
     /* config.plugin('define') */
     new DefinePlugin({
       "process.env": {

@@ -12,6 +12,50 @@ export interface Project {
  * @description 处理Proj4js的地理坐标系/投影坐标系
  */
 export class Crs implements Project {
+  static clone(crs: Crs) {
+    const { epsg, proj } = crs;
+    const copy = new Crs(epsg, proj);
+    return copy;
+  }
+
+  static wrapper(crs: Crs) {
+    const { epsg, proj } = crs;
+    const copy = new Crs(epsg, proj);
+    return copy;
+  }
+
+  /**
+   * @description 通过mapgis的地理坐标系的名字或者id转换成标准得epsg规则
+   * @param id mapgis的id或者名字
+   */
+  static MapgisToEpsg(id: number | string) {
+    let epsg;
+    let proj;
+    MapGISSrefs.forEach((ref) => {
+      if (ref.name === id || ref.id === id || ref.id === `${id}`) {
+        epsg = `EPSG_${ref.epsgid}`;
+        proj = ProjectTool.getProj4sDetail(ref.epsgid);
+      }
+    });
+    const copy = new Crs(epsg, proj);
+    return copy;
+  }
+
+  /**
+   * @description 通过mapgis的地理坐标系的名字或者id转换成标准得epsg规则
+   * @param id mapgis的id或者名字
+   */
+  static EpsgToMapgis(id: number) {
+    let mapgis;
+    const epsgid = `${epsgId(id)}`;
+    MapGISSrefs.forEach((ref) => {
+      if (ref.id === epsgid) {
+        mapgis = ref;
+      }
+    });
+    return mapgis;
+  }
+
   /**
    * @description EPSG对应的编号
    * @see http://epsg.io/
@@ -33,9 +77,9 @@ export class Crs implements Project {
    * @description 点-正向投影  经纬度->平面坐标
    * @param lonlat
    */
-  projectPoint(lonlat: Array<number>) {
-    let id = epsgId(this.epsg);
-    let source = ProjectTool.getProj4sDetail(4326);
+  projectPoint(lonlat: number[]) {
+    const id = epsgId(this.epsg);
+    const source = ProjectTool.getProj4sDetail(4326);
     let destination = "";
 
     if (this.epsg && !this.proj) {
@@ -53,9 +97,9 @@ export class Crs implements Project {
    * @description 点-反向投影  平面坐标->经纬度
    * @param point
    */
-  unprojectPoint(point: Array<number>) {
-    let id = epsgId(this.epsg);
-    let source = ProjectTool.getProj4sDetail(4326);
+  unprojectPoint(point: number[]) {
+    const id = epsgId(this.epsg);
+    const source = ProjectTool.getProj4sDetail(4326);
     let destination = "";
 
     if (this.epsg && !this.proj) {
@@ -68,54 +112,11 @@ export class Crs implements Project {
 
     return ProjectTool.proj4Transform(destination, source, point);
   }
-
-  static clone(crs: Crs) {
-    let { epsg, proj } = crs;
-    let copy = new Crs(epsg, proj);
-    return copy;
-  }
-
-  static wrapper(crs: Crs) {
-    let { epsg, proj } = crs;
-    let copy = new Crs(epsg, proj);
-    return copy;
-  }
-
-  /**
-   * @description 通过mapgis的地理坐标系的名字或者id转换成标准得epsg规则
-   * @param id mapgis的id或者名字
-   */
-  static MapgisToEpsg(id: number | string) {
-    let epsg, proj;
-    MapGISSrefs.forEach((ref) => {
-      if (ref.name === id || ref.id === id || ref.id === `${id}`) {
-        epsg = `EPSG_${ref.epsgid}`;
-        proj = ProjectTool.getProj4sDetail(ref.epsgid);
-      }
-    });
-    let copy = new Crs(epsg, proj);
-    return copy;
-  }
-
-  /**
-   * @description 通过mapgis的地理坐标系的名字或者id转换成标准得epsg规则
-   * @param id mapgis的id或者名字
-   */
-  static EpsgToMapgis(id: number) {
-    let mapgis;
-    let epsgid = `${epsgId(id)}`;
-    MapGISSrefs.forEach((ref) => {
-      if (ref.id === epsgid) {
-        mapgis = ref;
-      }
-    });
-    return mapgis;
-  }
 }
 
 export function cloneCrs(crs: Crs) {
-  let { epsg, proj } = crs;
-  let copy = new Crs(epsg, proj);
+  const { epsg, proj } = crs;
+  const copy = new Crs(epsg, proj);
   return copy;
 }
 

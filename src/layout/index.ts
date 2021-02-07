@@ -1,22 +1,12 @@
-export { IApplication } from "./app";
-export {
-  ThemeLayout,
-  ThemeStyle,
-  ThemeSlot,
-  ThemeContent,
-  ThemeManifest,
-} from "./themes";
+import {
+  IApplication
+} from "./app";
+
+import * as ITheme from './themes';
+import * as IWidget from './widgets';
 
 export {
-  Widget,
-  WidgetOnScreen,
-  WidgetPool,
-  WidgetGroup,
-  WidgetProperties,
-  WidgetManifest,
-  WidgetsManifest,
-  WidgetPosition,
-  WidgetConfig,
-  DefaultWidgetPosition,
-  DefaultWidgetStyle,
-} from "./widgets";
+  IApplication,
+  ITheme,
+  IWidget
+}

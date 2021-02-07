@@ -1,6 +1,9 @@
-import Redux from "./react";
-import Vuex from "./vue";
+// import Redux from "./react";
+// import Vuex from "./vue";
 
-export { Redux, Vuex };
+// export { Redux, Vuex };
 
-export default { Redux, Vuex };
+// export default { Redux, Vuex };
+
+export {};
+export default {};

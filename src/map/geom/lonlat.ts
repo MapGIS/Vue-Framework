@@ -6,52 +6,52 @@ export const minLatitude = -90;
 export const defautPrecision = 0.0000000001;
 
 export class Lnglat {
-  lng: number;
-  lat: number;
+    static fromObject(lnglat: any, precision?: number): Lnglat {
+        precision = precision || defautPrecision;
+        if (lnglat.lng === undefined || lnglat.lat === undefined) {
+            return new Lnglat(0, 0);
+        }
 
-  constructor(lng, lat) {
-    this.lng = lng;
-    this.lat = lat;
-  }
+        let { lng, lat } = lnglat;
 
-  fix(precision?: number) {
-    precision = precision || defautPrecision;
-    if (this.lng > maxLongitude) {
-      this.lng = maxLongitude - precision;
-    }
-    if (this.lng < minLongitude) {
-      this.lng = minLongitude + precision;
-    }
-    if (this.lat > maxLatitude) {
-      this.lat = maxLatitude - precision;
-    }
-    if (this.lat < minLatitude) {
-      this.lat = minLatitude + precision;
-    }
-  }
-
-  static fromObject(lnglat: any, precision?: number): Lnglat {
-    precision = precision || defautPrecision;
-    if (lnglat.lng === undefined || lnglat.lat === undefined) {
-      return new Lnglat(0, 0);
+        if (lng > maxLongitude) {
+            lng = maxLongitude - precision;
+        }
+        if (lng < minLongitude) {
+            lng = minLongitude + precision;
+        }
+        if (lat > maxLatitude) {
+            lat = maxLatitude - precision;
+        }
+        if (lat < minLatitude) {
+            lat = minLatitude + precision;
+        }
+        return new Lnglat(lng, lat);
     }
 
-    let { lng, lat } = lnglat;
+    lng: number;
+    lat: number;
 
-    if (lng > maxLongitude) {
-      lng = maxLongitude - precision;
+    constructor(lng, lat) {
+        this.lng = lng;
+        this.lat = lat;
     }
-    if (lng < minLongitude) {
-      lng = minLongitude + precision;
+
+    fix(precision?: number) {
+        precision = precision || defautPrecision;
+        if (this.lng > maxLongitude) {
+            this.lng = maxLongitude - precision;
+        }
+        if (this.lng < minLongitude) {
+            this.lng = minLongitude + precision;
+        }
+        if (this.lat > maxLatitude) {
+            this.lat = maxLatitude - precision;
+        }
+        if (this.lat < minLatitude) {
+            this.lat = minLatitude + precision;
+        }
     }
-    if (lat > maxLatitude) {
-      lat = maxLatitude - precision;
-    }
-    if (lat < minLatitude) {
-      lat = minLatitude + precision;
-    }
-    return new Lnglat(lng, lat);
-  }
 }
 
 export default Lnglat;

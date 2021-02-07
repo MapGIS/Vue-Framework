@@ -14,4 +14,4 @@ export {
     ViewState,
     State,
     MapMouseEvent
-};
+}

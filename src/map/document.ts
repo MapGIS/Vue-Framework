@@ -533,8 +533,7 @@ export class IDocument {
     changeCurrent(id: string) {
         const current = defaultCurrent;
 
-        for (let i = 0; i < this.backgrounds.length; i++) {
-            const back = this.backgrounds[i];
+        for (const back of this.backgrounds) {
             if (back.id === id) {
                 current.id = back.id;
                 current.type = LayerType.BackGround;
@@ -543,8 +542,7 @@ export class IDocument {
             }
         }
 
-        for (let i = 0; i < this.layers.length; i++) {
-            const layer = this.layers[i];
+        for (const layer of this.layers) {
             if (layer.type === LayerType.GroupLayer) {
                 const find = findLayer(id, layer);
                 if (find) {

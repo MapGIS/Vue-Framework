@@ -35,6 +35,7 @@
     },
     "dependencies": {
         "@mapbox/mapbox-gl-style-spec": "^13.12.0",
+        "@mapgis/mapbox-gl": "^1.9.7",
         "@turf/bbox": "^6.3.0",
         "@turf/distance": "^6.3.0",
         "@turf/helpers": "^6.3.0",

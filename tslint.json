@@ -8,8 +8,10 @@
             "node_modules/**"
         ]
     },
-    "rules": {
+  "rules": {
+        "align": [false, "parameters", "statements"],
         "member-access": false,
+        "no-bitwise": false,
         "quotemark": [false, "single"],
         "indent": [false, "spaces", 2],
         "interface-name": false,

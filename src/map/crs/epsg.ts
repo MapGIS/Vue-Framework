@@ -1,20 +1,20 @@
 export const EPSG = {
-    "WGS84": [
+    WGS84: [
         { id: 4326, name: "WGS1984_度", type: 0, strProject: "+proj=longlat +datum=WGS84 +no_defs" }
     ],
-    "Web墨卡托": [
+    Web墨卡托: [
         { id: 3857, name: "Web墨卡托_WGS1984", type: 1, strProject: "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs" }
     ],
-    "经纬度西安80": [
+    经纬度西安80: [
         { id: 4610, name: "地理坐标系(西安)_度", type: 0, strProject: "+proj=longlat +a=6378140 +b=6356755.288157528 +units=degrees +no_defs" }
     ],
-    "经纬度北京54": [
+    经纬度北京54: [
         { id: 4214, name: "地理坐标系(北京)_度", type: 0, strProject: "+proj=longlat +ellps=krass +towgs84=15.8,-154.4,-82.3,0,0,0,0 +no_defs" }
     ],
-    "经纬度中国2000": [
+    经纬度中国2000: [
         { id: 4490, name: "中国2000国家大地坐标系_度", type: 0, strProject: "+proj=longlat +ellps=GRS80 +units=degrees +no_defs" }
     ],
-    "高斯西安80": [
+    高斯西安80: [
         { id: 2348, name: "高斯大地坐标系_西安80_23带6_北", type: 1, strProject: "+proj=tmerc +lat_0=0 +lon_0=135 +k=1 +x_0=500000 +y_0=0 +a=6378140 +b=6356755.288157528 +units=m +no_defs" },
         { id: 2347, name: "高斯大地坐标系_西安80_22带6_北", type: 1, strProject: "+proj=tmerc +lat_0=0 +lon_0=129 +k=1 +x_0=500000 +y_0=0 +a=6378140 +b=6356755.288157528 +units=m +no_defs" },
         { id: 2346, name: "高斯大地坐标系_西安80_21带6_北", type: 1, strProject: "+proj=tmerc +lat_0=0 +lon_0=123 +k=1 +x_0=500000 +y_0=0 +a=6378140 +b=6356755.288157528 +units=m +no_defs" },
@@ -99,7 +99,7 @@ export const EPSG = {
         { id: 2368, name: "高斯大地坐标系_西安80_44带3_北2", type: 0, strProject: "+proj=tmerc +lat_0=0 +lon_0=132 +k=1 +x_0=44500000 +y_0=0 +a=6378140 +b=6356755.288157528 +units=m +no_defs" },
         { id: 2369, name: "高斯大地坐标系_西安80_45带3_北2", type: 0, strProject: "+proj=tmerc +lat_0=0 +lon_0=135 +k=1 +x_0=45500000 +y_0=0 +a=6378140 +b=6356755.288157528 +units=m +no_defs" }
     ],
-    "高斯北京54": [
+    高斯北京54: [
         { id: 21413, name: "高斯大地坐标系_北京54_13带6_北2", type: 0, strProject: "+proj=tmerc +lat_0=0 +lon_0=75 +k=1 +x_0=13500000 +y_0=0 +ellps=krass +towgs84=15.8,-154.4,-82.3,0,0,0,0 +units=m +no_defs" },
         { id: 21414, name: "高斯大地坐标系_北京54_14带6_北2", type: 0, strProject: "+proj=tmerc +lat_0=0 +lon_0=81 +k=1 +x_0=14500000 +y_0=0 +ellps=krass +towgs84=15.8,-154.4,-82.3,0,0,0,0 +units=m +no_defs" },
         { id: 21415, name: "高斯大地坐标系_北京54_15带6_北2", type: 0, strProject: "+proj=tmerc +lat_0=0 +lon_0=87 +k=1 +x_0=15500000 +y_0=0 +ellps=krass +towgs84=15.8,-154.4,-82.3,0,0,0,0 +units=m +no_defs" },
@@ -116,7 +116,7 @@ export const EPSG = {
         { id: 2402, name: "高斯大地坐标系_北京54_26带3_北2", type: 0, strProject: "+proj=tmerc +lat_0=0 +lon_0=78 +k=1 +x_0=26500000 +y_0=0 +ellps=krass +towgs84=15.8,-154.4,-82.3,0,0,0,0 +units=m +no_defs" },
         { id: 32646, name: "Beijing 1954 / 3-degree Gauss-Kruger CM 102E", type: 1, strProject: "+proj=utm +zone=46 +datum=WGS84 +units=m +no_defs" }
     ],
-    "高斯中国2000": [
+    高斯中国2000: [
         { id: 4502, name: "高斯大地坐标系_中国2000_13带6_北", type: 0, strProject: "+proj=tmerc +lat_0=0 +lon_0=75 +k=1 +x_0=500000 +y_0=0 +ellps=GRS80 +units=m +no_defs" },
         { id: 4503, name: "高斯大地坐标系_中国2000_14带6_北", type: 0, strProject: "+proj=tmerc +lat_0=0 +lon_0=81 +k=1 +x_0=500000 +y_0=0 +ellps=GRS80 +units=m +no_defs" },
         { id: 4504, name: "高斯大地坐标系_中国2000_15带6_北", type: 0, strProject: "+proj=tmerc +lat_0=0 +lon_0=87 +k=1 +x_0=500000 +y_0=0 +ellps=GRS80 +units=m +no_defs" },
@@ -157,10 +157,10 @@ export const EPSG = {
 
 
 export function epsgId(epsg: string | number) {
-    if(typeof epsg === 'string') {
-        let str = epsg.toUpperCase()
+    if (typeof epsg === 'string') {
+        const str = epsg.toUpperCase()
         let result;
-    
+
         if (str.indexOf('EPSG:') >= 0) {
             result = str.split('EPSG:')
         } else if (str.indexOf('EPSG_') >= 0) {
@@ -168,10 +168,10 @@ export function epsgId(epsg: string | number) {
         } else if (str.indexOf('EPSG') >= 0) {
             result = str.split('EPSG')
         } else {
-            return parseInt(epsg)
+            return parseInt(epsg, 10)
         }
         if (result.length >= 2) {
-            return parseInt(result[1])
+            return parseInt(result[1], 10)
         } else {
             return 4326
         }

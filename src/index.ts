@@ -90,7 +90,7 @@ export default {
 
   Style,
   Theme,
-  
+
   Util,
   Flux,
   Layout,

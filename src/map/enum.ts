@@ -1,6 +1,8 @@
 export enum ViewState {
     Map = "map",
     Edit = "edit",
+    MeasureArea = "measurearea",
+    MeasureLength = "measurelength",
     Query = "query",
     Print = "print",
     Layout = "layout",

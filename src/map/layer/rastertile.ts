@@ -14,8 +14,9 @@ export class RasterTileLayer extends ILayer {
     title?: string;
     tileUrl?: string;
     imgUrl?: string;
-    layout?: ILayout;
-    style?: RasterTileStyle;
+
+    minZoom?: number;
+    maxZoom?: number;
 
     constructor() {
         super();

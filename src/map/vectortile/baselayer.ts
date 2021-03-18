@@ -35,7 +35,7 @@ export let VectorTileLayerDefine = {
         type: "raster",
         subtype: LayerType.RasterTile,
         name: "栅格瓦片",
-        icon: "icon-background",
+        icon: "icon-yingxiangronghe",
         info: "栅格图层，用来作为底图",
         limit: [VectorTileType.Raster],
     },
@@ -244,7 +244,7 @@ export function changeVectorTileStyle(
     layers.map((layer) => {
         if (layer.type === LayerType.GroupLayer) {
             if (layer.children) {
-                loopGroupProp(vector.id, "style", style, layer);
+                layer = loopGroupProp(vector.id, "style", style, layer);
             }
         } else {
             if (layer.id === vector.id) {
@@ -253,6 +253,7 @@ export function changeVectorTileStyle(
                 }
             }
         }
+        return layer;
     });
 
     return layers;
@@ -271,7 +272,7 @@ export function changeVectorTileLayout(
     layers.map((layer) => {
         if (layer.type === LayerType.GroupLayer) {
             if (layer.children) {
-                loopGroupProp(vector.id, "layout", layout, layer);
+                layer = loopGroupProp(vector.id, "layout", layout, layer);
             }
         } else {
             if (layer.id === vector.id) {
@@ -280,6 +281,7 @@ export function changeVectorTileLayout(
                 }
             }
         }
+        return layer;
     });
 
     return layers;
@@ -298,7 +300,7 @@ export function changeVectorTileFilter(
     layers.map((layer) => {
         if (layer.type === LayerType.GroupLayer) {
             if (layer.children) {
-                loopGroupProp(vector.id, "filter", filter, layer);
+                layer = loopGroupProp(vector.id, "filter", filter, layer);
             }
         } else {
             if (layer.id === vector.id) {
@@ -307,6 +309,7 @@ export function changeVectorTileFilter(
                 }
             }
         }
+        return layer;
     });
 
     return layers;
@@ -317,7 +320,7 @@ export function changeVectorTileType(
     subtype: VectorTileType,
     document: IDocument
 ) {
-    const layers = document.layers;
+    let layers: any = document.layers;
     if (!layers) {
         return undefined;
     }
@@ -334,6 +337,7 @@ export function changeVectorTileType(
                 }
             }
         }
+        return layer;
     });
 
     return layers;
@@ -345,7 +349,7 @@ export function changeVectorTileZoom(
     maxZoom: number,
     document: IDocument
 ) {
-    const layers = document.layers;
+    let layers: any = document.layers;
     if (minZoom < 0 || maxZoom < 0) {
         return layers;
     }
@@ -353,11 +357,11 @@ export function changeVectorTileZoom(
         return undefined;
     }
 
-    layers.map((layer) => {
+    layers = layers.map((layer) => {
         if (layer.type === LayerType.GroupLayer) {
             if (layer.children) {
-                loopGroupProp(vector.id, "minZoom", minZoom, layer);
-                loopGroupProp(vector.id, "maxZoom", maxZoom, layer);
+                layer = loopGroupProp(vector.id, "minZoom", minZoom, layer);
+                layer = loopGroupProp(vector.id, "maxZoom", maxZoom, layer);
             }
         } else {
             if (layer.id === vector.id) {
@@ -366,11 +370,11 @@ export function changeVectorTileZoom(
                     vectorlayer = { ...layer, source: undefined, sourceLayer: undefined };
                     vectorlayer.minZoom = minZoom;
                     vectorlayer.maxZoom = maxZoom;
-                    return vector;
+                    layer = vectorlayer;
                 }
             }
-            return layer;
         }
+        return layer;
     });
 
     return layers;

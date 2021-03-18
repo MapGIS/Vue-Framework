@@ -103,7 +103,7 @@ export class Convert {
             if (type === LayerType.GeoJSON) {
                 sources[key] = {
                     type: 'geojson',
-                    data: url ||  FeatureCollection
+                    data: url || FeatureCollection
                 };
             }
         });
@@ -137,7 +137,7 @@ export class Convert {
 
             if (
                 subtype === SubLayerType.IgsDocLayer ||
-                    subtype === SubLayerType.OgcWmsLayer
+                subtype === SubLayerType.OgcWmsLayer
             ) {
                 layer.children = children;
             }
@@ -167,7 +167,7 @@ export class Convert {
             type = SubLayerDefine[subtype].type;
         } else if (
             VectorTileLayerDefine[subtype] &&
-                VectorTileLayerDefine[subtype].type
+            VectorTileLayerDefine[subtype].type
         ) {
             type = VectorTileLayerDefine[subtype].type;
         }
@@ -180,7 +180,7 @@ export class Convert {
             type = SubLayerDefine[subtype].subtype;
         } else if (
             VectorTileLayerDefine[subtype] &&
-                VectorTileLayerDefine[subtype].type
+            VectorTileLayerDefine[subtype].type
         ) {
             type = VectorTileLayerDefine[subtype].subtype;
         }
@@ -188,7 +188,7 @@ export class Convert {
     }
 
     docTomvtLayout(layout) {
-        if (!layout)  {
+        if (!layout) {
             layout = { visibility: "visible" };
         }
         if (layout.visible === undefined) {
@@ -208,8 +208,8 @@ export class Convert {
      */
     mvtTodoc(mvt): IDocument {
         const name = mvt.name || "地图样式";
-        const sources = this.mvtTodocSources(mvt.sources);
-        const layers = this.mvtTodocLayers(mvt.layers);
+        const sources = this.mvtTodocSources(mvt);
+        const layers = this.mvtTodocLayers(mvt);
 
         const doc = new IDocument(
             defaultName,
@@ -220,10 +220,14 @@ export class Convert {
             MapRender.MapBoxGL
         );
 
+        doc.sprite = mvt.sprite;
+        doc.glyphs = mvt.glyphs;
+
         return doc;
     }
 
-    mvtTodocSources(sources) {
+    mvtTodocSources(mvt) {
+        let { sources } = mvt;
         if (!sources) {
             return defaultSources;
         }
@@ -231,16 +235,18 @@ export class Convert {
         let news = {};
         for (const key of keys) {
             const source = sources[key];
-            if (source.type !== "vector") {
-                continue;
-            } else {
+            if (source.type == "vector" || source.type == 'raster') {
                 const tiles = source.tiles;
                 if (!tiles) { continue; }
                 if (tiles.length <= 0) { continue; }
                 const url = tiles[0];
                 source.name = key;
                 source.url = url;
-                source.type = LayerType.VectorTile;
+                if (source.type === 'raster') {
+                    source.type = LayerType.RasterTile;
+                } else if (source.type === 'vector') {
+                    source.type = LayerType.VectorTile;
+                }
                 source.minZoom = source.min || 0;
                 source.maxZoom = source.max || 20;
                 delete source.tiles;
@@ -252,35 +258,43 @@ export class Convert {
         return news || defaultSources;
     }
 
-    mvtTodocLayers(layers) {
+    mvtTodocLayers(mvt) {
+        let { layers } = mvt;
         let flats = [];
         flats = layers.filter((layer) => {
-            const { id, type, paint, layout } = layer;
-
-            layer.sourceLayer = layer["source-layer"];
-
+            const { id, type, paint, layout, minzoom, maxzoom } = layer;
             layer.title = id;
             layer.id = id;
             layer.name = id;
             layer.key = id;
-
-            if (GeometryTypes.indexOf(layer.type) < 0) { return false; }
-
-            layer.type = LayerType.VectorTile;
-            layer.subtype = this.mvtTodocType(type);
-            layer.icon = VectorTileLayerDefine[layer.subtype].icon;
-
             layer.info = "";
             layer.description = "";
-
             layer.style = paint || {};
             layer.layout = this.mvtTodocLayout(layout) || {};
-
             layer.url = undefined;
-
+            layer.minZoom = minzoom;
+            layer.maxZoom = maxzoom;
             delete layer.paint;
-            // delete layer['source-layer']
-            // return layer
+            delete layer.minzoom;
+            delete layer.maxzoom;
+
+            if (type == "raster") {
+                layer.type = LayerType.RasterTile;
+                layer.subtype = this.mvtTodocType(type);
+                layer.icon = VectorTileLayerDefine[layer.subtype].icon;
+                let url = mvt.sources[layer.source].url;
+                layer.url = url;
+            } else {
+                layer.sourceLayer = layer["source-layer"];
+
+                if (GeometryTypes.indexOf(layer.type) < 0) { return false; }
+
+                layer.type = LayerType.VectorTile;
+                layer.subtype = this.mvtTodocType(type);
+                layer.icon = VectorTileLayerDefine[layer.subtype].icon;
+                // delete layer['source-layer']
+                // return layer
+            }
             return true;
         });
         return flats;

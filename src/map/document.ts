@@ -825,7 +825,8 @@ export class IDocument {
     deleteSource(name: string): object {
         const find = this.sources[name];
         if (find) {
-            return (this.sources[name] = undefined);
+            delete this.sources[name];
+            // return (this.sources[name] = undefined);
         }
         return this.sources;
     }

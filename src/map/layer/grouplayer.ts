@@ -261,6 +261,33 @@ export function loopGroupProp(id: string, key: string, value, group) {
     return group;
 }
 
+export function loopChildrenPrefix(groupid, prefix: string, group, find: boolean) {
+    if (!group || group.type !== LayerType.GroupLayer) {
+        return group;
+    }
+    if (find) {
+        group.key = prefix + group.key;
+        group.id = prefix + group.id;
+    }
+    if (group.children) {
+        group.children.map((child) => {
+            if (child.type === LayerType.GroupLayer) {
+                if (!find) {
+                    find = child.id === groupid ? true : false;
+                }
+                child = loopChildrenPrefix(groupid, prefix, child, find);
+            } else {
+                if (find) {
+                    child.key = prefix + child.key;
+                    child.id = prefix + child.id;
+                }
+            }
+            return child;
+        });
+    }
+    return group;
+}
+
 export function addGroupItem(layer: ILayer, parent: string, group) {
     if (!group || group.type !== LayerType.GroupLayer) {
         return group;

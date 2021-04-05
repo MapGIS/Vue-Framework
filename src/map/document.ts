@@ -25,6 +25,7 @@ import {
     loopLayerProp,
     loopLayerStyle,
     loopLayerVisible,
+    loopChildrenPrefix,
     forceLayerVisible,
     loopLayerPosition,
 } from "./layer/grouplayer";
@@ -928,6 +929,23 @@ export class IDocument {
                     item.style[propName] = propValue;
                 }
             }
+        });
+
+        return layers;
+    }
+
+    changeChildrenKey(groupid, prefix) {
+        let layers = this.layers;
+        if (!layers) { return undefined; }
+
+        layers = layers.map((item) => {
+            if (item.type === LayerType.GroupLayer) {
+                if (item.children) {
+                    let find = item.id === groupid ? true : false;
+                    item = loopChildrenPrefix(groupid, prefix, item, find);
+                }
+            }
+            return item;
         });
 
         return layers;

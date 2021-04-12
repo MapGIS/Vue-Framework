@@ -672,7 +672,7 @@ export class IDocument {
         return null;
     }
 
-    addLayerInGroup(layer: ILayer, parent: string) {
+    addLayerInGroup(layer: ILayer, parent?: string) {
         if (!parent) {
             this.layers.push(layer);
         } else {

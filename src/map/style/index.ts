@@ -23,6 +23,12 @@ import {
   scaleSequential,
 } from "./color";
 
+import {
+  Legend,
+  LegendItem,
+  StandardLegend
+} from './legend';
+
 export {
   Sprite,
   SpriteManager,
@@ -40,7 +46,11 @@ export {
   scaleOrdinal,
   scaleQuantize,
   scaleSequential,
+  Legend,
+  LegendItem,
+  StandardLegend,
 };
+
 
 export default {
   Sprite,
@@ -58,4 +68,7 @@ export default {
   scaleOrdinal,
   scaleQuantize,
   scaleSequential,
+  Legend,
+  LegendItem,
+  StandardLegend,
 };

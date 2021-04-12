@@ -18,6 +18,7 @@ export class GroupLayer extends ILayer {
         super();
         this.title = "新建组图层";
         this.id = this.key = uuid();
+        this.type = LayerType.GroupLayer;
     }
 }
 

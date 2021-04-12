@@ -1,4 +1,5 @@
 import { Theme } from "./theme";
+import { ThirdDiao } from './template';
 
-export { Theme };
-export default { Theme };
+export { Theme, ThirdDiao };
+export default { Theme, ThirdDiao };

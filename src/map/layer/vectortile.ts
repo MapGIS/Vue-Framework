@@ -28,7 +28,7 @@ export class VectorTileLayer extends ILayer {
         const { tolerance, filter, url } = this;
         let reg;
         let rep;
-        if (tolerance && filter) {
+        if (tolerance >= 0 && filter >= 0) {
             if (url.indexOf("tolerance") >= 0 && url.indexOf("filter") >= 0) {
                 reg = RegExp("tolerance=[0-9]+[.]*[0-9]*&filter=[0-9]+[.]*[0-9]*", "g");
                 rep = `tolerance=${tolerance}&filter=${filter}`;
@@ -47,7 +47,7 @@ export class VectorTileLayer extends ILayer {
                 this.url += `&tolerance=${tolerance}`;
                 this.url += `&filter=${filter}`;
             }
-        } else if (tolerance) {
+        } else if (tolerance >= 0) {
             if (url.indexOf("tolerance") >= 0) {
                 reg = RegExp("tolerance=[0-9]+[.]*[0-9]*", "g");
                 rep = `tolerance=${tolerance}`;
@@ -55,7 +55,7 @@ export class VectorTileLayer extends ILayer {
             } else {
                 this.url += `&tolerance=${tolerance}`;
             }
-        } else if (filter) {
+        } else if (filter >= 0) {
             if (url.indexOf("filter") >= 0) {
                 reg = RegExp("filter=[0-9]+[.]*[0-9]*", "g");
                 rep = `filter=${filter}`;

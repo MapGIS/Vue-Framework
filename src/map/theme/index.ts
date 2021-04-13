@@ -1,5 +1,5 @@
 import { Theme } from "./theme";
-import { ThirdDiao } from './template';
+import { SecondDiao, ThirdDiao } from './template';
 
-export { Theme, ThirdDiao };
-export default { Theme, ThirdDiao };
+export { Theme, SecondDiao, ThirdDiao };
+export default { Theme, SecondDiao, ThirdDiao };

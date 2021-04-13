@@ -15,6 +15,8 @@ export class RasterTileLayer extends ILayer {
     tileUrl?: string;
     imgUrl?: string;
 
+    mapgisOffset?: number;
+    tileSize?: number;
     minZoom?: number;
     maxZoom?: number;
 

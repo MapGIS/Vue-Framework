@@ -4,6 +4,8 @@ export class BackGroundLayer extends ILayer {
     title: string;
     tileUrl: string;
     imgUrl: string;
+    mapgisOffset?: number;
+    tileSize?: number;
     style?: BackGroundStyle;
     token?: string;
 }

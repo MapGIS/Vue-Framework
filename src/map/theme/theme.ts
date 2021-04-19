@@ -2,7 +2,7 @@ import {
     DataDrivenPropertyValueSpecification,
     ColorSpecification,
 } from "@mapbox/mapbox-gl-style-spec/types";
-import { MapRender } from "../document";
+import { IDocument, MapRender } from "../document";
 
 export class BaseTheme {
     name: string;
@@ -10,6 +10,10 @@ export class BaseTheme {
 }
 
 const randomColors = ["#e4e4e4", "#ffffff", "#0079c1"];
+
+export interface ThemeAction {
+    apply: (doc: IDocument, layerid: string) => IDocument
+}
 
 export class Theme {
     static setTheme(id, theme, map, render: MapRender, type) {
@@ -43,6 +47,9 @@ export class Theme {
         }
     }
 
+    /**
+     * @description 遍历地图对象，将所有图层的基本颜色提取成数据
+     */
     static getThemes(map, render: MapRender, type): BaseTheme[] {
         const themes = [];
         if (render === MapRender.MapBoxGL) {
@@ -138,4 +145,6 @@ export class Theme {
         }
         return theme;
     }
+
+
 }

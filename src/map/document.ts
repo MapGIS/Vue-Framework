@@ -127,7 +127,7 @@ export class IDocument {
         copy.widget = document.widget;
         copy.query = document.query;
         copy.story = Story.wrapper(story);
-
+        copy.maxBounds = document.maxBounds;
         return copy;
     }
 
@@ -175,6 +175,7 @@ export class IDocument {
         copy.widget = deepCopy(document.widget);
         copy.story = Story.wrapper(story);
         copy.query = query;
+        copy.maxBounds = document.maxBounds;
 
         return copy;
     }
@@ -216,7 +217,7 @@ export class IDocument {
      * @param {Object} options.sources 数据源
      * @param {Object} options.maprender 渲染引擎
      * @param {Object} options.bounds 当前地图范围
-     * @param {Object} options.maxbounds 当前地图最大范围
+     * @param {Object} options.maxBounds 当前地图最大范围
      * @param {Object} options.sprite 符号库
      * @param {Object} options.glyphs 字体库
      * @param {Object} options.service 服务信息
@@ -227,7 +228,7 @@ export class IDocument {
             name, current, backgrounds, layers,    // 地图文档
             sources, service,                      // 数据源与服务
             sprite, glyphs,                        // 符号库
-            maprender, crs, center, bounds, maxbounds, query    // 地图信息
+            maprender, crs, center, bounds, maxBounds, query    // 地图信息
         } = options;
 
         const doc = new IDocument(
@@ -245,7 +246,7 @@ export class IDocument {
         );
 
         doc.center = center || doc.center || defaultPosition;
-        doc.maxbounds = maxbounds || doc.maxbounds || defaultBounds;
+        doc.maxBounds = maxBounds || doc.maxBounds || defaultBounds;
         doc.query = query;
 
         return doc;
@@ -313,7 +314,7 @@ export class IDocument {
     /**
      * @member 地图最大边界
      */
-    maxbounds?: Bounds;
+    maxBounds?: Bounds;
 
     /**
      * @member 地图查询范围
@@ -371,7 +372,7 @@ export class IDocument {
         this.service = service ? service : defaultService;
         this.maprender = maprender ? maprender : MapRender.MapBoxGL;
         this.bounds = bounds ? bounds : defaultBounds;
-        this.maxbounds =  defaultBounds;
+        this.maxBounds =  defaultBounds;
         this.sprite = sprite ? sprite : defaultSprites;
         this.glyphs = glyphs ? glyphs : defaultGlyphs;
         this.crs = crs ? crs : defaultCrs;

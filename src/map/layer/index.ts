@@ -23,6 +23,18 @@ import {
 } from "./igserver";
 
 import {
+  PlotBaseLayer,
+  PlotPointLayer,
+  PlotLineLayer,
+  PlotPolygonLayer,
+  PlotAnnotationLayer,
+  PlotPointId,
+  PlotLineId,
+  PlotPolygonId,
+  PlotAnnotationId
+} from './plot';
+
+import {
   defaultId,
   LayerType,
   SubLayerType,
@@ -84,6 +96,15 @@ export {
   checkLayerVisible,
   changeLayersVisible,
   compareLayers,
+  PlotBaseLayer,
+  PlotPointLayer,
+  PlotLineLayer,
+  PlotPolygonLayer,
+  PlotAnnotationLayer,
+  PlotPointId,
+  PlotLineId,
+  PlotPolygonId,
+  PlotAnnotationId
 };
 
 export default {
@@ -129,4 +150,14 @@ export default {
   checkLayerVisible,
   changeLayersVisible,
   compareLayers,
+
+  PlotBaseLayer,
+  PlotPointLayer,
+  PlotLineLayer,
+  PlotPolygonLayer,
+  PlotAnnotationLayer,
+  PlotPointId,
+  PlotLineId,
+  PlotPolygonId,
+  PlotAnnotationId
 };

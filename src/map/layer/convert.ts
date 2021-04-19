@@ -13,7 +13,7 @@ import { LayerType, SubLayerType, SubLayerDefine } from "../layer";
 import { VectorTileLayerDefine } from "../vectortile/baselayer";
 import { deepCopy } from "../../utils/deepequal";
 import { uuid } from "../../utils/uuid";
-import { FeatureCollection } from '../format/geojson';
+import { EmptyGeoJSONFeatureCollection } from '../format/geojson';
 
 export const defaultId = "cesium vector tiles";
 export const defaultSprite =
@@ -103,7 +103,7 @@ export class Convert {
             if (type === LayerType.GeoJSON) {
                 sources[key] = {
                     type: 'geojson',
-                    data: url || FeatureCollection
+                    data: url || EmptyGeoJSONFeatureCollection
                 };
             }
         });

@@ -1,4 +1,4 @@
-import { LayerType } from '../../layer/baselayer.ts'
+import { LayerType } from '../../layer/baselayer';
 
 export enum LegendType {
     PNG = 'image/png',

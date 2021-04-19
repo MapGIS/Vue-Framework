@@ -87,7 +87,7 @@ export let VectorTileLayerDefine = {
         type: "symbol",
         subtype: LayerType.VectorTile,
         name: "符号",
-        icon: "icon-dollar-symbol-1",
+        icon: "icon-zhujiceng",
         info: "分为文字和图片两部分",
         limit: [
             VectorTileType.Circle,

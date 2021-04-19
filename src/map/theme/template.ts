@@ -2,17 +2,9 @@ import { IDocument } from '../document';
 import { GroupLayer } from '../layer/grouplayer';
 import { SecondLayers, ThirdLayers } from './guotu';
 import { Convert } from '../layer/convert';
+import { Theme, ThemeAction } from './theme';
 
-export class Template {
-
-}
-
-export interface TemplateImpl {
-    apply: (doc: IDocument, layerid: string) => IDocument
-}
-
-
-export class SecondDiao extends Template implements TemplateImpl {
+export class SecondDiao extends Theme implements ThemeAction {
     constructor() {
         super();
     }
@@ -54,7 +46,7 @@ export class SecondDiao extends Template implements TemplateImpl {
 
 }
 
-export class ThirdDiao extends Template implements TemplateImpl {
+export class ThirdDiao extends Theme implements ThemeAction {
     constructor() {
         super();
     }

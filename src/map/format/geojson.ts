@@ -1,12 +1,49 @@
 import turfbbox from "@turf/bbox";
 import { MapRender } from "../document";
 
-export let FeatureCollection =  {
-    type: 'geojson',
-    data: {
-        type: 'FeatureCollection',
-        features: []
-    }
+type GeoJSONPosition = [number, number] | [number, number, number];
+type Geometry<T, C> = { type: T, coordinates: C }
+
+export type GeoJSONPoint = Geometry<'Point', GeoJSONPosition>;
+export type GeoJSONMultiPoint = Geometry<'MultiPoint', Array<GeoJSONPosition>>;
+
+export type GeoJSONLineString = Geometry<'LineString', Array<GeoJSONPosition>>;
+export type GeoJSONMultiLineString = Geometry<'MultiLineString', Array<Array<GeoJSONPosition>>>;
+
+export type GeoJSONPolygon = Geometry<'Polygon', Array<Array<GeoJSONPosition>>>;
+export type GeoJSONMultiPolygon = Geometry<'MultiPolygon', Array<Array<Array<GeoJSONPosition>>>>;
+
+export type GeoJSONGeometry =
+    | GeoJSONPoint
+    | GeoJSONMultiPoint
+    | GeoJSONLineString
+    | GeoJSONMultiLineString
+    | GeoJSONPolygon
+    | GeoJSONMultiPolygon
+    | GeoJSONGeometryCollection;
+
+export type GeoJSONGeometryCollection = {
+    type: 'GeometryCollection',
+    geometries: Array<GeoJSONGeometry>
+};
+
+export type GeoJSONFeature = {
+    type: 'Feature',
+    geometry?: GeoJSONGeometry,
+    properties?: {},
+    id?: number | string
+};
+
+export type GeoJSONFeatureCollection = {
+    type: 'FeatureCollection',
+    features: Array<GeoJSONFeature>
+};
+
+export type GeoJSON = GeoJSONGeometry | GeoJSONFeature | GeoJSONFeatureCollection;
+
+export let EmptyGeoJSONFeatureCollection: GeoJSONFeatureCollection =  {
+    type: 'FeatureCollection',
+    features: []
 };
 
 export class GeojsonFeature {
@@ -51,10 +88,10 @@ export class GeojsonFeature {
         return bounds;
     }
 
-  bbox() {
-    this.bounds = turfbbox(this.feature);
-    return this.bounds;
-  }
+    bbox() {
+        this.bounds = turfbbox(this.feature);
+        return this.bounds;
+    }
 }
 
 export class GeojsonCollection {
@@ -65,7 +102,7 @@ export class GeojsonCollection {
         features: [],
     };
 
-    constructor(features?: GeojsonFeature[] | object[]) {
+    constructor(features?: GeojsonFeature[] | GeoJSONFeature[] | object[]) {
         if (features instanceof Array) {
             this.data.features = features || [];
         } else {
@@ -73,7 +110,7 @@ export class GeojsonCollection {
         }
     }
 
-    addFeature(feature: GeojsonFeature | any) {
+    addFeature(feature: GeojsonFeature | GeoJSONFeature | any) {
         if (feature instanceof GeojsonFeature) {
             this.data.features.push(feature.getFeature());
         } else {

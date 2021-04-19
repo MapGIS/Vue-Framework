@@ -24,6 +24,7 @@ export enum EditState {
     TEXT = "draw_text",
     /** 仿照上面DRAW_POLYGON的模式，实际上是调用map.trash()方法 */
     TRASH = "draw_trash",
+    NONE = "none",
 }
 
 export enum QueryState {

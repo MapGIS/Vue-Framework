@@ -12,7 +12,7 @@ export class BaseTheme {
 const randomColors = ["#e4e4e4", "#ffffff", "#0079c1"];
 
 export interface ThemeAction {
-    apply: (doc: IDocument, layerid: string) => IDocument
+    apply: (doc: IDocument, layerid: string, mst: any[]) => IDocument
 }
 
 export class Theme {

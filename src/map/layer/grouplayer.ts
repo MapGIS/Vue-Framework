@@ -14,10 +14,13 @@ import { deepCopy } from "../../utils/deepequal";
 export class GroupLayer extends ILayer {
     children?: ILayer[];
 
-    constructor() {
+    constructor(options?: any) {
         super();
-        this.title = "新建组图层";
+        options = options || {};
+        const { title, children } = options;
+        this.title = title || "新建组图层";
         this.id = this.key = uuid();
+        this.children = children || [];
         this.type = LayerType.GroupLayer;
     }
 }

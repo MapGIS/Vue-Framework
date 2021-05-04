@@ -49,6 +49,11 @@ export const DefaultSvgProperty: SvgProperty = {
 };
 
 export class Sprite {
+    static GlobalJsonUrl;
+    static GlobalPngUrl;
+    static GlobalJsonData;
+    static GlobalPngData;
+
     static base64ToImage(base64) {
         const img = document.createElement("img").setAttribute("src", base64);
         return img;
@@ -74,13 +79,38 @@ export class Sprite {
         });
     }
 
+    // static async GlobalCombineSprite() {
+    //     const jsonUrl = await axios.get(this.json);
+    //     const pngUrl = await axios.get(this.png, { responseType: 'arraybuffer' });
+    //     const datas = [pngUrl, jsonUrl];
+    //     return datas;
+    // }
+
+    // static GlobalParseSprite() {
+    //     const datas = GlobalCombineSprite();
+    //     const png = datas[0];
+    //     const json = datas[1];
+    //     if (!png || !json) {
+    //         return {};
+    //     }
+    //     const base64 = 'data:image/png;base64,' +
+    //         btoa(new Uint8Array(png.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+    //     const spriteImage = new Image();
+    //     spriteImage.src = base64;
+    //     const pngData = spriteImage;
+    //     const jsonData = json.data;
+    //     this.pngData = pngData;
+    //     this.jsonData = jsonData;
+    //     return { pngData, jsonData };
+    // }
+
     /**
      * @param icon 图片名称
      * @param spriteImage 样式符号图片png
      * @param spriteData 样式说明文件json
      * @param canvas 画布
      */
-    static getSpriteIcon(icon, spriteImage, spriteData, canvas) {
+    static getSpriteIcon(icon, spriteImage, spriteData, canvas?) {
         canvas = canvas ? canvas : document.createElement("canvas");
         if (canvas && spriteImage && spriteData && spriteData[icon]) {
             let pattern;
@@ -172,6 +202,46 @@ export class Sprite {
      * @description 符号库png文件地址
      **/
     png: string;
+    /**
+     * @description 符号库json文件内容
+     **/
+    jsonData: any;
+    /**
+     * @description 符号库png文件内容
+     **/
+    pngData: string | HTMLImageElement;
+
+    constructor(options) {
+        const { title, path, json, png } = options;
+        this.title = title;
+        this.path = path;
+        this.json = json;
+        this.png = png;
+        this.jsonData = undefined;
+        this.pngData = undefined;
+    }
+
+    async initSprite() {
+        const json = await this.parseJson();
+        const png = await this.parsePng();
+        const result = this.parseSprite([png, json]);
+        return result;
+    }
+
+    async getSpriteItem(iconid: string) {
+        let base64;
+        if (!this.pngData || !this.jsonData ) {
+            if (this.json && this.png) {
+                const datas = await this.initSprite();
+                const result = this.parseSprite(datas);
+                const { pngData, jsonData } = result;
+                base64 = Sprite.getSpriteIcon(iconid, pngData, jsonData);
+            }
+        } else {
+            base64 = Sprite.getSpriteIcon(iconid, this.pngData, this.jsonData);
+        }
+        return base64;
+    }
 
     /**
      * @description 针对高分辨率屏幕导致的xxx@2 xxx@3的情况进行对应的统一path处理
@@ -184,6 +254,46 @@ export class Sprite {
             }
         }
     }
+
+    private async parsePng() {
+        const png = await fetch(this.png);
+        const arraybuffer = await png.arrayBuffer();
+        // const json = await axios.get(this.png, { responseType: 'arraybuffer' });
+        // return json;
+        return arraybuffer;
+    }
+
+    private async parseJson() {
+        let json = {};
+
+        const url = this.json;
+        try {
+            const response = await fetch(url);
+            json = await response.json();
+        } catch (error) {
+            return json;
+        }
+
+        return json;
+    }
+
+    private parseSprite(datas) {
+        const png = datas[0];
+        const json = datas[1];
+        if (!png || !json) {
+            return {};
+        }
+        const base64 = 'data:image/png;base64,' +
+            btoa(new Uint8Array(png.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+        const spriteImage = new Image();
+        spriteImage.src = base64;
+        const pngData = spriteImage;
+        const jsonData = json.data;
+        this.pngData = pngData;
+        this.jsonData = jsonData;
+        return { pngData, jsonData };
+    }
+
 }
 
 export class SpriteManager {

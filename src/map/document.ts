@@ -13,6 +13,7 @@ import {
 } from "./layer";
 
 import {
+    GroupLayer,
     findLayer,
     findLayersByType,
     findLayersById,
@@ -35,7 +36,8 @@ import {
 } from "../utils/array";
 
 import {
-    uuid
+    uuid,
+    randomid
 } from "../utils/uuid";
 
 import {
@@ -732,55 +734,55 @@ export class IDocument {
     specialLayer(id: string, type: string) {
         let position = -1;
         let copy;
+        let grouplayer;
         let typeName;
         let iconfont;
         switch (type) {
             case "monodrome":
                 typeName = "单值";
-                iconfont = "icon-tongyongdanzhipipei";
+                iconfont = "icon-danzhizhuantitu";
                 break;
             case "subsection":
                 typeName = "分段";
-                iconfont = "icon-fenji";
+                iconfont = "icon-fenduanzhuantitu";
                 break;
             case "statistics":
                 typeName = "统计";
-                iconfont = "icon-tongji";
+                iconfont = "icon-tongjizhuantitu";
                 break;
             case "density":
                 typeName = "密度";
-                iconfont = "icon-midufenxiSVG";
+                iconfont = "icon-zhuantitu";
                 break;
             case "grade":
                 typeName = "等级";
-                iconfont = "icon-dengji";
+                iconfont = "icon-tongyizhuantitu";
                 break;
         }
         this.layers = this.layers.map((layer, index) => {
-            if (layer.type === LayerType.GroupLayer) {
-                layer = specialGroupItem(id, layer, type);
-            } else {
-                if (layer.id === id) {
-                    // 组图层复制 后面再说，先不管
-                    position = index + 1;
-                    const key = uuid();
-                    const name = layer.title + "-" + typeName + "专题图";
-                    const special = type;
-                    copy = deepCopy(layer);
-                    copy = {
-                        ...copy,
-                        key,
-                        id: key,
-                        name,
-                        title: name,
-                        special,
-                        icon: iconfont,
-                    };
-                }
+            // if (layer.type === LayerType.GroupLayer) {
+            //     layer = specialGroupItem(id, layer, type);
+            // } else {
+            if (layer.id === id && layer.type !== LayerType.GroupLayer) {
+                // 组图层复制 后面再说，先不管
+                position = index + 1;
+                const key = randomid();
+                const name = layer.title + "-" + typeName + "专题图";
+                const special = type;
+                copy = deepCopy(layer);
+                copy = { ...copy,
+                         key, id: key, name, title: name,
+                         special, icon: iconfont,
+                       };
+                grouplayer = new GroupLayer({
+                    title: `${typeName}-专题图`,
+                    children: [copy]
+                });
             }
+            // }
             return layer;
         });
-        if (position > 0) { this.layers.splice(position, 0, copy); }
+        if (position > 0) { this.layers.splice(position, 0, grouplayer); }
         return this.layers;
     }
 

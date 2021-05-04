@@ -1,5 +1,5 @@
 import { Theme } from "./theme";
-import { SecondDiao, ThirdDiao } from './template';
+import { MapgisStyleTheme, SecondDiao, ThirdDiao } from './template';
 
-export { Theme, SecondDiao, ThirdDiao };
-export default { Theme, SecondDiao, ThirdDiao };
+export { MapgisStyleTheme,Theme, SecondDiao, ThirdDiao };
+export default { MapgisStyleTheme, Theme, SecondDiao, ThirdDiao };

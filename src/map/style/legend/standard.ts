@@ -5,8 +5,10 @@ import { IDocument, MapRender } from '../../document';
 import { LayerType, SubLayerType } from '../../layer/baselayer';
 import { VectorTileType } from '../../vectortile/baselayer'
 import { uuid } from '../../../utils/uuid';
+import { Sprite } from '../../style/sprite';
 
 export class StandardLegend {
+    sprite: Sprite;
 
     constructor() {
         // standard legend
@@ -64,12 +66,19 @@ export class StandardLegend {
         return legends;
     }
 
+    async initSpriteByDocument(document: IDocument) {
+        const {sprite} = document;
+        this.sprite = new Sprite({ json: `${sprite}.json`, png: `${sprite}.png`});
+        const datas = await this.sprite.initSprite();
+    }
+
     getLegendByDocument(document: IDocument) {
         const legends = [];
         const layerObj: any = {};
         if (!document) { return legends; }
 
         const layers = document.getFlatLayers();
+        // this.initSpriteByDocument(document);
 
         layers.forEach((layer) => {
             const layerName = layer.sourceLayer || `${layer.type}_${layer.title}`;
@@ -92,7 +101,6 @@ export class StandardLegend {
                 }
             }
         });
-
 
         Object.keys(layerObj).forEach((k) => {
             const item = layerObj[k];
@@ -169,30 +177,59 @@ export class StandardLegend {
         const layout = layer.layout;
         if (layer.type === LayerType.VectorTile || layer.type === LayerType.GeoJSON) {
             if (layer.subtype === VectorTileType.Circle) {
-                let point:any = {};
+                let point: any = {};
                 if (style) {
-                    point.r = style["circle-radius"];
-                    point.stroke = style["circle-stroke-color"];
-                    point.strokeWidth = style["circle-stroke-width"];
+                    if (style["circle-radius"]) {
+                        point.r = style["circle-radius"];
+                    }
+                    if (style["circle-stroke-color"]) {
+                        point.stroke = style["circle-stroke-color"];
+                    }
+                    if (style["circle-stroke-width"]) {
+                        point.strokeWidth = style["circle-stroke-width"];
+                    }
+                    if (style["circle-color"]) {
+                        point.fill = style["circle-color"];
+                    }
                     base64 = legenditem.drawPoint(point);
                 }
             } else if (layer.subtype === VectorTileType.Line) {
-                let line:any = {};
+                let line: any = {};
                 if (style) {
-                    line.strokeWidth = style["line-width"];
-                    line.stroke = style["line-color"];
+                    if (style["line-width"]) {
+                        line.strokeWidth = style["line-width"];
+                    }
+                    if (style["line-color"]) {
+                        line.stroke = style["line-color"];
+                    }
                 }
                 if (layout) {
-                    line.strokeLineJoin = layout["line-cap"];
+                    if (layout["line-cap"]) {
+                        line.strokeLineJoin = layout["line-cap"];
+                    }
                 }
-                if (Object.keys(line).length > 0) {
+
+                if (style && style["line-pattern"]) {
+                    // base64 = this.sprite.getSpriteItem(style["line-pattern"]);
+                } else {
                     base64 = legenditem.drawLine(line);
                 }
+                // if (Object.keys(line).length > 0) {
+                //     base64 = legenditem.drawLine(line);
+                // }
             } else if (layer.subtype === VectorTileType.Fill) {
-                let polygon:any = {};
+                let polygon: any = {};
                 if (style) {
-                    polygon.stroke = style["fill-outline-color"];
-                    polygon.fill = style["fill-color"];
+                    if (style["fill-outline-color"]) {
+                        polygon.stroke = style["fill-outline-color"];
+                    }
+                    if (style["fill-color"]) {
+                        polygon.fill = style["fill-color"];
+                    }
+                }
+                if (style && style["fill-pattern"]) {
+                    // base64 = this.sprite.getSpriteItem(style["fill-pattern"]);
+                } else {
                     base64 = legenditem.drawPolygon(polygon);
                 }
             }

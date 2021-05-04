@@ -9,7 +9,8 @@ import {
     defaultBacks,
 } from "../document";
 import { defaultSources, Source } from "../source/source";
-import { LayerType, SubLayerType, SubLayerDefine } from "../layer";
+import { ILayer, LayerType, SubLayerType, SubLayerDefine } from "../layer";
+import { GroupLayer, flatLayers } from './grouplayer';
 import { VectorTileLayerDefine } from "../vectortile/baselayer";
 import { deepCopy } from "../../utils/deepequal";
 import { uuid } from "../../utils/uuid";
@@ -160,6 +161,53 @@ export class Convert {
 
         return layers;
     }
+
+    docGroupTomvtLayers(group: GroupLayer, remove: boolean = true) {
+        const flats: any[] = flatLayers(group, true);
+
+        const layers = flats.map((layer) => {
+            const { key, sourceLayer, type, subtype, layout, style, paint, children, url } = layer;
+
+            layer.type = this.docTomvtType(subtype);
+            layer.subtype = this.docTomvtSubtype(subtype);
+            layer.layout = this.docTomvtLayout(layout);
+            layer.paint = style || paint || {};
+
+            if (type === VectorTileLayerDefine.Raster.type) {
+                layer["source-layer"] = "null";
+            } else if (type === LayerType.GeoJSON) {
+                // do not has source-layer props
+                layer.source = key;
+            } else {
+                layer["source-layer"] = sourceLayer || "null";
+            }
+
+            if (
+                subtype === SubLayerType.IgsDocLayer ||
+                subtype === SubLayerType.OgcWmsLayer
+            ) {
+                layer.children = children;
+            }
+
+            if (remove) {
+                delete layer.style;
+                delete layer.subtype;
+                delete layer.icon;
+                delete layer.sourceLayer;
+                delete layer.title;
+                delete layer.name;
+                // delete layer.url;
+                // 这个地方是为了解决实时出后台矢量瓦片导致的tolerance&filter的变化，请看MapboxGL-React/VectorTile
+                // let changeUrl = layer.url != vectortile.url ? true : false;
+            }
+
+            // layer.key = uuid();
+            return layer;
+        });
+
+        return layers;
+    }
+
 
     docTomvtType(subtype) {
         let type = subtype;

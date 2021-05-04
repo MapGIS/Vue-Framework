@@ -37,14 +37,14 @@ export class LegendItem {
     drawPoint(point) {
         let {
             cx, cy, r,
-            stroke = "#000000", strokeWidth = 1, fill = "#FFFFFF",
-            width = 24, height = 24 
+            stroke = "#000000", strokeWidth = 1, fill = "#000000",
+            width = 24, height = 24
         } = point;
         let canvas = this.createCanvas(width, height);
 
         cx = cx || width / 2;
         cy = cy || height / 2;
-        r = r || Math.min(cx, cy);
+        r = r || (Math.min(cx, cy) / 2);
 
         let ctx = canvas.getContext('2d');
 
@@ -90,7 +90,7 @@ export class LegendItem {
     drawPolygon(polygon) {
         let {
             stroke = '#000000', strokeWidth = 0,
-            fill = "#FFFFFF",
+            fill = "#000000",
             width = 24, height = 24
         } = polygon;
 

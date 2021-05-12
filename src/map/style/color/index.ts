@@ -2,6 +2,7 @@ import { Schemes, Interpolates } from "./colors";
 import { interpolateStepsPercent } from "./interpolate";
 import {
   schemeStepsPercent,
+  schemeStepsStops,
   scaleLinear,
   scaleOrdinal,
   scaleQuantize,
@@ -13,6 +14,7 @@ export {
   Interpolates,
   interpolateStepsPercent,
   schemeStepsPercent,
+  schemeStepsStops,
   scaleLinear,
   scaleOrdinal,
   scaleQuantize,

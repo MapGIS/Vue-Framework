@@ -275,7 +275,7 @@ export class Convert {
     }
 
     mvtTodocSources(mvt) {
-        let { sources } = mvt;
+        const { sources } = mvt;
         if (!sources) {
             return defaultSources;
         }
@@ -283,7 +283,7 @@ export class Convert {
         let news = {};
         for (const key of keys) {
             const source = sources[key];
-            if (source.type == "vector" || source.type == 'raster') {
+            if (source.type === "vector" || source.type === 'raster') {
                 const tiles = source.tiles;
                 if (!tiles) { continue; }
                 if (tiles.length <= 0) { continue; }

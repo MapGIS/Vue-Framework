@@ -8,6 +8,12 @@ export enum ColorMode {
   Cyclical = "彩虹配色",
 }
 
+export enum ColorFormat {
+  MapgisRemotePercent = "mapgisremotepercent",
+  MapboxStops = "mapboxglstops",
+  MapboxMatch = "mapboxglmatch",
+}
+
 export const Categorical = {
   Category10: {
     url:

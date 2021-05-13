@@ -19,7 +19,7 @@ export function schemeStepsPercent(min, max, scheme) {
 }
 
 /**
- * @description Mapbox需要的颜色模板
+ * @description Mapbox需要的颜色模板-针对数值型
  * @param {Number} [min = 0] 最小值
  * @param {Number} [max = 255] 最大值
  * @param scheme d3颜色色卡
@@ -32,6 +32,26 @@ export function schemeStepsStops(min, max, scheme) {
         const stemp = Math.ceil(Math.abs(max - min) / 10 * i);
         stops.push([stemp, colors(stemp)]);
     }
+    return stops;
+}
+
+/**
+ * @description Mapbox需要的颜色模板-针对字符串型
+ * @param {Array<String>} unique 属性字段统计数组
+ * @param scheme d3颜色色卡
+ * @returns 
+ */
+export function schemeMatchStops(unique, scheme) {
+    if (!unique || unique.length <= 0) return;
+    const min = 0, max = unique.length;
+    const count = Math.abs(max - min);
+    const colors = d3.scaleQuantize().domain([min, max]).range(scheme);
+    let stops = [];
+    unique.forEach((f, i) => {
+        stops.push(f);
+        stops.push(colors(i));
+    });
+    stops.push(colors(1));
     return stops;
 }
 

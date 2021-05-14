@@ -265,6 +265,39 @@ export function loopGroupProp(id: string, key: string, value, group) {
     return group;
 }
 
+export function loopChildrenAction(groupid, key, value, action, group, find: boolean) {
+    if (!group || group.type !== LayerType.GroupLayer) {
+        return group;
+    }
+    if (find && group[key]) {
+        switch (action) {
+            case 'prefix': group[key] = value + group[key]; break;
+            case 'postfix': group[key] = group[key] + value; break;
+            case 'replace': group[key] = value; break;
+        }
+    }
+    if (group.children) {
+        group.children.map((child) => {
+            if (child.type === LayerType.GroupLayer) {
+                if (!find) {
+                    find = child.id === groupid ? true : false;
+                }
+                child = loopChildrenAction(groupid, key, value, action, child, find);
+            } else {
+                if (find && child[key]) {
+                    switch (action) {
+                        case 'prefix': child[key] = value + child[key]; break;
+                        case 'postfix': child[key] = child[key] + value; break;
+                        case 'replace': child[key] = value; break;
+                    }
+                }
+            }
+            return child;
+        });
+    }
+    return group;
+}
+
 export function loopChildrenPrefix(groupid, prefix: string, group, find: boolean) {
     if (!group || group.type !== LayerType.GroupLayer) {
         return group;

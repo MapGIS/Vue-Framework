@@ -27,6 +27,7 @@ import {
     loopLayerStyle,
     loopLayerVisible,
     loopChildrenPrefix,
+    loopChildrenAction,
     forceLayerVisible,
     loopLayerPosition,
 } from "./layer/grouplayer";
@@ -68,6 +69,10 @@ import {
 import {
     Convert
 } from "./layer/convert";
+
+import {
+    Authorization
+} from './authorization';
 
 export enum MapRender {
     MapBoxGL = "mapboxgl",
@@ -130,6 +135,7 @@ export class IDocument {
         copy.query = document.query;
         copy.story = Story.wrapper(story);
         copy.maxBounds = document.maxBounds;
+        copy.authorization = document.authorization || new Authorization();
         return copy;
     }
 
@@ -178,6 +184,7 @@ export class IDocument {
         copy.story = Story.wrapper(story);
         copy.query = query;
         copy.maxBounds = document.maxBounds;
+        copy.authorization = document.authorization || new Authorization();
 
         return copy;
     }
@@ -239,7 +246,7 @@ export class IDocument {
             backgrounds || [],
             layers || [],
             sources || deepCopy(defaultSources),
-            maprender ||  deepCopy(MapRender.MapBoxGL),
+            maprender || deepCopy(MapRender.MapBoxGL),
             bounds || deepCopy(defaultBounds),
             sprite || deepCopy(defaultSprites),
             glyphs || deepCopy(defaultGlyphs),
@@ -350,6 +357,11 @@ export class IDocument {
     story?: Story;
 
     /**
+     * @member 验证头信息
+     */
+    authorization?: Authorization;
+
+    /**
      * @description 构造函数
      * @see 如果需要针对构造函数新增新的属性，请不要在构造函数后面追加参数，请使用IDocument.CreateByOptions(options)的方式
      **/
@@ -374,7 +386,7 @@ export class IDocument {
         this.service = service ? service : defaultService;
         this.maprender = maprender ? maprender : MapRender.MapBoxGL;
         this.bounds = bounds ? bounds : defaultBounds;
-        this.maxBounds =  defaultBounds;
+        this.maxBounds = defaultBounds;
         this.sprite = sprite ? sprite : defaultSprites;
         this.glyphs = glyphs ? glyphs : defaultGlyphs;
         this.crs = crs ? crs : defaultCrs;
@@ -408,7 +420,7 @@ export class IDocument {
         }
         if (
             this.current.type === LayerType.VectorTile ||
-                this.current.type === LayerType.RasterTile
+            this.current.type === LayerType.RasterTile
         ) {
             return this.getLayersById(this.current.id);
         } else {
@@ -428,7 +440,7 @@ export class IDocument {
         }
         if (
             this.current.type === LayerType.VectorTile ||
-                this.current.type === LayerType.RasterTile
+            this.current.type === LayerType.RasterTile
         ) {
             const results = this.getLayersById(this.current.id);
             if (results && results.length >= 1) {
@@ -610,13 +622,13 @@ export class IDocument {
         flats.forEach((layer) => {
             if (
                 (!layer.layout && layer.type !== LayerType.GroupLayer) ||
-                    (layer.layout && layer.layout.visible === true)
+                (layer.layout && layer.layout.visible === true)
             ) {
                 checkedKeys.push(layer.id);
             } else if (
                 layer.type === LayerType.GroupLayer &&
-                    layer.layout &&
-                    layer.layout.visible
+                layer.layout &&
+                layer.layout.visible
             ) {
                 checkedKeys.push(layer.id);
             }
@@ -682,7 +694,7 @@ export class IDocument {
             this.layers = this.layers.map((group) => {
                 if (
                     group.type === LayerType.GroupLayer ||
-                        (group.children && group.children.length >= 0)
+                    (group.children && group.children.length >= 0)
                 ) {
                     group = addGroupItem(layer, parent, group);
                 }
@@ -770,10 +782,11 @@ export class IDocument {
                 const name = layer.title + "-" + typeName + "专题图";
                 const special = type;
                 copy = deepCopy(layer);
-                copy = { ...copy,
-                         key, id: key, name, title: name,
-                         special, icon: iconfont,
-                       };
+                copy = {
+                    ...copy,
+                    key, id: key, name, title: name,
+                    special, icon: iconfont,
+                };
                 grouplayer = new GroupLayer({
                     title: `${typeName}-专题图`,
                     children: [copy]
@@ -953,6 +966,38 @@ export class IDocument {
 
         return layers;
     }
+
+    /**
+     * @description 统改所有图层的指定属性的值，可以是改前缀，后缀，整体替换
+     * @param {String} groupid 组图层名称
+     * @param {String} key 
+     * @param {Any} value 
+     * @param {String} action  行为 prefix postfix replace
+     */
+    changeGroupAction(groupid, key, value, action) {
+        let layers = this.layers;
+        if (!layers) { return undefined; }
+
+        layers = layers.map((item) => {
+            if (item.type === LayerType.GroupLayer) {
+                if (item.children) {
+                    let find = item.id === groupid ? true : false;
+                    item = loopChildrenAction(groupid, key, value, action, item.children, find);
+                }
+            } else {
+                if (item[key]) {
+                    switch (action) {
+                        case 'prefix': item[key] = value + item[key]; break;
+                        case 'postfix': item[key] = item[key] + value; break;
+                        case 'replace': item[key] = value; break;
+                    }
+                }
+            }
+            return item;
+        });
+
+        return layers;
+    }
 }
 
 export const defaultMapRender: MapRender = MapRender.MapBoxGL;
@@ -974,9 +1019,9 @@ export const defaultBack: BackGroundLayer = {
     type: LayerType.BackGround,
     url: "",
     tileUrl:
-    "static/tiles/EPSG3857/{z}/{x}/{y}.png",
+        "static/tiles/EPSG3857/{z}/{x}/{y}.png",
     imgUrl:
-    "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png",
+        "https://user-images.githubusercontent.com/23654117/56859980-16e31c80-69c4-11e9-9e15-0980bd7ff947.png",
 };
 
 export const defaultBacks: BackGroundLayer[] = [];

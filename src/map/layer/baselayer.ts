@@ -10,6 +10,7 @@ export enum LayerType {
     GroupLayer = "GroupLayer",
     BackGround = "BackGround",
     BackColor = "BackColor",
+    RasterDem = "RasterDem",
     RasterTile = "RasterTile",
     VectorTile = "VectorTile",
     GeoJSON = "GeoJSON",
@@ -100,6 +101,11 @@ export let LayerDefine = {
         type: LayerType.BackColor,
         group: LayerGroup.Common,
         name: "背景颜色",
+    },
+    RasterDem: {
+        type: LayerType.RasterDem,
+        group: LayerGroup.Common,
+        name: "栅格DEM",
     },
     RasterTile: {
         type: LayerType.RasterTile,

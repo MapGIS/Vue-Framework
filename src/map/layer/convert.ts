@@ -101,11 +101,16 @@ export class Convert {
 
         const flats = doc.getFlatLayers();
         flats.forEach((layer) => {
-            const { type, url, key } = layer;
+            const { type, url, key, source } = layer;
             if (type === LayerType.GeoJSON) {
                 sources[key] = {
                     type: 'geojson',
                     data: url || EmptyGeoJSONFeatureCollection
+                };
+            } else if (type === LayerType.VectorTile && !source) {
+                sources[key] = {
+                    type: 'vector',
+                    tiles: [url]
                 };
             }
         });
@@ -122,7 +127,7 @@ export class Convert {
 
         const flats = doc.getFlatLayers();
         layers = flats.map((layer) => {
-            const { key, sourceLayer, type, subtype, layout, style, paint, children, url } = layer;
+            const { key, source, sourceLayer, type, subtype, layout, style, paint, children, url } = layer;
 
             layer.type = this.docTomvtType(subtype);
             layer.subtype = this.docTomvtSubtype(subtype);
@@ -136,6 +141,11 @@ export class Convert {
                 layer.source = key;
             } else {
                 layer["source-layer"] = sourceLayer || "null";
+            }
+
+            if (url && !source) {
+                layer.source = key;
+                delete layer.url;
             }
 
             if (

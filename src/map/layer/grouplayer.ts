@@ -256,6 +256,8 @@ export function loopLayerProp(id, propName, propValue, group) {
                 if (child.id === id) {
                     if (child && child[propName] !== undefined) {
                         child[propName] = propValue;
+                    } else if (child) {
+                        child[propName] = propValue;
                     }
                 }
             }

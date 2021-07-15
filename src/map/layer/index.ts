@@ -8,6 +8,7 @@ import {
   RasterTileLayout,
   defaultRasterTileLayout,
 } from "./rastertile";
+import { GroupLayer } from './grouplayer';
 import { VectorTileLayer } from "./vectortile";
 import { GeoJsonLayer } from "./geojson";
 import { EchartsLayer } from "./echartslayer";
@@ -58,6 +59,7 @@ import {
 export {
   BackGroundLayer,
   BackColorLayer,
+  GroupLayer,
   RasterTileLayer,
   RasterLayerType,
   RasterTileStyle,
@@ -110,6 +112,7 @@ export {
 export default {
   BackGroundLayer,
   BackColorLayer,
+  GroupLayer,
   RasterTileLayer,
   RasterLayerType,
   RasterTileStyle,

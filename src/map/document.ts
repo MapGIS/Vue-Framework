@@ -17,12 +17,16 @@ import {
     findLayer,
     findLayersByType,
     findLayersById,
+    findLayerGroup,
     addGroupItem,
     addItemNearItem,
     deleteGroupItem,
     flatLayers,
     copyGroupItem,
     specialGroupItem,
+    upLayerInGroup,
+    downLayerInGroup,
+    loopGroupName,
     loopLayerProp,
     loopLayerStyle,
     loopLayerVisible,
@@ -994,6 +998,53 @@ export class IDocument {
                 }
             }
             return item;
+        });
+
+        return layers;
+    }
+
+    /**
+     * @description 升高图层的顺序
+     * @param {String} layerid 图层id
+     * @return 重新排序后的图层     
+     */
+    upLayer(layerid) {
+        let parent = this.layers;
+        let layers = upLayerInGroup(layerid, parent);
+        return layers;
+    }
+
+    /**
+     * @description 降低图层的顺序
+     * @param {String} layerid 图层id
+     * @return 重新排序后的图层     
+     */
+    downLayer(layerid) {
+        let parent = this.layers;
+        let layers = downLayerInGroup(layerid, parent);
+        return layers;
+    }
+
+    /**
+     * @description 改变图层名称
+     * @param {String} id 图层id
+     * @param {String} name 重命名名称
+     * @return 重新命名后的所有图层
+     */
+    changeLayerName(id, name) {
+        const layers = this.layers;
+        if (!layers) { return undefined; }
+
+        layers.map((item) => {
+            if (item.type === LayerType.GroupLayer) {
+                if (item.children) {
+                    loopGroupName(id, name, item);
+                }
+            } else {
+                if (item.title == id || item.name == id || item.id == id || item.key == id) {
+                    item.title = item.name = name;
+                }
+            }
         });
 
         return layers;

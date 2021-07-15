@@ -18,10 +18,12 @@ export class GroupLayer extends ILayer {
         super();
         options = options || {};
         const { title, children } = options;
-        this.title = title || "新建组图层";
+        this.name = this.title = title || "新建组图层";
         this.id = this.key = uuid();
         this.children = children || [];
         this.type = LayerType.GroupLayer;
+        this.description = "组图层信息";
+        this.info = "组图层信息";
     }
 }
 
@@ -65,6 +67,29 @@ export function findLayer(id: string, group) {
             } else {
                 if (child.id === id) {
                     layer = layer || child;
+                }
+            }
+        });
+    }
+    return layer;
+}
+
+/**
+ * @description 查找图层id所属的组图层
+ * @param id 图层Id
+ * @param group 组图层节点
+ * @returns 返回图层Id所属的组图层
+ */
+export function findLayerGroup(id: string, group) {
+    let layer;
+
+    if (group.children) {
+        group.children.forEach((child) => {
+            if (child.type === LayerType.GroupLayer) {
+                layer = layer || findLayerGroup(id, child);
+            } else {
+                if (child.id === id) {
+                    layer = layer || group.children;
                 }
             }
         });
@@ -129,6 +154,91 @@ export function findLayersById(id, group): ILayer[] {
         });
     }
     return layers;
+}
+
+/**
+ * @description 提升图层id所在组图层的顺序
+ * @param id 图层Id
+ * @param group 组图层节点
+ * @returns 返回升序后的组图层
+ */
+export function upLayerInGroup(id: string, group) {
+    let find = false;
+    let index = -1;
+
+    if (group && group.length > 0) {
+        group.map((child, i) => {
+            if (child.type === LayerType.GroupLayer && child.id !== id) {
+                child = upLayerInGroup(id, child.children);
+            } else {
+                if (child.id == id) {
+                    find = true;
+                    index = i;
+                }
+            }
+        });
+
+        if (find && index > 0) {
+            let temp = group[index - 1];
+            group[index - 1] = group[index];
+            group[index] = temp;
+        }
+    }
+    return group;
+}
+
+/**
+ * @description 降低图层id所在组图层的顺序
+ * @param id 图层Id
+ * @param group 组图层节点
+ * @returns 返回降序后的组图层
+ */
+export function downLayerInGroup(id: string, group) {
+    let find = false;
+    let index = -1;
+
+    if (group && group.length > 0) {
+        group.map((child, i) => {
+            if (child.type === LayerType.GroupLayer && child.id !== id) {
+                child = downLayerInGroup(id, child.children);
+            } else {
+                if (child.id == id) {
+                    find = true;
+                    index = i;
+                }
+            }
+        });
+
+        if (find && index > 0 && index < group.length - 1) {
+            let temp = group[index + 1];
+            group[index + 1] = group[index];
+            group[index] = temp;
+        }
+    }
+    return group;
+}
+
+export function loopGroupName(id, name, group) {
+    if (group.id === id) {
+        if (group && group.name) { group.name = name; }
+        if (group && group.title) { group.title = name; }
+    }
+    if (group.type !== LayerType.GroupLayer) {
+        return group;
+    }
+    if (group.children) {
+        group.children.map((child) => {
+            if (child.type === LayerType.GroupLayer) {
+                child = loopGroupName(id, name, child);
+            } else {
+                if (child.title == id || child.name == id || child.id == id || child.key == id) {
+                    if (child && child.name !== undefined) { child.name = name; }
+                    if (child && child.title !== undefined) { child.title = name; }
+                }
+            }
+        });
+    }
+    return group;
 }
 
 export function loopLayerProp(id, propName, propValue, group) {

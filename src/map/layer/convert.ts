@@ -53,13 +53,14 @@ export class Convert {
             style.id = doc.name || defaultId;
             style.sprite = doc.sprite || defaultSprite;
             style.glyphs = doc.glyphs || defaultGlyphs;
-            style.sources = this.docTomvtSources(doc);
-            style.layers = this.docTomvtLayers(doc);
+            style.sources = this.docTomvtSources(deepCopy(doc));
+            style.layers = this.docTomvtLayers(deepCopy(doc));
         }
         return style;
     }
 
-    docTomvtSources(doc: IDocument) {
+    docTomvtSources(docu: IDocument) {
+        let doc = IDocument.deepclone(docu);
         const sources = {};
         if (!doc) {
             return sources;
@@ -112,7 +113,8 @@ export class Convert {
         return sources;
     }
 
-    docTomvtLayers(doc: IDocument, remove: boolean = true) {
+    docTomvtLayers(docu: IDocument, remove: boolean = true) {
+        let doc = IDocument.deepclone(docu);
         let layers = [];
         if (!doc) {
             return layers;
@@ -150,6 +152,8 @@ export class Convert {
                 delete layer.sourceLayer;
                 delete layer.title;
                 delete layer.name;
+                delete layer.minZoom;
+                delete layer.maxZoom;
                 // delete layer.url;
                 // 这个地方是为了解决实时出后台矢量瓦片导致的tolerance&filter的变化，请看MapboxGL-React/VectorTile
                 // let changeUrl = layer.url != vectortile.url ? true : false;

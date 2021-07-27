@@ -1,7 +1,7 @@
-import {
-  Sprite,
-  SpriteManager
-} from "./sprite";
+// import {
+//   Sprite,
+//   SpriteManager
+// } from "./sprite";
 
 import {
   StoryType,
@@ -37,15 +37,15 @@ import {
   scaleSequential,
 } from "./color";
 
-import {
-  Legend,
-  LegendItem,
-  StandardLegend
-} from './legend';
+// import {
+//   Legend,
+//   LegendItem
+//   StandardLegend
+// } from './legend';
 
 export {
-  Sprite,
-  SpriteManager,
+  // Sprite,
+  // SpriteManager,
   StoryType,
   StoryEventType,
   StoryEventOptions,
@@ -74,14 +74,14 @@ export {
   scaleOrdinal,
   scaleQuantize,
   scaleSequential,
-  Legend,
-  LegendItem,
-  StandardLegend,
+  // Legend,
+  // LegendItem,
+  // StandardLegend,
 };
 
 
 export default {
-  Sprite,
+  // Sprite,
   StoryType,
   StoryEventType,
   StoryEventOptions,
@@ -110,7 +110,7 @@ export default {
   scaleOrdinal,
   scaleQuantize,
   scaleSequential,
-  Legend,
-  LegendItem,
-  StandardLegend,
+  // Legend,
+  // LegendItem,
+  // StandardLegend,
 };

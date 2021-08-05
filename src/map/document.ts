@@ -29,6 +29,7 @@ import {
     loopGroupName,
     loopLayerProp,
     loopLayerStyle,
+    loopLayerLayout,
     loopLayerVisible,
     loopChildrenPrefix,
     loopChildrenAction,
@@ -947,6 +948,26 @@ export class IDocument {
                 if (item.id === id) {
                     if (!item.style) { item.style = {}; }
                     item.style[propName] = propValue;
+                }
+            }
+        });
+
+        return layers;
+    }
+
+    changeLayerLayout(id, propName, propValue) {
+        const layers = this.layers;
+        if (!layers) { return undefined; }
+
+        layers.map((item) => {
+            if (item.type === LayerType.GroupLayer) {
+                if (item.children) {
+                    loopLayerLayout(id, propName, propValue, item);
+                }
+            } else {
+                if (item.id === id) {
+                    if (!item.layout) { item.layout = {}; }
+                    item.layout[propName] = propValue;
                 }
             }
         });

@@ -196,7 +196,6 @@ export function upLayerInGroup(id: string, group) {
 export function downLayerInGroup(id: string, group) {
     let find = false;
     let index = -1;
-
     if (group && group.length > 0) {
         group.map((child, i) => {
             if (child.type === LayerType.GroupLayer && child.id !== id) {
@@ -209,7 +208,7 @@ export function downLayerInGroup(id: string, group) {
             }
         });
 
-        if (find && index > 0 && index < group.length - 1) {
+        if (find && index >= 0 && index < group.length - 1) {
             let temp = group[index + 1];
             group[index + 1] = group[index];
             group[index] = temp;
@@ -296,6 +295,38 @@ export function loopLayerStyle(id, propName, propValue, group) {
     }
     return group;
 }
+
+export function loopLayerLayout(id, propName, propValue, group) {
+    if (group.id === id) {
+        if (group) {
+            if (!group.layout) {
+                group.layout = {};
+            }
+            group.layout[propName] = propValue;
+        }
+    }
+    if (group.type !== LayerType.GroupLayer) {
+        return group;
+    }
+    if (group.children) {
+        group.children.map((child) => {
+            if (child.type === LayerType.GroupLayer) {
+                child = loopLayerLayout(id, propName, propValue, child);
+            } else {
+                if (child.id === id) {
+                    if (child) {
+                        if (!child.layout) {
+                            child.layout = {};
+                        }
+                        child.layout[propName] = propValue;
+                    }
+                }
+            }
+        });
+    }
+    return group;
+}
+
 
 export function loopLayerVisible(id, visible, group) {
     if (group.id === id) {
